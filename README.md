@@ -4,7 +4,7 @@ results from an STV or Condorcet count of a set of ballots.
 
 Features:
 
-Three routines for assessing the safety: 1) deletion of random ballots, 2) addition of "plumping"
+Three routines for assessing safety: 1) deletion of random ballots, 2) addition of "plumping"
 ballots, and 3) selection of a randomly-selected fraction of the ballots.
 
 Experimental implementation of SafeRank: a (possibly partial) ranking derived by clustering a
