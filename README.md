@@ -1,15 +1,40 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # SafeVote
-Mod of vote_2.3-2 (https://cran.r-project.org/web/packages/vote/index.html) to test the safety of
-results from an STV or Condorcet count of a set of ballots.
 
-Features:
+<!-- badges: start -->
+<!-- badges: end -->
 
-Three routines for assessing safety: 1) deletion of random ballots, 2) addition of "plumping"
-ballots, and 3) selection of a randomly-selected fraction of the ballots.
+The goals of SafeVote are to investigate the safety of announcing
+preliminary results from an election, and to allow experimental study of
+the safety of a complete ranking of all candidates (as in a party list)
+that is derived from a small-scale election with preferential ballots.
 
-Experimental implementation of SafeRank: a (possibly partial) ranking derived by clustering a
-total ranking from a Condorcet count or an STV counting process.
+## Installation
 
-Reformatting of whitespace and bracketing in existing code, for legibility and consistency.
+You can install the development version of SafeVote from
+[GitHub](https://github.com/) with:
 
-Addition of roxygen2 comments.
+``` r
+# install.packages("devtools")
+devtools::install_github("cthombor/SafeVote")
+```
+
+## Examples
+
+This mod of `vote_2.3.2` reports the `Margins` of victory in an
+election. In cases where there are near-ties, the value of the `safety`
+parameter (default 1.0) will affect the completeness of the `SafeRank`
+ordering of the candidates.
+
+    library(SafeVote)
+    data(food_election)
+    stv(food_election, complete.ranking=TRUE, safety=0.5)
+
+A few safety-testing routines are supplied, to support experimental
+study of the statistical behaviour of ballot counting methods. For
+example:
+
+    data(dublin_west)
+    testFraction(dublin_west, astart=1000, ainc=1000, rankMethod="elected")
