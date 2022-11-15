@@ -25,7 +25,7 @@
 
 testDeletions <- function( votes="food_election", countMethod = "condorcet",
                            countArgs = NULL, dlimit = NULL,
-                           dinc = NULL, rankMethod = "SafeRank" ) {
+                           dinc = NULL, rankMethod = "safeRank" ) {
 
     if( is.null(dlimit) ) {
         dlimit = 1
@@ -85,7 +85,7 @@ testDeletions <- function( votes="food_election", countMethod = "condorcet",
         votes <- votes[-rvn,]
 
         newCR <- do.call(countMethod,
-                         append(countArgs,list(votes=votes))
+                         append(cArgs,list(votes=votes))
                          )
         newRank <- newCR[[rankMethod]]
 
@@ -161,7 +161,7 @@ testDeletions <- function( votes="food_election", countMethod = "condorcet",
 #' }
 testAdditions <- function(votes, alimit = NULL, ainc = NULL,
                            favoured = NULL, tacticalBallot = NULL,
-                           rankMethod = "SafeRank",
+                           rankMethod = "safeRank",
                            countMethod = "stv", countArgs = NULL ) {
 
     if( is.null(alimit) ) {
@@ -227,7 +227,7 @@ testAdditions <- function(votes, alimit = NULL, ainc = NULL,
                        matrix(fb,nrow=ainc,ncol=nc,byrow=TRUE)
                        ) ## stuffing the ballot box!
         newCR <- do.call(countMethod,
-                         append(countArgs,list(votes=votes))
+                         append(cArgs,list(votes=votes))
                          )
         newRank <- newCR[[rankMethod]]
         if( is.null(tacticalBallot) && (newRank[favoured] < initRank[favoured]) ) {
@@ -259,102 +259,130 @@ testAdditions <- function(votes, alimit = NULL, ainc = NULL,
 #' Test the fraction of ballots required to determine a result.
 #' 
 #' Starting from some number ('astart') of randomly-selected ballots,
-#' additional randomly-selected ballots are added until the same
-#' result is obtained as when all of the ballots are counted.
+#' additional randomly-selected ballots are added.  The rankings produced
+#' by each election are returned as a matrix with one row per election.
 #'
 #' @param votes A set of ballots
 #' @param countMethod The name of a function which will count the
-#'     ballots
+#'     ballots, e.g. "stv", "condorcet".
 #' @param countArgs List of args to be passed to countMethod (in
 #'     addition to votes)
 #' @param rankMethod Name of a ranking attribute in the output of
-#'     countMethod
+#'     countMethod, e.g. "elected", "ranking", "safeRank".
 #' @param astart Starting number of ballots (min 2)
 #' @param ainc Number of ballots to be added in each step
 #' @param arep Limit on the number of repetitions of the test.
 #'     Required to be non-null if ainc==0.
-#' @return Number of ballots required to reach the same result as when
-#'     all the ballots are counted.  The final ballot count is
-#'     attached as an attribute "finalResults".
+#' @param quiet TRUE to suppress all output
+#' @param verbose TRUE to produce diagnostic output
+#' @return a matrix of experimental results, of dimension n by m+1, where n is 
+#'     the number of elections and m is the number of candidates.  The first
+#'     column is named "nBallots".  Other columns indicate the ranking of each
+#'     candidate in each election.
 #' @export
 #' @examples
 #' data(food_election)
 #' testFraction(food_election, countMethod="condorcet", 
 #'               countArgs=list(safety=0.5))
 #'
-testFraction <- function(votes, astart = NULL, ainc = NULL,
-                          arep = NULL, rankMethod = "SafeRank",
-                          countMethod = "stv", countArgs = NULL ) {
-
-    nv <- nrow(votes)
-    nc <- ncol(votes)
-
-    if( is.null(astart) || (astart < 2) ) {
-        astart = 2
+testFraction <- function(votes,
+                         astart = NULL,
+                         ainc = NULL,
+                         arep = NULL,
+                         rankMethod = "safeRank",
+                         countMethod = "stv",
+                         countArgs = NULL,
+                         quiet = FALSE,
+                         verbose = FALSE) {
+  nv <- nrow(votes)
+  nc <- ncol(votes)
+  
+  if (is.null(astart) || (astart < 2)) {
+    astart = 2
+  }
+  if (is.null(ainc)) {
+    ainc <- round(sqrt(nv))
+  } else {
+    if (ainc == 0) {
+      stopifnot(!is.null(arep))
     }
-    if( is.null(ainc) ) {
-        ainc <- round( sqrt(nv) )
-    } else {
-        if( ainc == 0 ) {
-            stopifnot( !is.null(arep) )
-        }
+  }
+  if (is.null(arep)) {
+    arep <- trunc((nv-astart)/ainc)
+  }
+  
+  ## Suppress all output from counting unless verbose=TRUE
+  cArgs <-
+    append(countArgs, list(quiet = !verbose, verbose = verbose))
+  
+  nb <- astart + ainc * (1:arep)
+  if ((ainc != 0) && (arep > trunc((nv-astart)/ainc))) {
+    nb <- nb[-which(nb >= nv)]
+    nb <- c(nb,nv) ## use all ballots in the last experimental run
+  }
+
+  nreps <- 0
+  result <- NULL
+  
+  if (verbose && !quiet) {
+    cat(
+      "\nSelecting an increasingly-large fraction of",
+      nv,
+      "ballots until the ultimate ranking is found.\n"
+    )
+  }
+  if (!quiet) {
+    cat("Fraction of ballots:")
+  }
+  
+  for (nBallots in nb) {
+    nreps <- nreps + 1
+    if (!quiet) {
+      cat(paste0(" ", format(round(
+        nBallots / nv * 100, 1
+      ), digits = 4), "%"))
+      cat(ifelse(nreps < length(nb), ifelse((nreps %% 10) == 0, ",\n", ","), ""))
     }
-
-    cArgs <- append( countArgs, list(quiet=TRUE) )
-    ##TODO: add a 'quiet' arg
-
-    cr <- do.call(countMethod,append(cArgs,list(votes=votes)))
-    if(! rankMethod %in% attributes(cr)$names ) {
-        stop(paste("countMethod", countMethod, "does not produce a",
-                   rankMethod))
+    
+    selBallots <- sample(nv, nBallots)
+    newCR <- do.call(countMethod,
+                     append(cArgs, list(votes = votes[selBallots,])))
+    
+    if (!rankMethod %in% attributes(newCR)$names) {
+      stop(paste(
+        "countMethod",
+        countMethod,
+        "does not produce a",
+        rankMethod
+      ))
     }
-
-    cat("Initial ranking (counting all ballots):\n")
-    initRank <- cr[[rankMethod]]
-    print( initRank )
-
-    selectedVotes <- sample(nv, astart)
-
-    cat( "\nSelecting an increasingly-large fraction of", nv,
-        "ballots until the initial ranking is found.\n" )
-    cat("Progress: ")
-
-    rankingFound <- FALSE
-    nadd <- astart
-    nreps <- 1
-
-    while( !rankingFound ) {
-
-        cat( paste0(" ", format(round(nadd/nv*100,1), digits=4), "%,") )
-        if( (nreps %% 20) == 0 ) cat("\n ")
-
-        selVotes <- sample(nv, nadd)
-        newCR <- do.call(countMethod,
-                         append(countArgs,list(votes=votes[selVotes,])))
-        newRank <- newCR[[rankMethod]]
-
-        if( identical(newRank,initRank) ) {
-            rankingFound <- TRUE
-            cat("\nInitial ranking found after", nadd,
-                "randomly-selected ballots were counted." )
-            cat("\nFinal ranking:\n")
-            print( newRank )
-        }
-
-        nadd <- min( nadd + ainc, nv )
-        nreps <- nreps + 1
-        if( (nadd > nv) || (!is.null(arep) && nreps >= arep ) ) {
-            break
-        }
-
+    
+    newRank <- newCR[[rankMethod]]
+    if (rankMethod == "elected") {
+      newRank <- electedAsRank(newRank, colnames(votes))
     }
-
-    if( !rankingFound || nadd == nv ) {
-        cat( "\nNo subset of ballots produced the initial ranking\n" )
-    }
-
-    result = nadd
-    attributes(result) <- list(finalResults=newCR)
-    return(invisible(result))
+    
+    result <-
+      rbind(result, append(list(nBallots = nBallots), newRank))
+  }
+  
+  if(!quiet) {
+    cat("\nExperimental results:\n")
+    print(result)
+  }
+  
+  return(invisible(result))
 }
 
+#' convert the names of elected candidates into a 0-1 ranking
+#'
+#' @param elected the names of the elected candidates
+#' @param candidates the names of all candidates
+#'
+#' @return a named 0-1 vector of length(candidates) 
+#' 
+electedAsRank <- function(elected,candidates) {
+  rv <- as.integer(candidates %in% elected)
+  names(rv) <- candidates
+  return(rv)
+}
