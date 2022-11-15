@@ -200,7 +200,7 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
         if (cdc.scores[i, j] < cdc.scores[j, i]) {
           warning(
             paste(
-              "Condorcet violation: SafeRank of",
+              "Condorcet violation: safeRank of",
               cnames[i],
               "is above",
               cnames[j],
@@ -228,7 +228,7 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
           NULL,
         totals = points[, , "Wins"],
         scores = points[, , "Prefs"],
-        SafeRank = safeRank,
+        safeRank = safeRank,
         fuzz = fuzz,
         data = x,
         invalid.votes = votes[setdiff(rownames(votes), rownames(x)),
@@ -246,6 +246,8 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
       ),
       class = "SafeVote.condorcet"
     )
+  ##TODO define and use explicit constructors for SafeVote objects
+  
   if (!quiet)
     print(summary(result))
   invisible(result)
@@ -265,7 +267,7 @@ summary.SafeVote.condorcet <- function(object, ...) {
 
     df$Score <- rowSums(object$scores) # Borda's scoring
     df$BordaRank <- rank(-df$Score, ties.method="min")
-    df$SafeRank <- object$SafeRank
+    df$SafeRank <- object$safeRank
     attr(df, "fuzz") <- object$fuzz
 
     if(!is.null(object$elected)) {
@@ -315,7 +317,7 @@ print.summary.SafeVote.condorcet <- function(x, ...) {
   
   sortedBordaScore <- sort(x$Score, decreasing = TRUE)
   bordaGaps <- sortedBordaScore - append(sortedBordaScore[-1], 0)
-  cat("\nSafeRank fuzz on Borda scores:", attr(x, "fuzz"))
+  cat("\nsafeRank fuzz on Borda scores:", attr(x, "fuzz"))
   cat(
     "\nGaps in Borda scores: min",
     min(bordaGaps),

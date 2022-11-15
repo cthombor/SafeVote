@@ -21,7 +21,7 @@
 #' @param quiet TRUE to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param safety number of standard deviations on vote-counts, when producing a
-#'   SafeRank by clustering near-ties in a complete ranking
+#'   safeRank by clustering near-ties in a complete ranking
 #' @param ... undocumented
 #'
 #' @return object of class vote.stv
@@ -236,21 +236,18 @@ stv <- function(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE,
         Dm[-group.members] <- FALSE ## set of hopeful marked candidates
       }
 
-      if( (vmax >= quota &&
-
-          !(! ic %in% group.members && nseats == group.nseats) ||
-          ## with constant.quota, elected candidates may not need
-          ## to reach quota
+      if ((vmax >= quota &&
+           
+           !(!any(ic %in% group.members) &&
+             nseats == group.nseats) ||
+           ## with constant.quota, elected candidates may not need
+           ## to reach quota
+           
+           (constant.quota && sum(D) <= nseats)) ||
           
-          (constant.quota && sum(D) <= nseats)) ||
-          
-          (use.marking && 
-            any(ic %in% group.members) && 
-            (sum(Dm) <= group.nseats || sum(D) - sum(Dm) == 0)
-          )
- 
-        ) {
-        
+          (use.marking &&
+           any(ic %in% group.members) &&
+           (sum(Dm) <= group.nseats || sum(D) - sum(Dm) == 0))) {
         if( use.marking && length(ic) > 1 && sum(Dm) <= group.nseats ) {
           ## if a tiebreak, choose marked candidates if needed
           ic <- ic[ic %in% group.members]
@@ -359,7 +356,7 @@ stv <- function(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE,
       result.ties <- c(result.ties, tie)
       ## shift votes for voters who voted for ic
       jp <- x[, ic]
-      for (i in which(jp > 0)) {
+      for (i in which(jp > 0)) { ## TODO maybe vectorise this loop?
         index <- x[i,] > jp[i]
         x[i, index] <- x[i, index] - 1
       }
@@ -374,7 +371,7 @@ stv <- function(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE,
              quotas = result.quota, elect.elim = result.elect,
              ranking = result.ranks,
              margins = result.margins,
-             fuzz = safety*sqrt(nrow(orig.x)), ## for SafeRank
+             fuzz = safety*sqrt(nrow(orig.x)), ## for safeRank
              equal.pref.allowed = equal.ranking,
              ties = translate.ties(result.ties, tie.method),
              data = orig.x,
@@ -387,15 +384,16 @@ stv <- function(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE,
     )
 
     crt <- completeRankingTable(partialResult)
-    safeRank <- crt$SafeRank
-    names(safeRank) <- crt$Candidate
+    sr <- crt$SafeRank
+    names(sr) <- crt$Candidate
     result <- structure(
         append(
             partialResult,
-            list( rankingTable=crt, SafeRank=safeRank )
+            list( rankingTable=crt, safeRank=sr )
         ),
         class = "SafeVote.stv"
     )
+    ##TODO: define and use an explicit constructor for SafeVote objects
 
     if(!quiet) {
         print(summary(result, digits = digits))
@@ -726,7 +724,7 @@ print.summary.SafeVote.stv <- function(x, ...) {
             length(attr(x, "reservation.eligible")), "\n")
     }
     if( !is.null(attr(x, "rankingTable")) ) {
-      cat("\nFuzz on SafeRank:\t", attr(x, "fuzz"))
+      cat("\nFuzz on safeRank:\t", attr(x, "fuzz"))
       cat("\nComplete ranking:")
       print(knitr::kable(attr(x, "rankingTable"), 
                          align = c("r", "l", "c", "r", "l"), ...))
