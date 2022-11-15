@@ -9,9 +9,6 @@
 \arguments{
 \item{x, xlab, ylab, point.size, ...}{undocumented}
 }
-\value{
-undocumented
-}
 \description{
 plot() method for the result of an stv() ballot-count
 }

@@ -812,12 +812,8 @@ image.SafeVote.stv <- function(x, xpref = 2, ypref = 1,
 }
 
 #' plot() method for the result of an stv() ballot-count
-#'
-#' @param x,xlab,ylab,point.size,... undocumented
-#'
-#' @return undocumented
+#' @param x,xlab,ylab,point.size,... undocumented 
 #' @export
-#'
 plot.SafeVote.stv <- function(x, xlab = "Count", ylab = "Preferences",
                           point.size = 2, ...) {
     stopifnot(requireNamespace("ggplot2", quietly = TRUE))
@@ -877,7 +873,7 @@ plot.SafeVote.stv <- function(x, xlab = "Count", ylab = "Preferences",
 #' on the value of nseats, because this affects how votes are transferred.
 #'
 #' @param object partial results 
-#' @param ... undocumented
+#' @param ... undocumented, currently unused
 #'
 #' @return data.frame with columns Rank, Margin, Candidate, Elected, SafeRank
 #'

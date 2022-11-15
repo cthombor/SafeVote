@@ -11,7 +11,7 @@ completeRankingTable(object, ...)
 \arguments{
 \item{object}{partial results}
 
-\item{...}{undocumented}
+\item{...}{undocumented, currently unused}
 }
 \value{
 data.frame with columns Rank, Margin, Candidate, Elected, SafeRank

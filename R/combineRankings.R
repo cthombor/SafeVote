@@ -15,10 +15,11 @@ check.ranking <- function(r) {
 
 #' the least upper bound on a pair of rankings
 #'
-#' @param r1, r2 numeric vectors 
+#' @param r1,r2 numeric vectors 
 #' @return the most complete (but possibly partial) ranking which is consistent
 #'  with both r1 and r2.  Uses `ties.method="min"`
-#' @example combineRankings( c(3,1,2), c(2,1,3) )
+#' @export
+#' @examples combineRankings( c(3,1,2), c(2,1,3) )
 combineRankings <- function(r1,r2) {
     if( length(r1) != length(r2) ){
         stop( "Error: can't combine rankings of different length" )
