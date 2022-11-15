@@ -10,7 +10,7 @@ testDeletions(
   countArgs = NULL,
   dlimit = NULL,
   dinc = NULL,
-  rankMethod = "SafeRank"
+  rankMethod = "safeRank"
 )
 }
 \arguments{

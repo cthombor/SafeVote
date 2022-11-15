@@ -7,7 +7,7 @@
 combineRankings(r1, r2)
 }
 \arguments{
-\item{r1, }{r2 numeric vectors}
+\item{r1, r2}{numeric vectors}
 }
 \value{
 the most complete (but possibly partial) ranking which is consistent

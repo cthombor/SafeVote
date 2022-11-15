@@ -9,9 +9,11 @@ testFraction(
   astart = NULL,
   ainc = NULL,
   arep = NULL,
-  rankMethod = "SafeRank",
+  rankMethod = "safeRank",
   countMethod = "stv",
-  countArgs = NULL
+  countArgs = NULL,
+  quiet = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -25,23 +27,28 @@ testFraction(
 Required to be non-null if ainc==0.}
 
 \item{rankMethod}{Name of a ranking attribute in the output of
-countMethod}
+countMethod, e.g. "elected", "ranking", "safeRank".}
 
 \item{countMethod}{The name of a function which will count the
-ballots}
+ballots, e.g. "stv", "condorcet".}
 
 \item{countArgs}{List of args to be passed to countMethod (in
 addition to votes)}
+
+\item{quiet}{TRUE to suppress all output}
+
+\item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-Number of ballots required to reach the same result as when
-    all the ballots are counted.  The final ballot count is
-    attached as an attribute "finalResults".
+a matrix of experimental results, of dimension n by m+1, where n is 
+    the number of elections and m is the number of candidates.  The first
+    column is named "nBallots".  Other columns indicate the ranking of each
+    candidate in each election.
 }
 \description{
 Starting from some number ('astart') of randomly-selected ballots,
-additional randomly-selected ballots are added until the same
-result is obtained as when all of the ballots are counted.
+additional randomly-selected ballots are added.  The rankings produced
+by each election are returned as a matrix with one row per election.
 }
 \examples{
 data(food_election)

@@ -10,7 +10,7 @@ testAdditions(
   ainc = NULL,
   favoured = NULL,
   tacticalBallot = NULL,
-  rankMethod = "SafeRank",
+  rankMethod = "safeRank",
   countMethod = "stv",
   countArgs = NULL
 )

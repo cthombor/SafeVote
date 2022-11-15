@@ -63,7 +63,7 @@ do not specify a complete ranking of candidates}
 \item{digits}{number of significant digits in the output table}
 
 \item{safety}{number of standard deviations on vote-counts, when producing a
-SafeRank by clustering near-ties in a complete ranking}
+safeRank by clustering near-ties in a complete ranking}
 
 \item{...}{undocumented}
 }
