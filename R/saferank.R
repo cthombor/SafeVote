@@ -1,7 +1,9 @@
 #' Test the sensitivity of a ranking to random deletions
-#' 
-#' Ballots are deleted until the ranking changes, or
-#' until a specified number of ballots (`dlimit`) have been deleted.
+#'
+#' A series of simulated elections are held, with ballots deleted at random
+#' between each pair of elections.  Elections continue until either a
+#' specified number of ballots have been deleted, or a specified
+#' number of simulations has occurred.
 #'
 #' @param votes A set of ballots
 #' @param countMethod The name of a function which will count the
@@ -11,11 +13,15 @@
 #' @param rankMethod Name of a ranking attribute in the output of
 #'     countMethod
 #' @param dlimit Maximum number of ballots to delete
-#' @param dinc Number of ballots to be deleted in each step
-#' @return A vector of the indices of ballots whose deletions affected
-#'     the ranking. The vector is of zero length if the 'dlimit'
-#'     termination condition had been reached without affecting the
-#'     ranking.
+#' @param dstart  Number of ballots to be deleted after the initial count
+#' @param dinc Number of additional ballots to be deleted in subsequent steps
+#' @param drep Maximum number of elections (required if dinc=0)
+#' @param quiet TRUE to suppress all output
+#' @param verbose TRUE to produce diagnostic output
+#' @return A matrix of experimental results, of dimension n by m+1, where
+#'     n is the number of elections and m is the number of candidates.  The
+#'     first column is named "nBallots".  Other columns indicate the rankings
+#'     of the eponymous candidates.
 #' @export
 #' @examples {
 #' data(food_election)
@@ -23,109 +29,113 @@
 #' testDeletions(food_election, countMethod="stv", countArgs=list(nseats=10))
 #' }
 
-testDeletions <- function( votes="food_election", countMethod = "condorcet",
-                           countArgs = NULL, dlimit = NULL,
-                           dinc = NULL, rankMethod = "safeRank" ) {
-
-    if( is.null(dlimit) ) {
-        dlimit = 1
+testDeletions <-
+  function(votes = "food_election",
+           countMethod = "condorcet",
+           countArgs = NULL,
+           dlimit = NULL,
+           dstart = NULL,
+           dinc = NULL,
+           drep = NULL,
+           rankMethod = "safeRank",
+           quiet = FALSE,
+           verbose = FALSE) {
+    nv <- nrow(votes)
+    
+    ## suppress all output from counting unless verbose=TRUE
+    cArgs <-
+      append(countArgs, list(quiet = !verbose, verbose = verbose))
+    
+    ## an initial count of all ballots
+    cr <- do.call(countMethod, append(cArgs, list(votes = votes)))
+    if (!rankMethod %in% attributes(cr)$names) {
+      stop(paste("countMethod", countMethod, "does not produce a",
+                 rankMethod))
     }
-    dlimit = min( dlimit, nrow(votes)-1 )
-
-    if( is.null(dinc) ) {
-        dinc <- round( sqrt(dlimit) )
+    if (nv != nrow(cr$data)) {
+      warning(paste(
+        nrow(votes) - nrow(cr$data),
+        "informal ballots were deleted."
+      ))
     }
-
-    cArgs <- append( countArgs, list(quiet=TRUE) )
-    ## TODO: implement a 'quiet' parameter in this function
-
-    deletedBallots <- c()
-
-    cr <- do.call(countMethod,append(cArgs,list(votes=votes)))
-    if(! rankMethod %in% attributes(cr)$names ) {
-        stop(paste("countMethod", countMethod, "does not produce a",
-                   rankMethod))
+    ballots <- cr$data ## ballots are numbered and corrected
+    nb <- nrow(ballots)
+    
+    ## include the initial ballot count in the experimental record
+    crRank <- cr[[rankMethod]][colnames(votes)]
+    if (rankMethod == "elected") {
+      crRank <- electedAsRank(crRank, colnames(votes))
     }
-
-    initRank <- cr[[rankMethod]]
-
-    if( nrow(votes) != nrow(cr$data) ){
-        warning(
-            paste(
-                nrow(votes)-nrow(cr$data),
-                "informal ballots were deleted prior to testing."
-            )
-        )
+    result <- rbind(append(list(nBallots = nb), crRank))
+    
+    if (!quiet) {
+      cat("Number of ballots counted by", countMethod, ":\n", nb)
     }
-    votes <- cr$data # cleaned ballots, with rownames
-
-    cat("Initial ranking:\n")
-    print(initRank)
-    cat( "\nDeleting up to", dlimit, "ballots at random:\n " )
-    ndel <- 0
-    violFound <- FALSE
-
-    cat("Testing progress: ")
-
-    while( (!violFound) && (ndel <= dlimit-dinc) ) {
-
-        ndel <- ndel + dinc
-
-        rvn <- sample(nrow(votes),dinc)
-        deletedBallots <- append(deletedBallots, rvn)
-        stopifnot( ndel == length(deletedBallots) ) # regression test
-
-        ## progress report
-        if( dinc == 1 ){
-            cat( paste0(" ", rownames(votes)[rvn], ",") )
-        } else {
-            cat( "*" )
-        }
-
-        votes <- votes[-rvn,]
-
-        newCR <- do.call(countMethod,
-                         append(cArgs,list(votes=votes))
-                         )
-        newRank <- newCR[[rankMethod]]
-
-        if( identical(newRank, initRank) ) {
-            if( ((ndel %/% dinc) %% 20) == 0 ) {
-                cat(" ", nrow(votes), "ballots remaining\n ")
-            }
-        } else {
-            violFound <- TRUE
-            if( ((ndel %/% dinc) %% 20) != 0 ) cat("\n")
-            cat("Ranking changed after", ndel, "ballots were deleted.\n")
-            cat("Final ranking:\n")
-            print(newRank)
-        }
+    
+    if (is.null(dlimit)) {
+      dlimit = nb-2
     }
-
-    if( ! violFound ) {
-        cat("\nNo safety violations after",
-            length(deletedBallots),
-            "ballot deletions.\n")
+    dlimit = min(dlimit, nb - 2) ## an election must have at least 2 ballots
+    
+    if (is.null(dstart)) {
+      if (is.null(dinc) && is.null(drep)) {
+        dstart <- 1
+      } else {
+        dstart <- 0
+      }
+    }
+    
+    if (is.null(dinc)) {
+      dinc <- dlimit %/% 10  ## deciles (roughly)
+    }
+    stopifnot(dinc >= 0)
+    
+    if (is.null(drep)) {
+      stopifnot(dinc != 0)
+      drep <- trunc(dlimit / dinc) + 1
+    }
+    
+    if (dinc == 0) {
+      nbv <- rep(nb - dstart, drep)
     } else {
-        cat("\nSafety violation after", length(deletedBallots),
-            "ballot deletions.\n")
-        if( length(deletedBallots)<100 ) {
-            cat("\nDeleted ballots:", deletedBallots, "\n" )
-        }
+      nbv <- nb - dstart - dinc * (1:drep)
+      nbv <- nbv[nbv > 1]
     }
+    
+    nrep <- 0
+    for (nBallots in nbv) {
 
-    result = deletedBallots
-    attributes(result) <- list(finalResults=newCR)
+      nrep <- nrep + 1
+      if (!quiet) {
+        cat(ifelse((nrep %% 10) == 0, ",\n", ","), nBallots)
+      }
+      
+      rvn <- sample(nrow(ballots), nBallots)
+      ballots <- ballots[rvn,]
+      cr <-
+        do.call(countMethod, append(cArgs, list(votes = ballots)))
+      crRank <- cr[[rankMethod]][colnames(votes)]
+      if (rankMethod == "elected") {
+        crRank <- electedAsRank(crRank, colnames(votes))
+      }
+
+      result <- rbind(result, append(c(nBallots = nBallots), crRank))
+
+    }
+    
+    if (!quiet) {
+      cat("\nExperimental results:\n")
+      print(result)
+    }
     return(invisible(result))
-}
-
+  }
 
 #' Test the sensitivity of a result to tactical voting.
-#' 
-#' Ballots are added until the ranking changes, or until a specified number of 
-#' ballots (`alimit`) have been deleted.  A simple tactic of "plumping" is
-#' used, if a `favoured` candidate is specified.  Alternatively, 
-#' a `tacticalBallot` may be specified.
+#'
+#' Ballots are added until a specified number of simulated elections (`arep`)
+#' have been held   A tactic of "plumping" is used when stuffing the ballot
+#' box, if a `favoured` candidate is specified.  Alternatively, a
+#' `tacticalBallot` may be specified.
 #'
 #' @param votes A set of ballots
 #' @param countMethod The name of a function which will count the
@@ -143,121 +153,128 @@ testDeletions <- function( votes="food_election", countMethod = "condorcet",
 #'     ncol(ballots).  If this argument is non-null, it takes
 #'     precedence over 'favoured' when the ballot box is being
 #'     stuffed.
-#' @param alimit Maximum number of plumping ballots to add
 #' @param ainc Number of ballots to be added in each step
-#' @return Number of plumping ballots required for the tactical ballot
-#'     (if any) to affect the ranking, or for the favoured candidate
-#'     to move up in the ranking; or zero, if the termination
-#'     condition has been reached without the tactical voting (if any)
-#'     having affected the ranking or the ranking of the favoured
-#'     candidate (if any) having improved.  The results of the final
-#'     ballot count are attached as an attribute "finalResults".
+#' @param arep Maximum number of ballot-stuffed elections to run
+#' @param quiet TRUE to suppress all output
+#' @param verbose TRUE to produce diagnostic output
+#' @return A matrix of experimental results, of dimension n by m+1, where
+#'     n is the number of elections and m is the number of candidates.  The
+#'     first column is named "nBallots".  Other columns indicate the rankings
+#'     of the eponymous candidates.
 #' @export
-#' @examples {
+#' @examples
 #' data(food_election)
-#' testAdditions(food_election, countMethod="condorcet", alimit=10)
-#' testAdditions(food_election, favoured=1, countArgs=list(nseats=10))
-#' testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), alimit=5)
-#' }
-testAdditions <- function(votes, alimit = NULL, ainc = NULL,
-                           favoured = NULL, tacticalBallot = NULL,
-                           rankMethod = "safeRank",
-                           countMethod = "stv", countArgs = NULL ) {
-
-    if( is.null(alimit) ) {
-        alimit = 1
-    }
-    if( is.null(ainc) ) {
-        ainc <- round( sqrt(alimit) )
-    }
-
-    cArgs <- append( countArgs, list(quiet=TRUE) )
-    ##TODO: add a 'quiet' arg to test.additions()
-
-    cr <- do.call( countMethod, append(cArgs,list(votes=votes)) )
-    if(! rankMethod %in% attributes(cr)$names ) {
-        stop(paste("countMethod", countMethod, "does not produce a",
-                   rankMethod))
-    }
-
-    cat("Initial ranking:\n")
-    initRank <- cr[[rankMethod]]
-    print( initRank )
-
-    votes <- cr$data ## corrected ballots
-    nc <- ncol(votes)
-
-    if( is.null(tacticalBallot)) {
-
-        if( ! is.null(favoured) ) {
-            fc <- ifelse( is.character(favoured),
-                         which( names(initRank) == favoured ),
-                         favoured ## favoured is an integer
-                         )
-            stopifnot( (fc >= 1) || (fc <= nc) )
-            favoured <- colnames(cr$data)[fc]
-        } else {
-            cl <-names(initRank[-1]) ## choose a random non-winner to favour
-            favoured <- cl[sample(length(cl), 1)]
-            fc <- which( colnames(cr$data) == favoured )
-        }
-        ## henceforth, favoured is a string and fc is an integer
-        cat( "\nAdding up to", alimit, "ballots to favour", favoured, "\n" )
-        fb <- rep(2,nc)
-        fb[fc] <- 1 # fb is a ballot preferring fc to all other candidates
-        if( initRank[fc] == 1 ) {
-            warning("\n", favoured, "is already top-ranked.")
-            ## possibly a desirable test of the stability of lower rankings
-            ## when a top-ranked candidate is plumped
-        }
+#' testAdditions(food_election)
+#' testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), areps=2)
+#' 
+testAdditions <- function(votes,
+                          ainc = NULL,
+                          arep = 2,
+                          favoured = NULL,
+                          tacticalBallot = NULL,
+                          rankMethod = "safeRank",
+                          countMethod = "stv",
+                          countArgs = NULL,
+                          quiet = FALSE,
+                          verbose = FALSE) {
+  if (is.null(arep)) {
+    arep = 1
+  }
+  stopifnot(arep > 0)
+  if (is.null(ainc)) {
+    ainc <- round(sqrt(nrow(votes)))
+  }
+  stopifnot(ainc >= 0)
+  
+  ## Suppress all output from counting unless verbose=TRUE
+  cArgs <-
+    append(countArgs, list(quiet = !verbose, verbose = verbose))
+  
+  cr <- do.call(countMethod, append(cArgs, list(votes = votes)))
+  if (!rankMethod %in% attributes(cr)$names) {
+    stop(paste("countMethod", countMethod, "does not produce a",
+               rankMethod))
+  }
+  
+  initRank <- cr[[rankMethod]][colnames(votes)]
+  result <- matrix(append(c(nBallots = nrow(votes)), initRank),
+                   ncol = ncol(votes) + 1)
+  
+  if (!quiet && verbose) {
+    cat("Initial ranking by", countMethod, ":\n")
+    print(initRank)
+  }
+  
+  nc <- ncol(votes)
+  nv <- nrow(votes)
+  svotes <- votes ## simulated ballot box
+  
+  if (is.null(tacticalBallot)) {
+    if (!is.null(favoured)) {
+      fc <- ifelse(is.character(favoured),
+                   which(names(initRank) == favoured),
+                   favoured)
+      stopifnot((fc >= 1) || (fc <= nc))
+      favoured <- colnames(cr$data)[fc]
     } else {
-        fb <- tacticalBallot
-        stopifnot( (length(fb) == nc) )
-        cat( "\nAdding up to", alimit, "ballots with preferences", tacticalBallot, "\n" )
+      cl <- colnames(votes) ## choose a random non-winner to favour
+      cl <- cl[-which(cl==names(initRank[which(initRank==1)]))]
+      favoured <- cl[sample(length(cl), size=1)]
+      fc <- which(colnames(votes) == favoured)
     }
+    ## henceforth, favoured is a string and fc is an integer
+    fb <- sample(1:nc, nc) # random ballot
+    fb[fc] <- 0
+    fb <- rank(fb) # favoured is most-preferred, other prefs are random
+  } else {
+    fb <- tacticalBallot
+    stopifnot((length(fb) == nc))
+  }
+  names(fb) <- colnames(votes)
+  if (!quiet) {
+    cat("\nAdding up to",
+        arep * ainc,
+        countMethod,
+        "ballots = (",
+        fb,
+        ")\n")
+  }
+  
+  if (!quiet)
     cat("Testing progress: ")
-
-    improvementFound <- FALSE
-    nadd <- 0
-    while( (!improvementFound) && (nadd <= alimit-ainc) ) {
-        nadd <- nadd + ainc
-        cat( paste0(" ", nadd, ",") )
-        if( ((nadd %/% ainc) %% 20) == 0 ) cat("\n ")
-        votes <- rbind(votes,
-                       matrix(fb,nrow=ainc,ncol=nc,byrow=TRUE)
-                       ) ## stuffing the ballot box!
-        newCR <- do.call(countMethod,
-                         append(cArgs,list(votes=votes))
-                         )
-        newRank <- newCR[[rankMethod]]
-        if( is.null(tacticalBallot) && (newRank[favoured] < initRank[favoured]) ) {
-            improvementFound <- TRUE
-            if( ((nadd %/% ainc) %% 20) != 0 ) cat("\n")
-            cat( favoured, "was upranked after", nadd,
-                "ballots were added.\n" )
-            cat("Final ranking:\n")
-            print( newRank )
-        } else if(! identical(newRank,initRank) ) {
-            improvementFound <- TRUE
-            if( ((nadd %/% ainc) %% 20) != 0 ) cat("\n")
-            cat( "Ranking changed after", nadd, "tactical ballots were stuffed.\n" )
-            cat("Final ranking:\n")
-            print( newRank )
-        }
-
+  
+  nadd <- 0
+  for (repct in 1:arep) {
+    svotes <- rbind(svotes,
+                   matrix(
+                     fb,
+                     nrow = ainc,
+                     ncol = nc,
+                     byrow = TRUE,
+                     dimnames = list(c((nv+nadd+1):(nv+nadd+ainc)), names(fb))
+                   )) ## stuffing the ballot box!
+    nadd <- nadd + ainc
+    if (!quiet) {
+      cat(paste0(" ", nadd))
+      cat(ifelse(repct < arep, ifelse((repct %% 10) == 0, ",\n", ","), ""))
     }
-    if( !improvementFound ) {
-        cat( "\nNo improvement in ranking after", nadd,
-            "ballots were stuffed.\n")
-    }
-
-    result = nadd
-    attributes(result) <- list(finalResults=newCR)
-    return(invisible(result))
+    newCR <- do.call(countMethod,
+                     append(cArgs, list(votes = svotes)))
+    newRank <- newCR[[rankMethod]][colnames(votes)]
+    result <-
+      rbind(result, append(c(nBallots = nrow(svotes)), newRank))
+  }
+  
+  if (!quiet) {
+    cat("\nExperimental results:\n")
+    print(result)
+  }
+  return(invisible(result))
 }
 
-#' Test the fraction of ballots required to determine a result.
-#' 
+
+#' Experiment with partial counts of ballots.
+#'
 #' Starting from some number ('astart') of randomly-selected ballots,
 #' additional randomly-selected ballots are added.  The rankings produced
 #' by each election are returned as a matrix with one row per election.
@@ -275,16 +292,17 @@ testAdditions <- function(votes, alimit = NULL, ainc = NULL,
 #'     Required to be non-null if ainc==0.
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
-#' @return a matrix of experimental results, of dimension n by m+1, where n is 
+#' @return a matrix of experimental results, of dimension n by m+1, where n is
 #'     the number of elections and m is the number of candidates.  The first
 #'     column is named "nBallots".  Other columns indicate the ranking of each
 #'     candidate in each election.
 #' @export
 #' @examples
 #' data(food_election)
-#' testFraction(food_election, countMethod="condorcet", 
-#'               countArgs=list(safety=0.5))
-#'
+#' testFraction(food_election, countMethod="condorcet",
+#'              countArgs=list(safety=0.5))
+#' testFraction(dublin_west, astart=20, ainc=20, arep=19, countMethod="stv",
+#'              rankMethod="elected", quiet=FALSE)
 testFraction <- function(votes,
                          astart = NULL,
                          ainc = NULL,
@@ -301,14 +319,14 @@ testFraction <- function(votes,
     astart = 2
   }
   if (is.null(ainc)) {
-    ainc <- round(sqrt(nv))
+    ainc <- nv %/% 10  ## deciles (roughly)
   } else {
     if (ainc == 0) {
       stopifnot(!is.null(arep))
     }
   }
   if (is.null(arep)) {
-    arep <- trunc((nv-astart)/ainc)
+    arep <- trunc((nv - astart) / ainc)
   }
   
   ## Suppress all output from counting unless verbose=TRUE
@@ -316,11 +334,11 @@ testFraction <- function(votes,
     append(countArgs, list(quiet = !verbose, verbose = verbose))
   
   nb <- astart + ainc * (1:arep)
-  if ((ainc != 0) && (arep > trunc((nv-astart)/ainc))) {
+  if ((ainc != 0) && (arep > trunc((nv - astart) / ainc))) {
     nb <- nb[-which(nb >= nv)]
-    nb <- c(nb,nv) ## use all ballots in the last experimental run
+    nb <- c(nb, nv) ## use all ballots in the last experimental run
   }
-
+  
   nreps <- 0
   result <- NULL
   
@@ -332,7 +350,7 @@ testFraction <- function(votes,
     )
   }
   if (!quiet) {
-    cat("Fraction of ballots:")
+    cat("Fraction of", countMethod, "ballots:\n")
   }
   
   for (nBallots in nb) {
@@ -346,7 +364,7 @@ testFraction <- function(votes,
     
     selBallots <- sample(nv, nBallots)
     newCR <- do.call(countMethod,
-                     append(cArgs, list(votes = votes[selBallots,])))
+                     append(cArgs, list(votes = votes[selBallots, ])))
     
     if (!rankMethod %in% attributes(newCR)$names) {
       stop(paste(
@@ -357,16 +375,16 @@ testFraction <- function(votes,
       ))
     }
     
-    newRank <- newCR[[rankMethod]]
+    newRank <- newCR[[rankMethod]][colnames(votes)]
     if (rankMethod == "elected") {
       newRank <- electedAsRank(newRank, colnames(votes))
     }
     
     result <-
-      rbind(result, append(list(nBallots = nBallots), newRank))
+      rbind(result, append(c(nBallots = nBallots), newRank))
   }
   
-  if(!quiet) {
+  if (!quiet) {
     cat("\nExperimental results:\n")
     print(result)
   }
@@ -379,9 +397,9 @@ testFraction <- function(votes,
 #' @param elected the names of the elected candidates
 #' @param candidates the names of all candidates
 #'
-#' @return a named 0-1 vector of length(candidates) 
-#' 
-electedAsRank <- function(elected,candidates) {
+#' @return a named 0-1 vector of length(candidates)
+#'
+electedAsRank <- function(elected, candidates) {
   rv <- as.integer(candidates %in% elected)
   names(rv) <- candidates
   return(rv)
