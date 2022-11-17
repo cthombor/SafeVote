@@ -138,12 +138,18 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
         break
       }
       if (sum(most.wins) == 2) {
-        # run-off between two candidates
+        ## run-off between two candidates
+        ##         
+        ## Recoded Nov 22 to avoid some nasty corner cases with NA.  Previously 
+        ##  
+        ## pair.run <- compare.two.candidates(x2[, which(most.wins)[1]], 
+        ##                                    x2[, which(most.wins)[2]])
+        ## runoff.winner<-cand.names[which(most.wins)[which(pair.run == TRUE)]]
+        ##
+        ## See Section 4.5.8 of https://adv-r.hadley.nz/subsetting.html
         pair.run <-
-          compare.two.candidates(x2[, which(most.wins)[1]],
-                                 x2[, which(most.wins)[2]])
-        runoff.winner <-
-          cand.names[which(most.wins)[which(pair.run == TRUE)]]
+          compare.two.candidates(x2[, most.wins[1]], x2[, most.wins[2]])
+        runoff.winner <- cand.names[most.wins[pair.run]]
       } else {
         # run-off between more than two candidates
         x3 <- x2[, most.wins]
@@ -197,22 +203,21 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
     for (j in 1:nc) {
       if (safeRank[i] < safeRank[j]) {
         # i ranked higher than j
-        if (cdc.scores[i, j] < cdc.scores[j, i]) {
-          warning(
-            paste(
-              "Condorcet violation: safeRank of",
-              cnames[i],
-              "is above",
-              cnames[j],
-              "but",
-              cdc.scores[j, i],
-              "ballots prefer",
-              cnames[j],
-              "and only",
-              cdc.scores[i, j],
-              "ballots prefer",
-              cnames[i]
-            )
+        if (!quiet && (cdc.scores[i, j] < cdc.scores[j, i])) {
+          cat(
+            "\nCondorcet violation: safeRank of",
+            cnames[i],
+            "is above",
+            cnames[j],
+            "but",
+            cdc.scores[j, i],
+            "ballots prefer",
+            cnames[j],
+            "and only",
+            cdc.scores[i, j],
+            "ballots prefer",
+            cnames[i],
+            "\n"
           )
         }
       }
@@ -223,7 +228,7 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
     structure(
       list(
         elected = if (sum(cdc.winner) > 0)
-          cnames[which(cdc.winner)]
+          cnames[cdc.winner]
         else
           NULL,
         totals = points[, , "Wins"],
@@ -235,7 +240,7 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
                               , drop = FALSE],
         corrected.votes = corrected.votes,
         loser = if (sum(cdc.loser) > 0)
-          cnames[which(cdc.loser)]
+          cnames[cdc.loser]
         else
           NULL,
         runoff.winner = if (length(runoff.winner) > 0)

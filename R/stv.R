@@ -356,7 +356,7 @@ stv <- function(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE,
       result.ties <- c(result.ties, tie)
       ## shift votes for voters who voted for ic
       jp <- x[, ic]
-      for (i in which(jp > 0)) { ## TODO maybe vectorise this loop?
+      for (i in which(jp > 0)) { ## TODO why not vectorise this loop?
         index <- x[i,] > jp[i]
         x[i, index] <- x[i, index] - 1
       }
@@ -401,46 +401,44 @@ stv <- function(votes, nseats = NULL, eps = 0.001, equal.ranking = FALSE,
     invisible(result)
 }
 
-#' Find a winner and their margin of victory 
+#' Find a winner and their margin of victory
 #'
 #' @param votes cleaned ballots
 #'
 #' @return length-2 vector: the index of a winning candidate, and their margin
-#'         of victory (which is 0 in the case of a tie)
-#'         
+#'         of victory (0 if a tie, NA if no losers)
+#'
 winnerMargin <- function(votes) {
-  if( length(votes) == 0 ) {
-    warning("winnerMargin() was called on an empty set of votes")
-    return( c(NA, NA) )
-  }
-  winner <- which( votes == max(votes) )
-  if( length(votes) > length(winner) ) {
-    margin <- max(votes) - max( votes[-winner] )
+  stopifnot(length(votes) > 0)
+  winner <- which(votes == max(votes))
+  ## random tie-break (no-op if length(winner)==1)
+  winner <- winner[[sample(length(winner), 1)]]
+  if (length(votes) > length(winner)) {
+    margin <- max(votes) - max(votes[-winner])
   } else {
     margin <- NA
   }
-  return( c(winner, margin) )
+  return(c(winner, margin))
 }
 
-#' Find a loser and their margin of victory 
+#' Find a loser and their margin of victory
 #'
 #' @param votes cleaned ballots
 #'
 #' @return length-2 vector: the index of a losing candidate, and their margin
-#'         of loss (which is 0 in the case of a tie)
-#'   
+#'         of loss (0 if a tie, NA if no winners)
+#'
 loserMargin <- function(votes) {
-  if( length(votes) == 0 ) {
-    warning("loserMargin() was called on an empty set of votes")
-    return( c(NA, NA) )
-  }
-  loser <- which( votes == min(votes) )
-  if( length(votes) > length(loser) ) {
-    margin <- min( votes[-loser] ) - min(votes)
+  stopifnot(length(votes) > 0)
+  loser <- which(votes == min(votes))
+  ## random tie-break
+  loser <- loser[[sample(length(loser), 1)]]
+  if (length(votes) > length(loser)) {
+    margin <- min(votes[-loser]) - min(votes)
   } else {
     margin <- NA
   }
-  return( c(loser, margin) )
+  return(c(loser, margin))
 }
 
 #' Undocumented internal method from original code
@@ -657,7 +655,8 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
     cnames <- colnames(object$elect.elim)
     for(i in 1:ncounts) {
         if (i %in% where.winner) {
-            elected <- cnames[which(object$elect.elim[i,]==1)]
+            ## Recoded Nov 22 from ... cnames[which(object$elect.elim[i,]==1)]
+            elected <- cnames[object$elect.elim[i,]==1]
             df["Elected", idxcols[i]] <- paste(elected, collapse=", ")
             for(can in elected) {
                 if (idxcols[i]+2 <= ncol(df)) {
@@ -668,7 +667,8 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
 
         }
         if (i %in%  where.elim) {
-            eliminated <-cnames[which(object$elect.elim[i,]==-1)]
+            ## Recoded Nov 22 from ... cnames[which(object$elect.elim[i,]==-1)]
+            eliminated <-cnames[object$elect.elim[i,]==-1]
             df["Eliminated",idxcols[i]] <- paste(eliminated, collapse=", ")
             for(can in eliminated) {
                 if(idxcols[i]+2 <=  ncol(df)) {
@@ -678,15 +678,16 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
         }
     }
 
-    if(any(object$ties != "")) {
-        df["Tie-breaks", seq(1, ncol(df), by = 2)] <- object$ties
+    if (any(object$ties != "")) {
+      df["Tie-breaks", seq(1, ncol(df), by = 2)] <- object$ties
     }
     else {
-        df <- df[-which(rownames(df) == "Tie-breaks"),, drop = FALSE]
+      ## Recoded Nov 22 from ... df[-which(rownames(df) == "Tie-breaks")...
+      df <- df[-(rownames(df) == "Tie-breaks"), , drop = FALSE]
     }
-    if(!is.null(object$reserved.seats)) {
-        rownames(df)[object$group.members + 1] <-
-            paste0(rownames(df)[object$group.members + 1], "*")
+    if (!is.null(object$reserved.seats)) {
+      rownames(df)[object$group.members + 1] <-
+        paste0(rownames(df)[object$group.members + 1], "*")
     }
     df[is.na(df)] <- ""
     class(df) <- c('summary.SafeVote.stv', class(df))
