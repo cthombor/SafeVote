@@ -2,7 +2,7 @@
 % Please edit documentation in R/saferank.R
 \name{testFraction}
 \alias{testFraction}
-\title{Test the fraction of ballots required to determine a result.}
+\title{Experiment with partial counts of ballots.}
 \usage{
 testFraction(
   votes,
@@ -40,7 +40,7 @@ addition to votes)}
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-a matrix of experimental results, of dimension n by m+1, where n is 
+a matrix of experimental results, of dimension n by m+1, where n is
     the number of elections and m is the number of candidates.  The first
     column is named "nBallots".  Other columns indicate the ranking of each
     candidate in each election.
@@ -52,7 +52,8 @@ by each election are returned as a matrix with one row per election.
 }
 \examples{
 data(food_election)
-testFraction(food_election, countMethod="condorcet", 
-              countArgs=list(safety=0.5))
-
+testFraction(food_election, countMethod="condorcet",
+             countArgs=list(safety=0.5))
+testFraction(dublin_west, astart=20, ainc=20, arep=19, countMethod="stv",
+             rankMethod="elected", quiet=FALSE)
 }

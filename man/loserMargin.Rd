@@ -11,7 +11,7 @@ loserMargin(votes)
 }
 \value{
 length-2 vector: the index of a losing candidate, and their margin
-        of loss (which is 0 in the case of a tie)
+        of loss (0 if a tie, NA if no winners)
 }
 \description{
 Find a loser and their margin of victory

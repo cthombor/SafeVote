@@ -9,8 +9,12 @@ testDeletions(
   countMethod = "condorcet",
   countArgs = NULL,
   dlimit = NULL,
+  dstart = NULL,
   dinc = NULL,
-  rankMethod = "safeRank"
+  drep = NULL,
+  rankMethod = "safeRank",
+  quiet = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -24,20 +28,30 @@ addition to votes)}
 
 \item{dlimit}{Maximum number of ballots to delete}
 
-\item{dinc}{Number of ballots to be deleted in each step}
+\item{dstart}{Number of ballots to be deleted after the initial count}
+
+\item{dinc}{Number of additional ballots to be deleted in subsequent steps}
+
+\item{drep}{Maximum number of elections (required if dinc=0)}
 
 \item{rankMethod}{Name of a ranking attribute in the output of
 countMethod}
+
+\item{quiet}{TRUE to suppress all output}
+
+\item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-A vector of the indices of ballots whose deletions affected
-    the ranking. The vector is of zero length if the 'dlimit'
-    termination condition had been reached without affecting the
-    ranking.
+A matrix of experimental results, of dimension n by m+1, where
+    n is the number of elections and m is the number of candidates.  The
+    first column is named "nBallots".  Other columns indicate the rankings
+    of the eponymous candidates.
 }
 \description{
-Ballots are deleted until the ranking changes, or
-until a specified number of ballots (`dlimit`) have been deleted.
+A series of simulated elections are held, with ballots deleted at random
+between each pair of elections.  Elections continue until either a
+specified number of ballots have been deleted, or a specified
+number of simulations has occurred.
 }
 \examples{
 {

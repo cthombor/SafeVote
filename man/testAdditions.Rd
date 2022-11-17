@@ -6,21 +6,23 @@
 \usage{
 testAdditions(
   votes,
-  alimit = NULL,
   ainc = NULL,
+  arep = 2,
   favoured = NULL,
   tacticalBallot = NULL,
   rankMethod = "safeRank",
   countMethod = "stv",
-  countArgs = NULL
+  countArgs = NULL,
+  quiet = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
 \item{votes}{A set of ballots}
 
-\item{alimit}{Maximum number of plumping ballots to add}
-
 \item{ainc}{Number of ballots to be added in each step}
+
+\item{arep}{Maximum number of ballot-stuffed elections to run}
 
 \item{favoured}{Name of the candidate being "plumped".  If NULL, a
 random candidate is selected from among the candidates not
@@ -41,27 +43,26 @@ ballots}
 
 \item{countArgs}{List of args to be passed to countMethod (in
 addition to votes)}
+
+\item{quiet}{TRUE to suppress all output}
+
+\item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-Number of plumping ballots required for the tactical ballot
-    (if any) to affect the ranking, or for the favoured candidate
-    to move up in the ranking; or zero, if the termination
-    condition has been reached without the tactical voting (if any)
-    having affected the ranking or the ranking of the favoured
-    candidate (if any) having improved.  The results of the final
-    ballot count are attached as an attribute "finalResults".
+A matrix of experimental results, of dimension n by m+1, where
+    n is the number of elections and m is the number of candidates.  The
+    first column is named "nBallots".  Other columns indicate the rankings
+    of the eponymous candidates.
 }
 \description{
-Ballots are added until the ranking changes, or until a specified number of 
-ballots (`alimit`) have been deleted.  A simple tactic of "plumping" is
-used, if a `favoured` candidate is specified.  Alternatively, 
-a `tacticalBallot` may be specified.
+Ballots are added until a specified number of simulated elections (`arep`)
+have been held   A tactic of "plumping" is used when stuffing the ballot
+box, if a `favoured` candidate is specified.  Alternatively, a
+`tacticalBallot` may be specified.
 }
 \examples{
-{
 data(food_election)
-testAdditions(food_election, countMethod="condorcet", alimit=10)
-testAdditions(food_election, favoured=1, countArgs=list(nseats=10))
-testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), alimit=5)
-}
+testAdditions(food_election)
+testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), areps=2)
+
 }
