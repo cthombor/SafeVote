@@ -415,8 +415,6 @@ extractRank <- function(rankMethod, countMethod, cr) {
 #' @param OtherFactors other secondary factors e.g. dataset name
 #'
 #' @return object of class SafeRankExpt
-#'
-#' @examples
 new_SafeRankExpt <-
   function(nvotes = vector(mode = integer),
            Ranks = matrix(),
