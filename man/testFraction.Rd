@@ -2,7 +2,7 @@
 % Please edit documentation in R/saferank.R
 \name{testFraction}
 \alias{testFraction}
-\title{Experiment with partial counts of ballots.}
+\title{Bootstrapping experiment, with fractional counts of ballots.}
 \usage{
 testFraction(
   votes,
@@ -23,37 +23,39 @@ testFraction(
 
 \item{ainc}{Number of ballots to be added in each step}
 
-\item{arep}{Limit on the number of repetitions of the test.
-Required to be non-null if ainc==0.}
+\item{arep}{Limit on the number of repetitions of the test. Required to be
+non-null if ainc==0.}
 
-\item{rankMethod}{Name of a ranking attribute in the output of
-countMethod, e.g. "elected", "ranking", "safeRank".}
+\item{rankMethod}{Name of a ranking attribute in the output of countMethod,
+e.g. "elected", "ranking", "safeRank".}
 
-\item{countMethod}{The name of a function which will count the
-ballots, e.g. "stv", "condorcet".}
+\item{countMethod}{The name of a function which will count the ballots, e.g.
+"stv", "condorcet".}
 
-\item{countArgs}{List of args to be passed to countMethod (in
-addition to votes)}
+\item{countArgs}{List of args to be passed to countMethod (in addition to
+votes)}
 
 \item{quiet}{TRUE to suppress all output}
 
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-a matrix of experimental results, of dimension n by m+1, where n is
-    the number of elections and m is the number of candidates.  The first
-    column is named "nBallots".  Other columns indicate the ranking of each
-    candidate in each election.
+a matrix of experimental results, of dimension n by 2m+1, where n is
+  the number of elections and m is the number of candidates.  The first
+  column is named "nBallots".  Other columns indicate the ranking and margin
+  of each candidate in each election.
 }
 \description{
 Starting from some number ('astart') of randomly-selected ballots,
-additional randomly-selected ballots are added.  The rankings produced
-by each election are returned as a matrix with one row per election.
+increasingly larger number of randomly-selected ballots are counted. The
+ballots are chosen independently for each experiment. The rankings and
+margins produced by each simulated election are returned as a matrix with one
+row per election.
 }
 \examples{
 data(food_election)
 testFraction(food_election, countMethod="condorcet",
-             countArgs=list(safety=0.5))
-testFraction(dublin_west, astart=20, ainc=20, arep=19, countMethod="stv",
+             countArgs=list(safety=0.5,complete.ranking=TRUE))
+testFraction(dublin_west, astart=20, ainc=20, arep=2, countMethod="stv",
              rankMethod="elected", quiet=FALSE)
 }

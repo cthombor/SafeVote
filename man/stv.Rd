@@ -77,10 +77,10 @@ Count preferential ballots using an STV method
 data(food_election)
 stv(food_election, complete.ranking=TRUE, safety=0.5)
 stv(food_election, nseats = NULL, eps = 0.001,
-  equal.ranking = FALSE, fsep = "\t", ties = c("f", "b"), 
-  constant.quota = FALSE, quota.hare = FALSE, 
+  equal.ranking = FALSE, fsep = "\t", ties = c("f", "b"),
+  constant.quota = FALSE, quota.hare = FALSE,
   group.nseats = NULL, group.members = NULL,
-  complete.ranking = FALSE, invalid.partial = FALSE, 
+  complete.ranking = FALSE, invalid.partial = FALSE,
   verbose = FALSE, seed = 1234, quiet = FALSE, digits = 3)
-  
+
 }

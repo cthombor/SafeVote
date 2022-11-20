@@ -4,7 +4,15 @@
 \alias{condorcet}
 \title{Count votes using the Condorcet voting method.}
 \usage{
-condorcet(votes, runoff = FALSE, safety = 1, fsep = "\\t", quiet = FALSE, ...)
+condorcet(
+  votes,
+  runoff = FALSE,
+  nseats = 1,
+  safety = 1,
+  fsep = "\\t",
+  quiet = FALSE,
+  ...
+)
 }
 \arguments{
 \item{votes}{[Matrix] or [data frame] containing the votes. Rows
@@ -14,6 +22,8 @@ votes are to be read. See below for more details.}
 
 \item{runoff}{Logical. If [TRUE] and no Condorcet winner exists,
 the election goes into a run-off, see below for details.}
+
+\item{nseats}{the number of seats to be filled in this election}
 
 \item{safety}{Parameter for a clustering heuristic on a total ranking of
 the candidates.  Conjecture: the default of `1.0` ensures a separation

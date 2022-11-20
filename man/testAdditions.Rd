@@ -6,8 +6,8 @@
 \usage{
 testAdditions(
   votes,
-  ainc = NULL,
-  arep = 2,
+  ainc = 1,
+  arep = NULL,
   favoured = NULL,
   tacticalBallot = NULL,
   rankMethod = "safeRank",
@@ -24,35 +24,32 @@ testAdditions(
 
 \item{arep}{Maximum number of ballot-stuffed elections to run}
 
-\item{favoured}{Name of the candidate being "plumped".  If NULL, a
-random candidate is selected from among the candidates not
-initially top-ranked.  All other candidates are ranked #2.  An
-integer value for 'favoured' is interpreted as an index into
-the candidate names.}
+\item{favoured}{Name of the candidate being "plumped".  If NULL, a random
+candidate is selected from among the candidates not initially top-ranked.
+All other candidates are fully-ranked at random, with an identical ballot
+paper being stuffed multiple times.  An integer value for 'favoured' is
+interpreted as an index into the candidate names.}
 
-\item{tacticalBallot}{A ballot paper i.e. a vector of length
-ncol(ballots).  If this argument is non-null, it takes
-precedence over 'favoured' when the ballot box is being
-stuffed.}
+\item{tacticalBallot}{A ballot paper i.e. a vector of length ncol(ballots).
+If this argument is non-null, it takes precedence over 'favoured' when the
+ballot box is being stuffed.}
 
-\item{rankMethod}{Name of a ranking attribute in the output of
-countMethod}
+\item{rankMethod}{Name of a ranking attribute in the output of countMethod}
 
-\item{countMethod}{The name of a function which will count the
-ballots}
+\item{countMethod}{The name of a function which will count the ballots}
 
-\item{countArgs}{List of args to be passed to countMethod (in
-addition to votes)}
+\item{countArgs}{List of args to be passed to countMethod (in addition to
+votes)}
 
 \item{quiet}{TRUE to suppress all output}
 
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-A matrix of experimental results, of dimension n by m+1, where
-    n is the number of elections and m is the number of candidates.  The
-    first column is named "nBallots".  Other columns indicate the rankings
-    of the eponymous candidates.
+A matrix of experimental results, of dimension n by 2m+1, where n is
+  the number of elections and m is the number of candidates.  The first
+  column is named "nBallots".  Other columns indicate the ranking of the
+  eponymous candidate, and their margin over the next-lower-ranked candidate.
 }
 \description{
 Ballots are added until a specified number of simulated elections (`arep`)
@@ -62,7 +59,7 @@ box, if a `favoured` candidate is specified.  Alternatively, a
 }
 \examples{
 data(food_election)
-testAdditions(food_election)
-testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), areps=2)
+testAdditions(food_election, countArgs=list(complete.ranking=TRUE))
+testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), arep=2)
 
 }

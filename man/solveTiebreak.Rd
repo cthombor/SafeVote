@@ -2,7 +2,7 @@
 % Please edit documentation in R/stv.R
 \name{solveTiebreak}
 \alias{solveTiebreak}
-\title{Undocumented internal method, renamed from 'solve.tiebreak' to avoid 
+\title{Undocumented internal method, renamed from 'solve.tiebreak' to avoid
 confusion with generic solve()}
 \usage{
 solveTiebreak(method, prefs, icans, ordered.ranking = NULL, elim = TRUE)
@@ -22,6 +22,6 @@ solveTiebreak(method, prefs, icans, ordered.ranking = NULL, elim = TRUE)
 undocumented
 }
 \description{
-Undocumented internal method, renamed from 'solve.tiebreak' to avoid 
+Undocumented internal method, renamed from 'solve.tiebreak' to avoid
 confusion with generic solve()
 }

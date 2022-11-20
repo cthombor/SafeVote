@@ -2,7 +2,7 @@
 % Please edit documentation in R/saferank.R
 \name{testDeletions}
 \alias{testDeletions}
-\title{Test the sensitivity of a ranking to random deletions}
+\title{Assess the safety of a preliminary result for an election}
 \usage{
 testDeletions(
   votes = "food_election",
@@ -20,43 +20,43 @@ testDeletions(
 \arguments{
 \item{votes}{A set of ballots}
 
-\item{countMethod}{The name of a function which will count the
-ballots}
+\item{countMethod}{The name of a function which will count the ballots}
 
-\item{countArgs}{List of args to be passed to countMethod (in
-addition to votes)}
+\item{countArgs}{List of args to be passed to countMethod (in addition to
+votes)}
 
 \item{dlimit}{Maximum number of ballots to delete}
 
-\item{dstart}{Number of ballots to be deleted after the initial count}
+\item{dstart}{Number of ballots to be deleted after the initial ballot-count}
 
-\item{dinc}{Number of additional ballots to be deleted in subsequent steps}
+\item{dinc}{Number of ballots to be deleted in subsequent steps}
 
 \item{drep}{Maximum number of elections (required if dinc=0)}
 
-\item{rankMethod}{Name of a ranking attribute in the output of
-countMethod}
+\item{rankMethod}{Name of a ranking attribute in the output of countMethod}
 
 \item{quiet}{TRUE to suppress all output}
 
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-A matrix of experimental results, of dimension n by m+1, where
-    n is the number of elections and m is the number of candidates.  The
-    first column is named "nBallots".  Other columns indicate the rankings
-    of the eponymous candidates.
+A matrix of experimental results, of dimension n by 2m+1, where n is
+  the number of elections and m is the number of candidates.  The first
+  column is named "nBallots".  Other columns indicate the ranking of the
+  eponymous candidate, and their margin over the next-lower-ranked candidate.
 }
 \description{
-A series of simulated elections are held, with ballots deleted at random
-between each pair of elections.  Elections continue until either a
-specified number of ballots have been deleted, or a specified
-number of simulations has occurred.
+Ballots are deleted at random from the ballot-box, with election results
+computed once per 'dinc' ballot-deletions.  The experiment terminates after a
+specified number of ballots have been deleted, or a specified number of
+ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
+testFraction() to experiment with independently-drawn samples from the
+ballot-box.
 }
 \examples{
-{
 data(food_election)
-testDeletions(food_election, countMethod="condorcet", dlimit=4)
-testDeletions(food_election, countMethod="stv", countArgs=list(nseats=10))
-}
+testDeletions(food_election)
+testDeletions(food_election, countMethod="stv",
+  countArgs=list(complete.ranking=TRUE))
+
 }
