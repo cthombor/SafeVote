@@ -8,4 +8,11 @@
 \description{
 Experimental fork of vote_2.3-2, with SafeRank and safety tests.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://cthombor.github.io/SafeVote/}
+}
+
+}
 \keyword{internal}
