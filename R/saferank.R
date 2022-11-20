@@ -1,33 +1,34 @@
-#' Test the sensitivity of a ranking to random deletions
+#' Assess the safety of a preliminary result for an election
 #'
-#' A series of simulated elections are held, with ballots deleted at random
-#' between each pair of elections.  Elections continue until either a
-#' specified number of ballots have been deleted, or a specified
-#' number of simulations has occurred.
+#' Ballots are deleted at random from the ballot-box, with election results
+#' computed once per 'dinc' ballot-deletions.  The experiment terminates after a
+#' specified number of ballots have been deleted, or a specified number of
+#' ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
+#' testFraction() to experiment with independently-drawn samples from the
+#' ballot-box.
 #'
 #' @param votes A set of ballots
-#' @param countMethod The name of a function which will count the
-#'     ballots
-#' @param countArgs List of args to be passed to countMethod (in
-#'     addition to votes)
-#' @param rankMethod Name of a ranking attribute in the output of
-#'     countMethod
+#' @param countMethod The name of a function which will count the ballots
+#' @param countArgs List of args to be passed to countMethod (in addition to
+#'   votes)
+#' @param rankMethod Name of a ranking attribute in the output of countMethod
 #' @param dlimit Maximum number of ballots to delete
-#' @param dstart  Number of ballots to be deleted after the initial count
-#' @param dinc Number of additional ballots to be deleted in subsequent steps
+#' @param dstart Number of ballots to be deleted after the initial ballot-count
+#' @param dinc Number of ballots to be deleted in subsequent steps
 #' @param drep Maximum number of elections (required if dinc=0)
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
-#' @return A matrix of experimental results, of dimension n by m+1, where
-#'     n is the number of elections and m is the number of candidates.  The
-#'     first column is named "nBallots".  Other columns indicate the rankings
-#'     of the eponymous candidates.
+#' @return A matrix of experimental results, of dimension n by 2m+1, where n is
+#'   the number of elections and m is the number of candidates.  The first
+#'   column is named "nBallots".  Other columns indicate the ranking of the
+#'   eponymous candidate, and their margin over the next-lower-ranked candidate.
 #' @export
-#' @examples {
+#' @examples
 #' data(food_election)
-#' testDeletions(food_election, countMethod="condorcet", dlimit=4)
-#' testDeletions(food_election, countMethod="stv", countArgs=list(nseats=10))
-#' }
+#' testDeletions(food_election)
+#' testDeletions(food_election, countMethod="stv",
+#'   countArgs=list(complete.ranking=TRUE))
+#' 
 
 testDeletions <-
   function(votes = "food_election",
@@ -62,31 +63,32 @@ testDeletions <-
     nb <- nrow(ballots)
     
     ## include the initial ballot count in the experimental record
-    crRank <- cr[[rankMethod]][colnames(votes)]
-    if (rankMethod == "elected") {
-      crRank <- electedAsRank(crRank, colnames(votes))
-    }
+    crRank <- SafeVote.extractRank(rankMethod,countMethod,cr)
     result <- rbind(append(list(nBallots = nb), crRank))
     
     if (!quiet) {
       cat("Number of ballots counted by", countMethod, ":\n", nb)
     }
     
+    ## An election must have at least 2 ballots, to minimise exposure to
+    ## semantic "surprises" in R on short vectors, and also to avoid untested
+    ## (or unimplemented) corner cases in stv().
     if (is.null(dlimit)) {
       dlimit = nb-2
     }
-    dlimit = min(dlimit, nb - 2) ## an election must have at least 2 ballots
+    dlimit = min(dlimit, nb - 2) 
     
     if (is.null(dstart)) {
-      if (is.null(dinc) && is.null(drep)) {
-        dstart <- 1
-      } else {
+ #     if (is.null(dinc) && is.null(drep)) {
+ #       dstart <- 1
+ #     } else {
         dstart <- 0
-      }
+ #     }
     }
     
     if (is.null(dinc)) {
-      dinc <- dlimit %/% 10  ## deciles (roughly)
+      dinc <- (dlimit-dstart+4) %/% 10  ## deciles (roughly)
+      if (dinc==0) dinc=1
     }
     stopifnot(dinc >= 0)
     
@@ -96,9 +98,13 @@ testDeletions <-
     }
     
     if (dinc == 0) {
-      nbv <- rep(nb - dstart, drep)
+      nbv <- rep(nb - dstart, drep-1)
     } else {
-      nbv <- nb - dstart - dinc * (1:drep)
+      if (dstart == 0) { ## special case: we have already counted all ballots
+        nbv <- nb - dstart - dinc * (1:drep)
+      } else {
+        nbv <- nb - dstart - dinc * (0:(drep-1))
+      }
       nbv <- nbv[nbv > 1]
     }
     
@@ -114,11 +120,7 @@ testDeletions <-
       ballots <- ballots[rvn,]
       cr <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
-      crRank <- cr[[rankMethod]][colnames(votes)]
-      if (rankMethod == "elected") {
-        crRank <- electedAsRank(crRank, colnames(votes))
-      }
-
+      crRank <- SafeVote.extractRank(rankMethod, countMethod, cr)
       result <- rbind(result, append(c(nBallots = nBallots), crRank))
 
     }
@@ -138,38 +140,35 @@ testDeletions <-
 #' `tacticalBallot` may be specified.
 #'
 #' @param votes A set of ballots
-#' @param countMethod The name of a function which will count the
-#'     ballots
-#' @param countArgs List of args to be passed to countMethod (in
-#'     addition to votes)
-#' @param rankMethod Name of a ranking attribute in the output of
-#'     countMethod
-#' @param favoured Name of the candidate being "plumped".  If NULL, a
-#'     random candidate is selected from among the candidates not
-#'     initially top-ranked.  All other candidates are ranked #2.  An
-#'     integer value for 'favoured' is interpreted as an index into
-#'     the candidate names.
-#' @param tacticalBallot A ballot paper i.e. a vector of length
-#'     ncol(ballots).  If this argument is non-null, it takes
-#'     precedence over 'favoured' when the ballot box is being
-#'     stuffed.
+#' @param countMethod The name of a function which will count the ballots
+#' @param countArgs List of args to be passed to countMethod (in addition to
+#'   votes)
+#' @param rankMethod Name of a ranking attribute in the output of countMethod
+#' @param favoured Name of the candidate being "plumped".  If NULL, a random
+#'   candidate is selected from among the candidates not initially top-ranked.
+#'   All other candidates are fully-ranked at random, with an identical ballot
+#'   paper being stuffed multiple times.  An integer value for 'favoured' is
+#'   interpreted as an index into the candidate names.
+#' @param tacticalBallot A ballot paper i.e. a vector of length ncol(ballots).
+#'   If this argument is non-null, it takes precedence over 'favoured' when the
+#'   ballot box is being stuffed.
 #' @param ainc Number of ballots to be added in each step
 #' @param arep Maximum number of ballot-stuffed elections to run
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
-#' @return A matrix of experimental results, of dimension n by m+1, where
-#'     n is the number of elections and m is the number of candidates.  The
-#'     first column is named "nBallots".  Other columns indicate the rankings
-#'     of the eponymous candidates.
+#' @return A matrix of experimental results, of dimension n by 2m+1, where n is
+#'   the number of elections and m is the number of candidates.  The first
+#'   column is named "nBallots".  Other columns indicate the ranking of the
+#'   eponymous candidate, and their margin over the next-lower-ranked candidate.
 #' @export
 #' @examples
 #' data(food_election)
-#' testAdditions(food_election)
-#' testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), areps=2)
+#' testAdditions(food_election, countArgs=list(complete.ranking=TRUE))
+#' testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), arep=2)
 #' 
 testAdditions <- function(votes,
-                          ainc = NULL,
-                          arep = 2,
+                          ainc = 1,
+                          arep = NULL,
                           favoured = NULL,
                           tacticalBallot = NULL,
                           rankMethod = "safeRank",
@@ -177,8 +176,9 @@ testAdditions <- function(votes,
                           countArgs = NULL,
                           quiet = FALSE,
                           verbose = FALSE) {
+
   if (is.null(arep)) {
-    arep = 1
+    arep <- 1
   }
   stopifnot(arep > 0)
   if (is.null(ainc)) {
@@ -273,35 +273,37 @@ testAdditions <- function(votes,
 }
 
 
-#' Experiment with partial counts of ballots.
+#' Bootstrapping experiment, with fractional counts of ballots.
 #'
 #' Starting from some number ('astart') of randomly-selected ballots,
-#' additional randomly-selected ballots are added.  The rankings produced
-#' by each election are returned as a matrix with one row per election.
+#' increasingly larger number of randomly-selected ballots are counted. The
+#' ballots are chosen independently for each experiment. The rankings and
+#' margins produced by each simulated election are returned as a matrix with one
+#' row per election.
 #'
 #' @param votes A set of ballots
-#' @param countMethod The name of a function which will count the
-#'     ballots, e.g. "stv", "condorcet".
-#' @param countArgs List of args to be passed to countMethod (in
-#'     addition to votes)
-#' @param rankMethod Name of a ranking attribute in the output of
-#'     countMethod, e.g. "elected", "ranking", "safeRank".
+#' @param countMethod The name of a function which will count the ballots, e.g.
+#'   "stv", "condorcet".
+#' @param countArgs List of args to be passed to countMethod (in addition to
+#'   votes)
+#' @param rankMethod Name of a ranking attribute in the output of countMethod,
+#'   e.g. "elected", "ranking", "safeRank".
 #' @param astart Starting number of ballots (min 2)
 #' @param ainc Number of ballots to be added in each step
-#' @param arep Limit on the number of repetitions of the test.
-#'     Required to be non-null if ainc==0.
+#' @param arep Limit on the number of repetitions of the test. Required to be
+#'   non-null if ainc==0.
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
-#' @return a matrix of experimental results, of dimension n by m+1, where n is
-#'     the number of elections and m is the number of candidates.  The first
-#'     column is named "nBallots".  Other columns indicate the ranking of each
-#'     candidate in each election.
+#' @return a matrix of experimental results, of dimension n by 2m+1, where n is
+#'   the number of elections and m is the number of candidates.  The first
+#'   column is named "nBallots".  Other columns indicate the ranking and margin
+#'   of each candidate in each election.
 #' @export
 #' @examples
 #' data(food_election)
 #' testFraction(food_election, countMethod="condorcet",
-#'              countArgs=list(safety=0.5))
-#' testFraction(dublin_west, astart=20, ainc=20, arep=19, countMethod="stv",
+#'              countArgs=list(safety=0.5,complete.ranking=TRUE))
+#' testFraction(dublin_west, astart=20, ainc=20, arep=2, countMethod="stv",
 #'              rankMethod="elected", quiet=FALSE)
 testFraction <- function(votes,
                          astart = NULL,
@@ -364,22 +366,8 @@ testFraction <- function(votes,
     
     selBallots <- sample(nv, nBallots)
     newCR <- do.call(countMethod,
-                     append(cArgs, list(votes = votes[selBallots, ])))
-    
-    if (!rankMethod %in% attributes(newCR)$names) {
-      stop(paste(
-        "countMethod",
-        countMethod,
-        "does not produce a",
-        rankMethod
-      ))
-    }
-    
-    newRank <- newCR[[rankMethod]][colnames(votes)]
-    if (rankMethod == "elected") {
-      newRank <- electedAsRank(newRank, colnames(votes))
-    }
-    
+                     append(cArgs, list(votes = votes[selBallots,])))
+    newRank <- SafeVote.extractRank(rankMethod, countMethod, newCR)
     result <-
       rbind(result, append(c(nBallots = nBallots), newRank))
   }
@@ -392,15 +380,27 @@ testFraction <- function(votes,
   return(invisible(result))
 }
 
-#' convert the names of elected candidates into a 0-1 ranking
+#' Extract a ranking vector by name from the results of a ballot count
 #'
-#' @param elected the names of the elected candidates
-#' @param candidates the names of all candidates
+#' @param rankMethod e.g. "elected"
+#' @param countMethod e.g. "stv"
+#' @param cr structure returned by a ballot-counting method
 #'
-#' @return a named 0-1 vector of length(candidates)
-#'
-electedAsRank <- function(elected, candidates) {
-  rv <- as.integer(candidates %in% elected)
-  names(rv) <- candidates
-  return(rv)
+#' @return a numeric ranking vector, in order of colnames(cr$data)
+SafeVote.extractRank <- function(rankMethod, countMethod, cr) {
+  if (!rankMethod %in% attributes(cr)$names) {
+    stop(paste("countMethod",
+               countMethod,
+               "does not produce a",
+               rankMethod))
+  }
+  if (rankMethod == "elected") {
+    ## convert a list of names to a 1-2 ranking vector
+    ranks <- c(ifelse(colnames(cr$data) %in% cr$elected,2,1))
+    names(ranks) <- colnames(cr$data)
+  } else {
+    ## rearrange a numeric ranking vector, if necessary
+    ranks <- cr[[rankMethod]][colnames(cr$data)]
+  }
+  return(ranks)
 }
