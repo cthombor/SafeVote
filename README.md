@@ -37,4 +37,5 @@ study of the statistical behaviour of ballot counting methods. For
 example:
 
     data(dublin_west)
-    testFraction(dublin_west, astart=1000, ainc=1000, rankMethod="elected")
+    testDeletions(dublin_west, countMethod="stv", rankMethod="elected",
+                  countArgs=list(nseats=3))
