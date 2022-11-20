@@ -35,6 +35,7 @@
 #' votes are to be read. See below for more details.
 #' @param runoff Logical. If [TRUE] and no Condorcet winner exists,
 #' the election goes into a run-off, see below for details.
+#' @param nseats the number of seats to be filled in this election
 #' @param safety Parameter for a clustering heuristic on a total ranking of
 #' the candidates.  Conjecture: the default of `1.0` ensures a separation
 #' of one s.d. between clusters, when `votes` are i.u.d. permutations on the
@@ -54,7 +55,7 @@
 #' condorcet(food_election)
 #' }
 
-condorcet <- function(votes, runoff = FALSE, safety = 1.0, 
+condorcet <- function(votes, runoff = FALSE, nseats = 1, safety = 1.0, 
                       fsep = '\t', quiet = FALSE, ...) {
     
   compare.two.candidates <- function(v1, v2) {
@@ -79,6 +80,8 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
     }
     p
   }
+  
+  stopifnot(nseats==1) ## TODO: implement nseats > 1
   
   votes <- prepare.votes(votes, fsep = fsep)
   nc <- ncol(votes)
@@ -187,7 +190,7 @@ condorcet <- function(votes, runoff = FALSE, safety = 1.0,
   ## bidirectional cluster heuristic
   safeRank <- rank(-bordaScore, ties.method = "min")
   sortedBordaScore <- sort(bordaScore, decreasing = TRUE)
-  bordaGaps <- sortedBordaScore - append(sortedBordaScore[-1], 0)
+  bordaGaps <- -diff(sortedBordaScore)
   for (i in 2:nc) {
     if (bordaGaps[i - 1] < fuzz) {
       ## uprank the candidate with i-th highest score
