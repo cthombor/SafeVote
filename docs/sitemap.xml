@@ -73,6 +73,9 @@
     <loc>https://cthombor.github.io/SafeVote/reference/election.info.html</loc>
   </url>
   <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/extractRank.html</loc>
+  </url>
+  <url>
     <loc>https://cthombor.github.io/SafeVote/reference/food_election.html</loc>
   </url>
   <url>
@@ -107,6 +110,9 @@
   </url>
   <url>
     <loc>https://cthombor.github.io/SafeVote/reference/loserMargin.html</loc>
+  </url>
+  <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt.html</loc>
   </url>
   <url>
     <loc>https://cthombor.github.io/SafeVote/reference/ordered.preferences.html</loc>
