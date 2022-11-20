@@ -65,7 +65,7 @@ do not specify a complete ranking of candidates}
 \item{safety}{number of standard deviations on vote-counts, when producing a
 safeRank by clustering near-ties in a complete ranking}
 
-\item{...}{undocumented}
+\item{...}{undocumented intent}
 }
 \value{
 object of class vote.stv
