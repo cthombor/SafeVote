@@ -63,7 +63,7 @@ testDeletions <-
     nb <- nrow(ballots)
     
     ## include the initial ballot count in the experimental record
-    crRank <- SafeVote.extractRank(rankMethod,countMethod,cr)
+    crRank <- extractRank(rankMethod,countMethod,cr)
     result <- rbind(append(list(nBallots = nb), crRank))
     
     if (!quiet) {
@@ -120,7 +120,7 @@ testDeletions <-
       ballots <- ballots[rvn,]
       cr <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
-      crRank <- SafeVote.extractRank(rankMethod, countMethod, cr)
+      crRank <- extractRank(rankMethod, countMethod, cr)
       result <- rbind(result, append(c(nBallots = nBallots), crRank))
 
     }
@@ -367,7 +367,7 @@ testFraction <- function(votes,
     selBallots <- sample(nv, nBallots)
     newCR <- do.call(countMethod,
                      append(cArgs, list(votes = votes[selBallots,])))
-    newRank <- SafeVote.extractRank(rankMethod, countMethod, newCR)
+    newRank <- extractRank(rankMethod, countMethod, newCR)
     result <-
       rbind(result, append(c(nBallots = nBallots), newRank))
   }
@@ -387,7 +387,7 @@ testFraction <- function(votes,
 #' @param cr structure returned by a ballot-counting method
 #'
 #' @return a numeric ranking vector, in order of colnames(cr$data)
-SafeVote.extractRank <- function(rankMethod, countMethod, cr) {
+extractRank <- function(rankMethod, countMethod, cr) {
   if (!rankMethod %in% attributes(cr)$names) {
     stop(paste("countMethod",
                countMethod,
