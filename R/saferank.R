@@ -404,3 +404,33 @@ extractRank <- function(rankMethod, countMethod, cr) {
   }
   return(ranks)
 }
+
+#' Constructor for the results of a SafeRank experiment
+#'
+#' @param nvotes primary factor: number of ballots counted
+#' @param Ranks observed ranks
+#' @param Margins observed margins
+#' @param countMethod secondary factor: counting method e.g. "stv"
+#' @param rankMethod secondary factor: ranking method e.g. "elected"
+#' @param OtherFactors other secondary factors e.g. dataset name
+#'
+#' @return object of class SafeRankExpt
+#'
+#' @examples
+new_SafeRankExpt <-
+  function(nvotes = vector(mode = integer),
+           Ranks = matrix(),
+           Margins = matrix(),
+           countMethod = str(),
+           rankMethod = str(),
+           OtherFactors = vector()) {
+    structure(
+      nvotes = nvotes,
+      Ranks = Ranks,
+      Margins = Margins,
+      countMethod = countMethod,
+      rankMethod = rankMethod,
+      OtherFactors = OtherFactors,
+      class = "SafeRankExpt"
+    )
+  }
