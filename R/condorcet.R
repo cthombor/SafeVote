@@ -175,30 +175,35 @@ condorcet <- function(votes, runoff = FALSE, nseats = 1, safety = 1.0,
     }
   }
   
-  
-  bordaScore <- rowSums(cdc.scores)
-  bordaRank <- rank(-cdc.scores, ties.method = "min")
+  tScore <- rowSums(cdc.scores) # tournament scoring
+  tRank <- rank(-tScore, ties.method = "min")
+  tMargin <-
+    sapply(
+      tScore,
+      FUN = function(x) {
+        if (length(which(tScore < x)) == 0)
+          NA
+        else
+          x - max(tScore[tScore < x])
+      }
+    )
+      
   nv <- nrow(x2)
   fuzz <- safety * (nc-1) * sqrt(nv) / 2
   ## safety == 1.0 puts a "fuzz" of approx 1 s.d. on each Borda score,
   ## when votes are i.u.d. permutations.
   
-  ## TODO: correctly compute the variance of the distribution of Borda
-  ## scores when voters have no preference (and are tie-breaking at random
-  ## when writing a total order on their ballot)
-  
-  ## bidirectional cluster heuristic
-  safeRank <- rank(-bordaScore, ties.method = "min")
-  sortedBordaScore <- sort(bordaScore, decreasing = TRUE)
-  bordaGaps <- -diff(sortedBordaScore)
+  ## iterative clustering, in decreasing order of bordaScore
+  safeRank <- tRank
+  sortedTScore <- sort(tScore, decreasing = TRUE)
   for (i in 2:nc) {
-    if (bordaGaps[i - 1] < fuzz) {
+    if ((sortedTScore[i - 1] - sortedTScore[i]) < fuzz) {
       ## uprank the candidate with i-th highest score
-      safeRank[names(sortedBordaScore[i])] <-
-        safeRank[names(sortedBordaScore[i - 1])]
+      safeRank[names(sortedTScore[i])] <-
+        safeRank[names(sortedTScore[i - 1])]
     }
   }
-  
+ 
   ## An extension of Condorcet's criterion to partial rankings:
   ## * Candidate i is more highly ranked than Candidate j
   ## * only if a majority of voters agree with this.
@@ -236,6 +241,8 @@ condorcet <- function(votes, runoff = FALSE, nseats = 1, safety = 1.0,
           NULL,
         totals = points[, , "Wins"],
         scores = points[, , "Prefs"],
+        ranking = tRank,
+        margins = tMargin,
         safeRank = safeRank,
         fuzz = fuzz,
         data = x,
@@ -273,8 +280,9 @@ summary.SafeVote.condorcet <- function(object, ...) {
     df$Total <- rowSums(object$totals)
     attr(df, "align") <- rep("r", ncol(df))
 
-    df$Score <- rowSums(object$scores) # Borda's scoring
-    df$BordaRank <- rank(-df$Score, ties.method="min")
+    df$Score <- rowSums(object$scores) # tournament-style scoring
+    df$BordaRank <- object$ranking # based on Score (not Total)
+    df$margin <- object$margins
     df$SafeRank <- object$safeRank
     attr(df, "fuzz") <- object$fuzz
 
