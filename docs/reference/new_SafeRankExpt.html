@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">SafeVote</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.96</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.97</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,27 +43,30 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_SafeRankExpt</span><span class="op">(</span></span>
-<span>  nvotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="va">integer</span><span class="op">)</span>,</span>
-<span>  Ranks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  Margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  countMethod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  rankMethod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  OtherFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  nBallots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  ranks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  countMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rankMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  datasetName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  experimentalMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  otherFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>nvotes</dt>
-<dd><p>primary factor: number of ballots counted</p></dd>
+    <dl><dt>nBallots</dt>
+<dd><p>primary factor: number of ballots counted in this
+experimental unit</p></dd>
 
 
-<dt>Ranks</dt>
-<dd><p>observed ranks</p></dd>
+<dt>ranks</dt>
+<dd><p>a matrix with colnames(ballots), one row per experimental unit</p></dd>
 
 
-<dt>Margins</dt>
-<dd><p>observed margins</p></dd>
+<dt>margins</dt>
+<dd><p>a matrix with colnames(ballots), one row per unit</p></dd>
 
 
 <dt>countMethod</dt>
@@ -74,8 +77,18 @@
 <dd><p>secondary factor: ranking method e.g. "elected"</p></dd>
 
 
+<dt>datasetName</dt>
+<dd><p>secondary factor: name of the dataset of ballots</p></dd>
+
+
+<dt>experimentalMethod</dt>
+<dd><p>secondary factor: name of the method which
+simulated these elections e.g. "testFraction"</p></dd>
+
+
 <dt>OtherFactors</dt>
-<dd><p>other secondary factors e.g. dataset name</p></dd>
+<dd><p>other secondary factors, e.g. parameters to
+experimentalMethod, a timestamp.</p></dd>
 
 </dl></div>
     <div class="section level2">

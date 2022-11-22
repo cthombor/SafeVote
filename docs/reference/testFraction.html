@@ -18,7 +18,7 @@ row per election."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
     
     <a class="navbar-brand me-2" href="../index.html">SafeVote</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.96</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.97</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,7 @@ row per election.</p>
 <span>  rankMethod <span class="op">=</span> <span class="st">"safeRank"</span>,</span>
 <span>  countMethod <span class="op">=</span> <span class="st">"stv"</span>,</span>
 <span>  countArgs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exptName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -101,6 +102,10 @@ e.g. "elected", "ranking", "safeRank".</p></dd>
 votes)</p></dd>
 
 
+<dt>exptName</dt>
+<dd><p>stem-name of experimental units e.g. "E"</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>TRUE to suppress all output</p></dd>
 
@@ -127,24 +132,114 @@ votes)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fraction of condorcet ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experimental results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       nBallots Oranges Pears Chocolate Strawberries Sweets</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]        4       3     5         1            3      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]        6       1     1         1            1      5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]        8       3     4         1            1      5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]       10       2     4         1            2      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]       12       2     5         1            2      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]       14       3     5         1            2      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]       16       3     5         1            2      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]       18       3     4         1            2      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]       20       3     5         1            2      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nBallots</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR1 KYR2 KYR3 KYR4 KYR5 KYR6 KYR7 KYR8 KYR9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4    6    8   10   12   14   16   18   20 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ranks</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Oranges Pears Chocolate Strawberries Sweets</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR1       3     4         2            1      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR2       3     4         1            1      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR3       2     2         1            2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR4       1     2         2            2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR5       2     4         1            2      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR6       3     5         1            2      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR7       2     5         1            2      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR8       2     5         1            2      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR9       3     5         1            2      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $margins</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Oranges Pears Chocolate Strawberries Sweets</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR1       4    NA         4            2     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR2       3     1         2            3     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR3       2     2         6            2     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR4       6     1         2            2     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR5       5    NA        17            1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR6       3    NA        15           13      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR7       3    NA        17            3     12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR8       9    NA        15            3      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> KYR9       6    NA        20            6      8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $countMethod</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "condorcet"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rankMethod</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "safeRank"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $datasetName</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "food_election"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $experimentalMethod</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testFraction"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$astart</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$ainc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$arep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs$safety</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs$complete.ranking</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SafeRankExpt"</span>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">dublin_west</span>, astart<span class="op">=</span><span class="fl">20</span>, ainc<span class="op">=</span><span class="fl">20</span>, arep<span class="op">=</span><span class="fl">2</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>             rankMethod<span class="op">=</span><span class="st">"elected"</span>, quiet<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fraction of stv ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  0.1%, 0.2%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experimental results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      nBallots Bonnie Burton Ryan Higgins Lenihan McDonald Morrissey Smyth Terry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]       40      1      2    2       2       2        1         1     1     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]       60      1      2    2       2       2        1         1     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nBallots</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TKC1 TKC2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   40   60 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ranks</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Bonnie Burton Ryan Higgins Lenihan McDonald Morrissey Smyth Terry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TKC1      1      1    2       2       2        2         1     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TKC2      1      2    2       2       2        1         1     1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $margins</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Bonnie   Burton      Ryan Higgins Lenihan McDonald Morrissey Smyth Terry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TKC1     NA       NA 0.8458624  2.6670       4  1.00025        NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TKC2     NA 2.141582 1.2032333  5.4545       9       NA        NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $countMethod</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "stv"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rankMethod</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "elected"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $datasetName</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "dublin_west"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $experimentalMethod</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testFraction"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$astart</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$ainc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$arep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SafeRankExpt"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
