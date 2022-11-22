@@ -2,7 +2,7 @@
 #' 
 #' The Condorcet method elects the candidate who wins a majority of the ranked
 #' vote in every head to head election against each of the other candidates.
-#' *I.e.*, the Condorcet winner is a candidate who beats all other candidates
+#' A Condorcet winner is a candidate who beats all other candidates
 #' in pairwise comparisons. Analogously, a Condorcet loser is a candidate
 #' who loses against all other candidates. Neither Condorcet winner nor loser
 #' might exist.
@@ -28,7 +28,14 @@
 #' `rank(x, ties.method = "min")`. If a conversion of a vote occurs, 
 #' a warning is issued. That is done internally by calling the
 #' [correct.ranking] function.
-#'
+#' 
+#' This method also computes a Borda ranking of all candidates, using
+#' tournament-style scoring.  This ranking is "fuzzed" into a SafeRank, with
+#' approximately 1 s.d. of fuzz when `safety` = 1.0 and voter preferences are
+#' i.u.d.  A warning is thrown if SafeRank violates the (extended) Condorcet
+#' principle: that Candidate $i$ is more highly ranked than Candidate $j$ only
+#' if a majority of voters agree with this.
+#' 
 #' @param votes [Matrix] or [data frame] containing the votes. Rows
 #' correspond to the votes, columns correspond to the candidates. If `votes`
 #' is a character string, it is interpreted as a file name from which the
