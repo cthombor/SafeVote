@@ -13,6 +13,7 @@ testAdditions(
   rankMethod = "safeRank",
   countMethod = "stv",
   countArgs = NULL,
+  exptName = NULL,
   quiet = FALSE,
   verbose = FALSE
 )
@@ -40,6 +41,8 @@ ballot box is being stuffed.}
 
 \item{countArgs}{List of args to be passed to countMethod (in addition to
 votes)}
+
+\item{exptName}{stem-name of experimental units e.g. "E"}
 
 \item{quiet}{TRUE to suppress all output}
 

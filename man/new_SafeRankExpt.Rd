@@ -5,26 +5,35 @@
 \title{Constructor for the results of a SafeRank experiment}
 \usage{
 new_SafeRankExpt(
-  nvotes = vector(mode = integer),
-  Ranks = matrix(),
-  Margins = matrix(),
-  countMethod = str(),
-  rankMethod = str(),
-  OtherFactors = vector()
+  nBallots = integer(0),
+  ranks = matrix(),
+  margins = matrix(),
+  countMethod = NULL,
+  rankMethod = NULL,
+  datasetName = NULL,
+  experimentalMethod = NULL,
+  otherFactors = list()
 )
 }
 \arguments{
-\item{nvotes}{primary factor: number of ballots counted}
+\item{nBallots}{primary factor: number of ballots counted in this
+experimental unit}
 
-\item{Ranks}{observed ranks}
+\item{ranks}{a matrix with colnames(ballots), one row per experimental unit}
 
-\item{Margins}{observed margins}
+\item{margins}{a matrix with colnames(ballots), one row per unit}
 
 \item{countMethod}{secondary factor: counting method e.g. "stv"}
 
 \item{rankMethod}{secondary factor: ranking method e.g. "elected"}
 
-\item{OtherFactors}{other secondary factors e.g. dataset name}
+\item{datasetName}{secondary factor: name of the dataset of ballots}
+
+\item{experimentalMethod}{secondary factor: name of the method which
+simulated these elections e.g. "testFraction"}
+
+\item{OtherFactors}{other secondary factors, e.g. parameters to
+experimentalMethod, a timestamp.}
 }
 \value{
 object of class SafeRankExpt

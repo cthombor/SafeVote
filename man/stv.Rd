@@ -18,7 +18,7 @@ stv(
   complete.ranking = FALSE,
   invalid.partial = FALSE,
   verbose = FALSE,
-  seed = 1234,
+  seed = NULL,
   quiet = FALSE,
   digits = 3,
   safety = 1,
@@ -56,7 +56,9 @@ do not specify a complete ranking of candidates}
 
 \item{verbose}{TRUE for diagnostic output}
 
-\item{seed}{integer seed for the (default) RNG in this instance of R}
+\item{seed}{integer seed for tie-breaking.  Warning: if non-null, the
+PRNG for R will be reseeded prior to every tie-break, making it advisable
+to use an independent PRNG stream in randomised experimentation on stv().}
 
 \item{quiet}{TRUE to suppress console output}
 

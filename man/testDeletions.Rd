@@ -13,6 +13,7 @@ testDeletions(
   dinc = NULL,
   drep = NULL,
   rankMethod = "safeRank",
+  exptName = NULL,
   quiet = FALSE,
   verbose = FALSE
 )
@@ -35,15 +36,14 @@ votes)}
 
 \item{rankMethod}{Name of a ranking attribute in the output of countMethod}
 
+\item{exptName}{stem-name of experimental units e.g. "E"}
+
 \item{quiet}{TRUE to suppress all output}
 
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-A matrix of experimental results, of dimension n by 2m+1, where n is
-  the number of elections and m is the number of candidates.  The first
-  column is named "nBallots".  Other columns indicate the ranking of the
-  eponymous candidate, and their margin over the next-lower-ranked candidate.
+SafeRankExpt object, describing this experiment and its results
 }
 \description{
 Ballots are deleted at random from the ballot-box, with election results
