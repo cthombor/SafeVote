@@ -16,12 +16,10 @@
 #' @param dstart Number of ballots to be deleted after the initial ballot-count
 #' @param dinc Number of ballots to be deleted in subsequent steps
 #' @param drep Maximum number of elections (required if dinc=0)
+#' @param exptName stem-name of experimental units e.g. "E"
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
-#' @return A matrix of experimental results, of dimension n by 2m+1, where n is
-#'   the number of elections and m is the number of candidates.  The first
-#'   column is named "nBallots".  Other columns indicate the ranking of the
-#'   eponymous candidate, and their margin over the next-lower-ranked candidate.
+#' @return SafeRankExpt object, describing this experiment and its results
 #' @export
 #' @examples
 #' data(food_election)
@@ -39,9 +37,40 @@ testDeletions <-
            dinc = NULL,
            drep = NULL,
            rankMethod = "safeRank",
+           exptName = NULL,
            quiet = FALSE,
            verbose = FALSE) {
-    nv <- nrow(votes)
+   
+    result <- new_SafeRankExpt(
+      nBallots = integer(0),
+      ranks = matrix(
+        nrow = 0,
+        ncol = ncol(votes),
+        dimnames = list(NULL, colnames(votes))
+      ),
+      margins = matrix(
+        nrow = 0,
+        ncol = ncol(votes),
+        dimnames = list(NULL, colnames(votes))
+      ),
+      countMethod = countMethod,
+      rankMethod = rankMethod,
+      datasetName = deparse1(substitute(votes)),
+      experimentalMethod = "testDeletions",
+      otherFactors = list(
+        dlimit = dlimit,
+        dstart = dstart,
+        dinc = dinc,
+        drep = drep,
+        countArgs = countArgs
+      )
+    )
+    
+    if (is.null(exptName)) {
+      exptName <-
+        paste(LETTERS[sample(length(LETTERS), 3, replace = TRUE)],
+              collapse = "")
+    }
     
     ## suppress all output from counting unless verbose=TRUE
     cArgs <-
@@ -53,7 +82,8 @@ testDeletions <-
       stop(paste("countMethod", countMethod, "does not produce a",
                  rankMethod))
     }
-    if (nv != nrow(cr$data)) {
+
+    if (nrow(votes) != nrow(cr$data)) {
       warning(paste(
         nrow(votes) - nrow(cr$data),
         "informal ballots were deleted."
@@ -63,27 +93,25 @@ testDeletions <-
     nb <- nrow(ballots)
     
     ## include the initial ballot count in the experimental record
+    exptID = paste0(exptName,0)
+    result$nBallots <- append(result$nBallots, structure(nb,names=exptID))
     crRank <- extractRank(rankMethod,countMethod,cr)
-    result <- rbind(append(list(nBallots = nb), crRank))
-    
+    result$ranks <- rbind(result$ranks,crRank)
+    rownames(result$ranks)[1] <- exptID
+    result$margins <- rbind(result$margins,cr$margins)
+    rownames(result$margins)[1] <- exptID
+ 
     if (!quiet) {
       cat("Number of ballots counted by", countMethod, ":\n", nb)
     }
     
-    ## An election must have at least 2 ballots, to minimise exposure to
-    ## semantic "surprises" in R on short vectors, and also to avoid untested
-    ## (or unimplemented) corner cases in stv().
-    if (is.null(dlimit)) {
-      dlimit = nb-2
-    }
+    ## stv() throws an error if there are fewer than two ballots
     dlimit = min(dlimit, nb - 2) 
+    result$otherFactors$dlimit<-dlimit
     
     if (is.null(dstart)) {
- #     if (is.null(dinc) && is.null(drep)) {
- #       dstart <- 1
- #     } else {
         dstart <- 0
- #     }
+        result$otherFactors$dstart<-dstart
     }
     
     if (is.null(dinc)) {
@@ -91,10 +119,12 @@ testDeletions <-
       if (dinc==0) dinc=1
     }
     stopifnot(dinc >= 0)
-    
+    result$otherFactors$dinc<-dinc
+
     if (is.null(drep)) {
       stopifnot(dinc != 0)
       drep <- trunc(dlimit / dinc) + 1
+      result$otherFactors$drep<-drep
     }
     
     if (dinc == 0) {
@@ -112,6 +142,7 @@ testDeletions <-
     for (nBallots in nbv) {
 
       nrep <- nrep + 1
+      exptID <- paste0(exptName,nrep)
       if (!quiet) {
         cat(ifelse((nrep %% 10) == 0, ",\n", ","), nBallots)
       }
@@ -120,13 +151,19 @@ testDeletions <-
       ballots <- ballots[rvn,]
       cr <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
+      
+      result$nBallots <-
+        append(result$nBallots, structure(nBallots, names = exptID))
       crRank <- extractRank(rankMethod, countMethod, cr)
-      result <- rbind(result, append(c(nBallots = nBallots), crRank))
-
+      result$ranks <- rbind(result$ranks, crRank)
+      rownames(result$ranks)[nrep]<-exptID
+      result$margins <- rbind(result$margins,cr$margins)
+      rownames(result$margins)[nrep] <- exptID
+      
     }
     
     if (!quiet) {
-      cat("\nExperimental results:\n")
+      cat("\n\nExperimental results:\n")
       print(result)
     }
     return(invisible(result))
@@ -154,6 +191,7 @@ testDeletions <-
 #'   ballot box is being stuffed.
 #' @param ainc Number of ballots to be added in each step
 #' @param arep Maximum number of ballot-stuffed elections to run
+#' @param exptName stem-name of experimental units e.g. "E"
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
 #' @return A matrix of experimental results, of dimension n by 2m+1, where n is
@@ -174,6 +212,7 @@ testAdditions <- function(votes,
                           rankMethod = "safeRank",
                           countMethod = "stv",
                           countArgs = NULL,
+                          exptName = NULL,
                           quiet = FALSE,
                           verbose = FALSE) {
 
@@ -186,6 +225,35 @@ testAdditions <- function(votes,
   }
   stopifnot(ainc >= 0)
   
+  result <- new_SafeRankExpt(
+    nBallots = integer(0),
+    ranks = matrix(
+      nrow = 0,
+      ncol = ncol(votes),
+      dimnames = list(NULL, colnames(votes))
+    ),
+    margins = matrix(
+      nrow = 0,
+      ncol = ncol(votes),
+      dimnames = list(NULL, colnames(votes))
+    ),
+    countMethod = countMethod,
+    rankMethod = rankMethod,
+    datasetName = deparse1(substitute(votes)),
+    experimentalMethod = "testAdditions",
+    otherFactors = list(
+      ainc = ainc,
+      arep = arep,
+      countArgs = countArgs
+    )
+  )
+  
+  if (is.null(exptName)) {
+    exptName <-
+      paste(LETTERS[sample(length(LETTERS), 3, replace = TRUE)],
+            collapse = "")
+  }
+  
   ## Suppress all output from counting unless verbose=TRUE
   cArgs <-
     append(countArgs, list(quiet = !verbose, verbose = verbose))
@@ -196,13 +264,20 @@ testAdditions <- function(votes,
                rankMethod))
   }
   
-  initRank <- cr[[rankMethod]][colnames(votes)]
-  result <- matrix(append(c(nBallots = nrow(votes)), initRank),
-                   ncol = ncol(votes) + 1)
+  ## include the initial ballot count in the experimental record
+  ## TODO: refactor to avoid duplicating this code in this module
+  exptID = paste0(exptName,0)
+  result$nBallots <-
+    append(result$nBallots, structure(nrow(votes), names = exptID))
+  crRank <- extractRank(rankMethod, countMethod, cr)
+  result$ranks <- rbind(result$ranks, crRank)
+  rownames(result$ranks)[1]<-exptID
+  result$margins <- rbind(result$margins, cr$margins)
+  rownames(result$margins)[1] <- exptID
   
   if (!quiet && verbose) {
     cat("Initial ranking by", countMethod, ":\n")
-    print(initRank)
+    print(crRank)
   }
   
   nc <- ncol(votes)
@@ -212,13 +287,13 @@ testAdditions <- function(votes,
   if (is.null(tacticalBallot)) {
     if (!is.null(favoured)) {
       fc <- ifelse(is.character(favoured),
-                   which(names(initRank) == favoured),
+                   which(names(crRank) == favoured),
                    favoured)
       stopifnot((fc >= 1) || (fc <= nc))
       favoured <- colnames(cr$data)[fc]
     } else {
       cl <- colnames(votes) ## choose a random non-winner to favour
-      cl <- cl[-which(cl==names(initRank[which(initRank==1)]))]
+      cl <- cl[-which(cl==names(crRank[which(crRank==1)]))]
       favoured <- cl[sample(length(cl), size=1)]
       fc <- which(colnames(votes) == favoured)
     }
@@ -240,6 +315,8 @@ testAdditions <- function(votes,
         ")\n")
   }
   
+  result$otherFactors <- append(result$otherFactors, list(tacticalBallot=fb))
+  
   if (!quiet)
     cat("Testing progress: ")
   
@@ -255,14 +332,21 @@ testAdditions <- function(votes,
                    )) ## stuffing the ballot box!
     nadd <- nadd + ainc
     if (!quiet) {
-      cat(paste0(" ", nadd))
+      cat(paste0(" ", repct))
       cat(ifelse(repct < arep, ifelse((repct %% 10) == 0, ",\n", ","), ""))
     }
-    newCR <- do.call(countMethod,
+    cr <- do.call(countMethod,
                      append(cArgs, list(votes = svotes)))
-    newRank <- newCR[[rankMethod]][colnames(votes)]
-    result <-
-      rbind(result, append(c(nBallots = nrow(svotes)), newRank))
+
+    exptID = paste0(exptName, repct)
+    result$nBallots <-
+      append(result$nBallots, structure(nrow(svotes), names = exptID))
+    crRank <- extractRank(rankMethod, countMethod, cr)
+    result$ranks <- rbind(result$ranks, crRank)
+    rownames(result$ranks)[repct+1] <- exptID
+    result$margins <- rbind(result$margins, cr$margins)
+    rownames(result$margins)[repct+1] <- exptID
+    
   }
   
   if (!quiet) {
@@ -292,6 +376,7 @@ testAdditions <- function(votes,
 #' @param ainc Number of ballots to be added in each step
 #' @param arep Limit on the number of repetitions of the test. Required to be
 #'   non-null if ainc==0.
+#' @param exptName stem-name of experimental units e.g. "E"
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
 #' @return a matrix of experimental results, of dimension n by 2m+1, where n is
@@ -312,6 +397,7 @@ testFraction <- function(votes,
                          rankMethod = "safeRank",
                          countMethod = "stv",
                          countArgs = NULL,
+                         exptName = NULL,
                          quiet = FALSE,
                          verbose = FALSE) {
   nv <- nrow(votes)
@@ -341,9 +427,6 @@ testFraction <- function(votes,
     nb <- c(nb, nv) ## use all ballots in the last experimental run
   }
   
-  nreps <- 0
-  result <- NULL
-  
   if (verbose && !quiet) {
     cat(
       "\nSelecting an increasingly-large fraction of",
@@ -355,21 +438,61 @@ testFraction <- function(votes,
     cat("Fraction of", countMethod, "ballots:\n")
   }
   
+  if (is.null(exptName)) {
+    exptName <-
+      paste(LETTERS[sample(length(LETTERS), 3, replace = TRUE)],
+            collapse = "")
+  }
+  
+  result <- new_SafeRankExpt(
+    nBallots = integer(0),
+    ranks = matrix(
+      nrow = 0,
+      ncol = ncol(votes),
+      dimnames = list(NULL, colnames(votes))
+    ),
+    margins = matrix(
+      nrow = 0,
+      ncol = ncol(votes),
+      dimnames = list(NULL, colnames(votes))
+    ),
+    countMethod = countMethod,
+    rankMethod = rankMethod,
+    datasetName = deparse1(substitute(votes)),
+    experimentalMethod = "testFraction",
+    otherFactors = list(
+      astart = astart,
+      ainc = ainc,
+      arep = arep,
+      countArgs = countArgs
+    )
+  )
+  
+  nreps <- 0
   for (nBallots in nb) {
     nreps <- nreps + 1
     if (!quiet) {
       cat(paste0(" ", format(round(
         nBallots / nv * 100, 1
       ), digits = 4), "%"))
-      cat(ifelse(nreps < length(nb), ifelse((nreps %% 10) == 0, ",\n", ","), ""))
+      cat(ifelse(nreps < length(nb),
+                 ifelse((nreps %% 10) == 0, ",\n", ","), 
+                 ""))
     }
     
     selBallots <- sample(nv, nBallots)
-    newCR <- do.call(countMethod,
+    cr <- do.call(countMethod,
                      append(cArgs, list(votes = votes[selBallots,])))
-    newRank <- extractRank(rankMethod, countMethod, newCR)
-    result <-
-      rbind(result, append(c(nBallots = nBallots), newRank))
+    
+    exptID = paste0(exptName, nreps)
+    result$nBallots <-
+      append(result$nBallots, structure(nBallots, names = exptID))
+    crRank <- extractRank(rankMethod, countMethod, cr)
+    result$ranks <- rbind(result$ranks, crRank)
+    rownames(result$ranks)[nreps] <- exptID
+    result$margins <- rbind(result$margins, cr$margins)
+    rownames(result$margins)[nreps] <- exptID
+    
   }
   
   if (!quiet) {
@@ -407,28 +530,39 @@ extractRank <- function(rankMethod, countMethod, cr) {
 
 #' Constructor for the results of a SafeRank experiment
 #'
-#' @param nvotes primary factor: number of ballots counted
-#' @param Ranks observed ranks
-#' @param Margins observed margins
+#' @param nBallots primary factor: number of ballots counted in this
+#'   experimental unit
+#' @param ranks a matrix with colnames(ballots), one row per experimental unit
+#' @param margins a matrix with colnames(ballots), one row per unit
 #' @param countMethod secondary factor: counting method e.g. "stv"
 #' @param rankMethod secondary factor: ranking method e.g. "elected"
-#' @param OtherFactors other secondary factors e.g. dataset name
-#'
+#' @param datasetName secondary factor: name of the dataset of ballots
+#' @param experimentalMethod secondary factor: name of the method which
+#'   simulated these elections e.g. "testFraction"
+#' @param OtherFactors other secondary factors, e.g. parameters to
+#'   experimentalMethod, a timestamp.
+#'   
 #' @return object of class SafeRankExpt
 new_SafeRankExpt <-
-  function(nvotes = vector(mode = integer),
-           Ranks = matrix(),
-           Margins = matrix(),
-           countMethod = str(),
-           rankMethod = str(),
-           OtherFactors = vector()) {
+  function(nBallots = integer(0),
+           ranks = matrix(),
+           margins = matrix(),
+           countMethod = NULL,
+           rankMethod = NULL,
+           datasetName = NULL,
+           experimentalMethod = NULL,
+           otherFactors = list()) {
     structure(
-      nvotes = nvotes,
-      Ranks = Ranks,
-      Margins = Margins,
-      countMethod = countMethod,
-      rankMethod = rankMethod,
-      OtherFactors = OtherFactors,
+      list(
+        nBallots = nBallots,
+        ranks = ranks,
+        margins = margins,
+        countMethod = countMethod,
+        rankMethod = rankMethod,
+        datasetName = datasetName,
+        experimentalMethod = experimentalMethod,
+        otherFactors = otherFactors
+      ),
       class = "SafeRankExpt"
     )
   }
