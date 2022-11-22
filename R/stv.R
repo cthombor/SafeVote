@@ -17,7 +17,9 @@
 #' @param invalid.partial TRUE if ballots are invalid (aka "informal") if they
 #'   do not specify a complete ranking of candidates
 #' @param verbose TRUE for diagnostic output
-#' @param seed integer seed for the (default) RNG in this instance of R
+#' @param seed integer seed for tie-breaking.  Warning: if non-null, the
+#'   PRNG for R will be reseeded prior to every tie-break, making it advisable
+#'   to use an independent PRNG stream in randomised experimentation on stv().
 #' @param quiet TRUE to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param safety number of standard deviations on vote-counts, when producing a
@@ -50,7 +52,7 @@ stv <-
            complete.ranking = FALSE,
            invalid.partial = FALSE,
            verbose = FALSE,
-           seed = 1234,
+           seed = NULL,
            quiet = FALSE,
            digits = 3,
            safety = 1.0,
@@ -186,6 +188,8 @@ stv <-
     ## Create elimination ranking
     tie.method <- match.arg(ties)
     tie.method.name <- c(f = "forwards", b = "backwards")
+    ## TODO: verify that the intention is to reseed prior to every tie-break, if
+    ## !is.null(seed)
     otb <- ordered.tiebreak(x, seed)
     
     if (use.marking) {
@@ -588,6 +592,7 @@ ordered.tiebreak <- function(vmat, seed = NULL) {
   ## resolve ranking duplicates by moving to the next column
   if (any(dpl)) {
     if (!is.null(seed))
+      ## TODO: verify that the intent is to reseed prior to every tie-break
       set.seed(seed)
     for (pref in 1:ncol(vmat)) {
       if (!pref %in% rnk[dpl])
