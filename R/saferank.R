@@ -93,6 +93,8 @@ testDeletions <-
     nb <- nrow(ballots)
     
     ## include the initial ballot count in the experimental record
+    ## TODO: refactor into result <- recordResult(result,...)
+    ## TODO: consider a major refactoring into result <- doExperiment(result)
     exptID = paste0(exptName,0)
     result$nBallots <- append(result$nBallots, structure(nb,names=exptID))
     crRank <- extractRank(rankMethod,countMethod,cr)
@@ -156,9 +158,9 @@ testDeletions <-
         append(result$nBallots, structure(nBallots, names = exptID))
       crRank <- extractRank(rankMethod, countMethod, cr)
       result$ranks <- rbind(result$ranks, crRank)
-      rownames(result$ranks)[nrep]<-exptID
+      rownames(result$ranks)[nrep+1]<-exptID
       result$margins <- rbind(result$margins,cr$margins)
-      rownames(result$margins)[nrep] <- exptID
+      rownames(result$margins)[nrep+1] <- exptID
       
     }
     
@@ -539,7 +541,7 @@ extractRank <- function(rankMethod, countMethod, cr) {
 #' @param datasetName secondary factor: name of the dataset of ballots
 #' @param experimentalMethod secondary factor: name of the method which
 #'   simulated these elections e.g. "testFraction"
-#' @param OtherFactors other secondary factors, e.g. parameters to
+#' @param otherFactors other secondary factors, e.g. parameters to
 #'   experimentalMethod, a timestamp.
 #'   
 #' @return object of class SafeRankExpt
@@ -566,3 +568,5 @@ new_SafeRankExpt <-
       class = "SafeRankExpt"
     )
   }
+
+##TODO: summary() method for SafeRankExpt class
