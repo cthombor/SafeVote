@@ -188,8 +188,6 @@ stv <-
     ## Create elimination ranking
     tie.method <- match.arg(ties)
     tie.method.name <- c(f = "forwards", b = "backwards")
-    ## TODO: verify that the intention is to reseed prior to every tie-break, if
-    ## !is.null(seed)
     otb <- ordered.tiebreak(x, seed)
     
     if (use.marking) {
@@ -229,13 +227,13 @@ stv <-
     
     count <- 0
     inPlay <- rep(TRUE, nc)
-    while (nseats > 0) {
+    ## elect or eliminate one candidate per execution of the loop, with an
+    ## early exit if all seats are filled
+    while ((nseats > 0) && any(inPlay)) {
       ## calculate quota and total first preference votes
       count <- count + 1
-      A <-
-        (x == 1) / rowSums(x == 1) ## splits 1st votes if there are
-      ## more than one first ranking
-      ## per vote
+      ## split 1st prefs if there is more than one first ranking on a ballot
+      A <- (x == 1) / rowSums(x == 1) 
       A[is.na(A)] <- 0
       uij <- w * A
       vcast <- apply(uij, 2, sum)
@@ -281,28 +279,30 @@ stv <-
       
       ## with constant.quota, elected candidates may not need to reach quota
       ##
-      ## if there are at least as many candidates in play as there are seats
-      ## remaining to be filled, there should be no eliminations, and the quota
-      ## is irrelevant.  We have allowed candidates to be elected even if
-      ## no voter has recorded a preference for them -- this is an important
-      ## case when running simulated elections with only a few ballots, but
-      ## is of limited practical relevance.
+      ## If there are at least as many candidates in play as there are seats
+      ## remaining to be filled, the quota is (arguably) irrelevant.
       ##
-      ## the clause "!(! ic %in% group.members && nseats == group.nseats)" was
+      ## If nobody has voted for a candidate, they (arguably) shouldn't be
+      ## elected -- even if they are a member of a group.
+      ##
+      ## The clause "!(! ic %in% group.members && nseats == group.nseats)" was
       ## recoded Nov 2022 to avoid throwing an error when group.members is NULL
-      ## and ic is not a singleton, however the intended semantics may be !all
-      ## rather than !any
+      ## and ic is not a singleton.
       ##
-      ## TODO: review for correctness
+      ## TODO: review for correctness against a specification of how the corner
+      ## cases should be handled.
       
       if ((vmax >= quota &&
-           !((nseats == group.nseats) &&
-             !any(ic %in% group.members)) ||
-           (constant.quota && sum(D) <= nseats)) ||
-          (use.marking &&
+           !(!any(ic %in% group.members) && (nseats == group.nseats))) ||
+          ((vmax > 0) && (constant.quota && sum(D) <= nseats)) ||
+          ((vmax > 0) &&
+           use.marking &&
            any(ic %in% group.members) &&
            (sum(Dm) <= group.nseats || sum(D) - sum(Dm) == 0)) ||
-          (nc - length(elected) - length(eliminated)) >= nseats) {
+          ((vmax > 0) &&
+           ((nc - length(elected) - length(eliminated)) >= nseats)) 
+          ) {
+        
         if (use.marking && length(ic) > 1 && sum(Dm) <= group.nseats) {
           ## if a tiebreak, choose marked candidates if needed
           ic <- ic[ic %in% group.members]
@@ -351,25 +351,26 @@ stv <-
               "elected with margin",
               result.margins[ic])
           if (tie > 0) {
-            cat("using", tie.method.name[tie.method])
+            cat(" using", tie.method.name[tie.method])
             if (tie == 2)
               cat(" & ordered")
             cat(" tie-breaking method ")
             if (tie > 2)
               cat("(sampled)")
-            
           }
           cat("\n")
         }
-        
       } else {
         ## no candidate reaches quota, and at least one can be eliminated
+        stopifnot(any(D))
+        elim.select <- D
         if (use.marking &&
             (nseats == group.nseats ||
              sum(Dm) <= group.nseats)) {
           elim.select <- elim.select & !Dm
         }
-        stopifnot(any(elim.select)) ## regression test
+        ## regression test for a corner case on Dm (group member gets no votes)
+        stopifnot(any(elim.select)) 
         vmin <- min(vcast[elim.select])
         ic <- (1:nc)[vcast == vmin & elim.select]
         stopifnot(length(ic) > 0)  ## regression test
@@ -411,17 +412,15 @@ stv <-
         }
       }
       
-      
-      
       result.ties <- c(result.ties, tie)
+      
+      stopifnot(length(ic) == 1) ## regression test
       ## shift votes for voters who voted for ic
       jp <- x[, ic]
       for (i in which(jp > 0)) {
-        ## TODO why not vectorise this loop?
-        index <- x[i,] > jp[i]
+        index <- x[i, ] > jp[i]
         x[i, index] <- x[i, index] - 1
       }
-      
       x[, ic] <- 0
       
     }
@@ -1101,8 +1100,13 @@ completeRankingTable <- function(object, ...) {
   safeRank <- result$Rank
   for (i in 2:nrow(result)) {
     ## iterative 1-d clustering
-    if (result$Margin[i - 1] < object$fuzz) {
+    if (is.na(result$Margin[i - 1])) {
+      warning("NA margin at rank ", i)
       safeRank[i] <- safeRank[i - 1]
+    } else {
+      if (result$Margin[i - 1] < object$fuzz) {
+        safeRank[i] <- safeRank[i - 1]
+      }
     }
   }
   
