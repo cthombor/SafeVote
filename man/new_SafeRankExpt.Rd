@@ -32,7 +32,7 @@ experimental unit}
 \item{experimentalMethod}{secondary factor: name of the method which
 simulated these elections e.g. "testFraction"}
 
-\item{OtherFactors}{other secondary factors, e.g. parameters to
+\item{otherFactors}{other secondary factors, e.g. parameters to
 experimentalMethod, a timestamp.}
 }
 \value{
