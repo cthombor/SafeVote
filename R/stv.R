@@ -803,7 +803,6 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
 #' @param x undocumented
 #' @param ... undocumented
 #'
-#' @import knitr
 #' @export
 print.summary.SafeVote.stv <- function(x, ...) {
   cat("\nResults of Single transferable vote")
@@ -835,7 +834,18 @@ print.summary.SafeVote.stv <- function(x, ...) {
       "\n\n")
 }
 
-#' view() method for the result of an stv() ballot-count
+#' generic view() for classes defined in this package
+#'
+#' @param object election object to be viewed
+#' @param ... additional parameters, passed to formatter()
+#'
+#' @return html-formatted object, with side-effect in RStudio's Viewer pane
+#' @export
+view <- function(object, ...) {
+  UseMethod("view")
+}
+
+#' view method for the result of an stv() ballot-count
 #' @param object undocumented
 #' @param ... undocumented
 #'
@@ -857,9 +867,9 @@ view.SafeVote.stv <- function(object, ...) {
 
 #' image() method for the result of an stv() ballot-count
 #'
-#' @param x,xpref,ypref,all.pref,proportion,... undocumented
+#' @param x,xpref,ypref,all.pref,proportion,... undocumented (legacy code)
 #'
-#' @return image object
+#' @return image object, with side-effect in RStudio Plots pane
 #' @import grDevices graphics data.table
 #' @export
 #'
@@ -869,7 +879,10 @@ image.SafeVote.stv <- function(x,
                                all.pref = FALSE,
                                proportion = TRUE,
                                ...) {
-  voter <- rank <- NULL # to avoid warnings of the CRAN check
+  
+  ## Declaring temps for data.table calls.  Warning: overloads rank() 
+  voter <- rank <- NULL 
+  
   xd <- x$data
   nc <- ncol(xd)
   if (all.pref) {
@@ -950,7 +963,8 @@ image.SafeVote.stv <- function(x,
 }
 
 #' plot() method for the result of an stv() ballot-count
-#' @param x,xlab,ylab,point.size,... undocumented
+#' @param x,xlab,ylab,point.size,... undocumented (legacy code)
+#' @return graphics object, with side-effect in RStudio's Plots pane
 #' @export
 plot.SafeVote.stv <-
   function(x,
@@ -959,9 +973,12 @@ plot.SafeVote.stv <-
            point.size = 2,
            ...) {
     stopifnot(requireNamespace("ggplot2", quietly = TRUE))
+    
+    ## Temp objects for data.table calls
     Count <- value <- selection <-
       i.value <- count.select <- Candidate <-
-      i.Count <- NULL  ## to avoid warnings of the CRAN check
+      i.Count <- NULL
+    
     ## Plot evolution of the preferences
     ## prepare data in the long format
     df <- data.table(x$preferences)
