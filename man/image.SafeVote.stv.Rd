@@ -7,10 +7,10 @@
 \method{image}{SafeVote.stv}(x, xpref = 2, ypref = 1, all.pref = FALSE, proportion = TRUE, ...)
 }
 \arguments{
-\item{x, xpref, ypref, all.pref, proportion, ...}{undocumented}
+\item{x, xpref, ypref, all.pref, proportion, ...}{undocumented (legacy code)}
 }
 \value{
-image object
+image object, with side-effect in RStudio Plots pane
 }
 \description{
 image() method for the result of an stv() ballot-count

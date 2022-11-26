@@ -7,7 +7,10 @@
 \method{plot}{SafeVote.stv}(x, xlab = "Count", ylab = "Preferences", point.size = 2, ...)
 }
 \arguments{
-\item{x, xlab, ylab, point.size, ...}{undocumented}
+\item{x, xlab, ylab, point.size, ...}{undocumented (legacy code)}
+}
+\value{
+graphics object, with side-effect in RStudio's Plots pane
 }
 \description{
 plot() method for the result of an stv() ballot-count

@@ -2,9 +2,9 @@
 % Please edit documentation in R/stv.R
 \name{view.SafeVote.stv}
 \alias{view.SafeVote.stv}
-\title{view() method for the result of an stv() ballot-count}
+\title{view method for the result of an stv() ballot-count}
 \usage{
-view.SafeVote.stv(object, ...)
+\method{view}{SafeVote.stv}(object, ...)
 }
 \arguments{
 \item{object}{undocumented}
@@ -15,5 +15,5 @@ view.SafeVote.stv(object, ...)
 formatted object
 }
 \description{
-view() method for the result of an stv() ballot-count
+view method for the result of an stv() ballot-count
 }

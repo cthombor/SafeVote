@@ -4,7 +4,7 @@
 \alias{view.SafeVote.plurality}
 \title{view method for plurality object}
 \usage{
-view.SafeVote.plurality(object, ...)
+\method{view}{SafeVote.plurality}(object, ...)
 }
 \arguments{
 \item{object, ...}{undocumented}
