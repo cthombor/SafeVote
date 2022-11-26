@@ -21,6 +21,7 @@
 #' @param verbose TRUE to produce diagnostic output
 #' @return SafeRankExpt object, describing this experiment and its results
 #' @export
+#' @import data.table
 #' @examples
 #' data(food_election)
 #' testDeletions(food_election)
@@ -40,29 +41,22 @@ testDeletions <-
            exptName = NULL,
            quiet = FALSE,
            verbose = FALSE) {
-   
+    
+    marginNames <- sapply(colnames(votes), function(x) paste0("m.",x))
+    
     result <- new_SafeRankExpt(
-      nBallots = integer(0),
-      ranks = matrix(
-        nrow = 0,
-        ncol = ncol(votes),
-        dimnames = list(NULL, colnames(votes))
-      ),
-      margins = matrix(
-        nrow = 0,
-        ncol = ncol(votes),
-        dimnames = list(NULL, colnames(votes))
-      ),
+      rankNames = colnames(votes),
+      marginNames = marginNames,
       countMethod = countMethod,
       rankMethod = rankMethod,
       datasetName = deparse1(substitute(votes)),
       experimentalMethod = "testDeletions",
+      countArgs = countArgs,
       otherFactors = list(
-        dlimit = dlimit,
-        dstart = dstart,
-        dinc = dinc,
-        drep = drep,
-        countArgs = countArgs
+        dlimit = NULL,
+        dstart = NULL,
+        dinc = NULL,
+        drep = NULL
       )
     )
     
@@ -93,41 +87,44 @@ testDeletions <-
     nb <- nrow(ballots)
     
     ## include the initial ballot count in the experimental record
-    ## TODO: refactor into result <- recordResult(result,...)
-    ## TODO: consider a major refactoring into result <- doExperiment(result)
+    ## TODO: consider a major refactoring, using doExperiment(result) to
+    ##    fill in the table of observations given the experimental units.
     exptID = paste0(exptName,0)
-    result$nBallots <- append(result$nBallots, structure(nb,names=exptID))
-    crRank <- extractRank(rankMethod,countMethod,cr)
-    result$ranks <- rbind(result$ranks,crRank)
-    rownames(result$ranks)[1] <- exptID
-    result$margins <- rbind(result$margins,cr$margins)
-    rownames(result$margins)[1] <- exptID
- 
+    crRank <- extractRank(rankMethod, countMethod, cr)
+    crMargins <- cr$margins
+    names(crMargins) <- marginNames
+    newResult <- append(list(exptID = exptID, 
+                             nBallots = nb), 
+                        append(crRank, 
+                               crMargins))
+    result <- rbind.SafeRankExpt(result, newResult)
+
     if (!quiet) {
-      cat("Number of ballots counted by", countMethod, ":\n", nb)
+      cat(paste0("Number of ballots counted by ",
+                 countMethod, ":\n  ", nb))
     }
     
     ## stv() throws an error if there are fewer than two ballots
     dlimit = min(dlimit, nb - 2) 
-    result$otherFactors$dlimit<-dlimit
+    attr(result, "otherFactors")$dlimit <- dlimit
     
     if (is.null(dstart)) {
         dstart <- 0
-        result$otherFactors$dstart<-dstart
     }
+    attr(result, "otherFactors")$dstart <- dstart
     
     if (is.null(dinc)) {
       dinc <- (dlimit-dstart+4) %/% 10  ## deciles (roughly)
       if (dinc==0) dinc=1
     }
     stopifnot(dinc >= 0)
-    result$otherFactors$dinc<-dinc
+    attr(result, "otherFactors")$dinc <- dinc
 
     if (is.null(drep)) {
       stopifnot(dinc != 0)
       drep <- trunc(dlimit / dinc) + 1
-      result$otherFactors$drep<-drep
     }
+    attr(result, "otherFactors")$drep <- drep
     
     if (dinc == 0) {
       nbv <- rep(nb - dstart, drep-1)
@@ -154,19 +151,20 @@ testDeletions <-
       cr <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
       
-      result$nBallots <-
-        append(result$nBallots, structure(nBallots, names = exptID))
       crRank <- extractRank(rankMethod, countMethod, cr)
-      result$ranks <- rbind(result$ranks, crRank)
-      rownames(result$ranks)[nrep+1]<-exptID
-      result$margins <- rbind(result$margins,cr$margins)
-      rownames(result$margins)[nrep+1] <- exptID
+      crMargins <- cr$margins
+      names(crMargins) <- marginNames
+      newResult <- append(list(exptID = exptID, 
+                               nBallots = nBallots), 
+                          append(crRank, 
+                                 crMargins))
+      result <- rbind.SafeRankExpt(result, newResult)
       
     }
     
     if (!quiet) {
-      cat("\n\nExperimental results:\n")
-      print(result)
+      cat("\n")
+      print(summary(result))
     }
     return(invisible(result))
   }
@@ -227,26 +225,20 @@ testAdditions <- function(votes,
   }
   stopifnot(ainc >= 0)
   
+  marginNames <- sapply(colnames(votes), function(x) paste0("m.",x))
+  
   result <- new_SafeRankExpt(
-    nBallots = integer(0),
-    ranks = matrix(
-      nrow = 0,
-      ncol = ncol(votes),
-      dimnames = list(NULL, colnames(votes))
-    ),
-    margins = matrix(
-      nrow = 0,
-      ncol = ncol(votes),
-      dimnames = list(NULL, colnames(votes))
-    ),
+    rankNames = colnames(votes),
+    marginNames = marginNames,
     countMethod = countMethod,
     rankMethod = rankMethod,
     datasetName = deparse1(substitute(votes)),
     experimentalMethod = "testAdditions",
+    countArgs = countArgs,
     otherFactors = list(
       ainc = ainc,
       arep = arep,
-      countArgs = countArgs
+      tacticalBallot = NULL
     )
   )
   
@@ -267,15 +259,15 @@ testAdditions <- function(votes,
   }
   
   ## include the initial ballot count in the experimental record
-  ## TODO: refactor to avoid duplicating this code in this module
   exptID = paste0(exptName,0)
-  result$nBallots <-
-    append(result$nBallots, structure(nrow(votes), names = exptID))
   crRank <- extractRank(rankMethod, countMethod, cr)
-  result$ranks <- rbind(result$ranks, crRank)
-  rownames(result$ranks)[1]<-exptID
-  result$margins <- rbind(result$margins, cr$margins)
-  rownames(result$margins)[1] <- exptID
+  crMargins <- cr$margins
+  names(crMargins) <- marginNames
+  newResult <- append(list(exptID = exptID, 
+                           nBallots = nrow(votes)), 
+                      append(crRank, 
+                             crMargins))
+  result <- rbind.SafeRankExpt(result, newResult)
   
   if (!quiet && verbose) {
     cat("Initial ranking by", countMethod, ":\n")
@@ -317,7 +309,7 @@ testAdditions <- function(votes,
         ")\n")
   }
   
-  result$otherFactors <- append(result$otherFactors, list(tacticalBallot=fb))
+  attr(result, "otherFactors")$tacticalBallot <- fb
   
   if (!quiet)
     cat("Testing progress: ")
@@ -341,19 +333,20 @@ testAdditions <- function(votes,
                      append(cArgs, list(votes = svotes)))
 
     exptID = paste0(exptName, repct)
-    result$nBallots <-
-      append(result$nBallots, structure(nrow(svotes), names = exptID))
     crRank <- extractRank(rankMethod, countMethod, cr)
-    result$ranks <- rbind(result$ranks, crRank)
-    rownames(result$ranks)[repct+1] <- exptID
-    result$margins <- rbind(result$margins, cr$margins)
-    rownames(result$margins)[repct+1] <- exptID
+    crMargins <- cr$margins
+    names(crMargins) <- marginNames
+    newResult <- append(list(exptID = exptID, 
+                             nBallots = nrow(svotes)), 
+                        append(crRank, 
+                               crMargins))
+    result <- rbind.SafeRankExpt(result, newResult)
     
   }
   
   if (!quiet) {
-    cat("\nExperimental results:\n")
-    print(result)
+    cat("\n")
+    print(summary(result))
   }
   return(invisible(result))
 }
@@ -446,27 +439,20 @@ testFraction <- function(votes,
             collapse = "")
   }
   
+  marginNames <- sapply(colnames(votes), function(x) paste0("m.",x))
+  
   result <- new_SafeRankExpt(
-    nBallots = integer(0),
-    ranks = matrix(
-      nrow = 0,
-      ncol = ncol(votes),
-      dimnames = list(NULL, colnames(votes))
-    ),
-    margins = matrix(
-      nrow = 0,
-      ncol = ncol(votes),
-      dimnames = list(NULL, colnames(votes))
-    ),
+    rankNames = colnames(votes),
+    marginNames = marginNames,
     countMethod = countMethod,
     rankMethod = rankMethod,
     datasetName = deparse1(substitute(votes)),
     experimentalMethod = "testFraction",
+    countArgs = countArgs,
     otherFactors = list(
       astart = astart,
       ainc = ainc,
-      arep = arep,
-      countArgs = countArgs
+      arep = arep
     )
   )
   
@@ -487,19 +473,19 @@ testFraction <- function(votes,
                      append(cArgs, list(votes = votes[selBallots,])))
     
     exptID = paste0(exptName, nreps)
-    result$nBallots <-
-      append(result$nBallots, structure(nBallots, names = exptID))
     crRank <- extractRank(rankMethod, countMethod, cr)
-    result$ranks <- rbind(result$ranks, crRank)
-    rownames(result$ranks)[nreps] <- exptID
-    result$margins <- rbind(result$margins, cr$margins)
-    rownames(result$margins)[nreps] <- exptID
-    
+    crMargins <- cr$margins
+    names(crMargins) <- marginNames
+    newResult <- append(list(exptID = exptID, 
+                             nBallots = nBallots), 
+                        append(crRank, 
+                               crMargins))
+    result <- rbind.SafeRankExpt(result, newResult)
   }
   
   if (!quiet) {
-    cat("\nExperimental results:\n")
-    print(result)
+    cat("\n")
+    print(summary(result))
   }
   
   return(invisible(result))
@@ -532,41 +518,126 @@ extractRank <- function(rankMethod, countMethod, cr) {
 
 #' Constructor for the results of a SafeRank experiment
 #'
-#' @param nBallots primary factor: number of ballots counted in this
-#'   experimental unit
-#' @param ranks a matrix with colnames(ballots), one row per experimental unit
-#' @param margins a matrix with colnames(ballots), one row per unit
+#' @param rankNames colnames for per-candidate ranks
+#' @param marginNames colnames for per-candidate margins
 #' @param countMethod secondary factor: counting method e.g. "stv"
 #' @param rankMethod secondary factor: ranking method e.g. "elected"
 #' @param datasetName secondary factor: name of the dataset of ballots
 #' @param experimentalMethod secondary factor: name of the method which
 #'   simulated these elections e.g. "testFraction"
+#' @param countArgs secondary factor: args passed to countMethod
 #' @param otherFactors other secondary factors, e.g. parameters to
-#'   experimentalMethod, a timestamp.
-#'   
+#'   experimentalMethod.
 #' @return object of class SafeRankExpt
 new_SafeRankExpt <-
-  function(nBallots = integer(0),
-           ranks = matrix(),
-           margins = matrix(),
+  function(rankNames = NULL,
+           marginNames = NULL,
            countMethod = NULL,
            rankMethod = NULL,
            datasetName = NULL,
            experimentalMethod = NULL,
+           countArgs = NULL,
            otherFactors = list()) {
-    structure(
-      list(
-        nBallots = nBallots,
-        ranks = ranks,
-        margins = margins,
-        countMethod = countMethod,
-        rankMethod = rankMethod,
-        datasetName = datasetName,
-        experimentalMethod = experimentalMethod,
-        otherFactors = otherFactors
-      ),
-      class = "SafeRankExpt"
+    
+    dt <- data.table(
+      exptID = matrix(character(0), ncol = 1),
+      nBallots = matrix(integer(0),   ncol = 1),
+      ranks    = matrix(integer(0),   ncol = length(rankNames)),
+      margins  = matrix(double(0),    ncol = length(marginNames))
     )
+    colnames(dt) <- c("exptID", "nBallots", rankNames, marginNames)
+    setattr(dt, "countMethod",        countMethod)
+    setattr(dt, "rankMethod",         rankMethod)
+    setattr(dt, "datasetName",        datasetName)
+    setattr(dt, "experimentalMethod", experimentalMethod)
+    setattr(dt, "countArgs",          countArgs)
+    setattr(dt, "startTime",          format(as.POSIXlt(Sys.time())))
+    setattr(dt, "otherFactors",       otherFactors)
+    class(dt) <- append("SafeRankExpt", class(dt))
+    return(dt)
   }
 
-##TODO: summary() method for SafeRankExpt class
+#' is.SafeRankExpt()
+#'
+#' @param x object of unknown class
+#' @return TRUE if x is a SafeRankExpt object
+#' @export
+is.SafeRankExpt <- function(x) {
+  return(inherits(x, "SafeRankExpt"))
+}
+
+#' add a row to a SafeRankExpt object
+#'
+#' @param object prior results of experimentation
+#' @param row    new observations
+#'
+#' @return updated SafeRankExpt object
+rbind.SafeRankExpt <- function(object, row) {
+  stopifnot(is.SafeRankExpt(object))
+  ## rbind() produces a SafeRankExpt object with no attributes
+  ao <- attributes(object)
+  object = rbind(object, row, use.names = TRUE)
+  attributes(object) <- ao
+  stopifnot(is.SafeRankExpt(object))
+  return(object)
+}
+
+#' summary method for SafeRankExpt
+#'
+#' @param x experimental results to be summarised
+#' @param ... args for generic summary()
+#'
+#' @return summary.SafeRankExpt object
+#' @export
+summary.SafeRankExpt <- function(x, ...) {
+  stopifnot(is.SafeRankExpt(x))
+  class(x) <- append("summary.SafeRankExpt", class(x))
+  return(invisible(x))
+}
+
+#' Print method for summary.SafeRankExpt
+#'
+#' @param x experimental results
+#' @param ... args for generic print()
+#'
+#' @return invisible(x), with side-effects to console
+#' @export
+print.summary.SafeRankExpt <- function(x, ...) {
+  cat(
+    paste0(
+      "\nResults of ",
+      attr(x, "experimentalMethod"),
+      " at ",
+      attr(x, "startTime"),
+      "\nDataset = ",
+      attr(x, "datasetName"),
+      ", countMethod = ",
+      attr(x, "countMethod"),
+      ", rankMethod = ",
+      attr(x, "rankMethod")
+    )
+  )
+  cA <- attr(x, "countArgs")
+  print(knitr::kable(
+    matrix(
+      cA,
+      ncol = length(cA),
+      byrow = TRUE,
+      dimnames = list(c("countArgs"), names(cA))
+    ),
+    align = "r"
+  ))
+  oF <- attr(x, "otherFactors")
+  print(knitr::kable(
+    matrix(
+      oF,
+      ncol = length(oF),
+      byrow = TRUE,
+      dimnames = list(c("otherFactors"), names(oF))
+    ), 
+    align = "r"
+  ))
+  cat("\nExperiment ID, number of ballots in simulated election, ranks, winning margins:")
+  options(knitr.kable.NA = '')
+  print(knitr::kable(x))
+}
