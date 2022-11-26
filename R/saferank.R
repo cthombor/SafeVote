@@ -31,7 +31,7 @@
 
 testDeletions <-
   function(votes = "food_election",
-           countMethod = "condorcet",
+           countMethod = "stv",
            countArgs = NULL,
            dlimit = NULL,
            dstart = NULL,
@@ -584,15 +584,15 @@ rbind.SafeRankExpt <- function(object, row) {
 
 #' summary method for SafeRankExpt
 #'
-#' @param x experimental results to be summarised
+#' @param object experimental results to be summarised
 #' @param ... args for generic summary()
 #'
 #' @return summary.SafeRankExpt object
 #' @export
-summary.SafeRankExpt <- function(x, ...) {
-  stopifnot(is.SafeRankExpt(x))
-  class(x) <- append("summary.SafeRankExpt", class(x))
-  return(invisible(x))
+summary.SafeRankExpt <- function(object, ...) {
+  stopifnot(is.SafeRankExpt(object))
+  class(object) <- append("summary.SafeRankExpt", class(object))
+  return(invisible(object))
 }
 
 #' Print method for summary.SafeRankExpt
@@ -601,6 +601,7 @@ summary.SafeRankExpt <- function(x, ...) {
 #' @param ... args for generic print()
 #'
 #' @return invisible(x), with side-effects to console
+#' @importFrom knitr kable
 #' @export
 print.summary.SafeRankExpt <- function(x, ...) {
   cat(
@@ -618,25 +619,25 @@ print.summary.SafeRankExpt <- function(x, ...) {
     )
   )
   cA <- attr(x, "countArgs")
-  print(knitr::kable(
-    matrix(
+  if (!is.null(cA)) {
+    print(knitr::kable(matrix(
       cA,
       ncol = length(cA),
       byrow = TRUE,
       dimnames = list(c("countArgs"), names(cA))
     ),
-    align = "r"
-  ))
+    align = "r"))
+  }
   oF <- attr(x, "otherFactors")
-  print(knitr::kable(
-    matrix(
+  if (!is.null(oF)) {
+    print(knitr::kable(matrix(
       oF,
       ncol = length(oF),
       byrow = TRUE,
       dimnames = list(c("otherFactors"), names(oF))
-    ), 
-    align = "r"
-  ))
+    ),
+    align = "r"))
+  }
   cat("\nExperiment ID, number of ballots in simulated election, ranks, winning margins:")
   options(knitr.kable.NA = '')
   print(knitr::kable(x))
