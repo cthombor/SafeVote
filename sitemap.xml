@@ -109,6 +109,9 @@
     <loc>https://cthombor.github.io/SafeVote/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/is.SafeRankExpt.html</loc>
+  </url>
+  <url>
     <loc>https://cthombor.github.io/SafeVote/reference/is.valid.vote.html</loc>
   </url>
   <url>
@@ -133,6 +136,9 @@
     <loc>https://cthombor.github.io/SafeVote/reference/prepare.votes.html</loc>
   </url>
   <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeRankExpt.html</loc>
+  </url>
+  <url>
     <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.approval.html</loc>
   </url>
   <url>
@@ -148,6 +154,9 @@
     <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.stv.html</loc>
   </url>
   <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/rbind.SafeRankExpt.html</loc>
+  </url>
+  <url>
     <loc>https://cthombor.github.io/SafeVote/reference/remove.candidate.html</loc>
   </url>
   <url>
@@ -161,6 +170,9 @@
   </url>
   <url>
     <loc>https://cthombor.github.io/SafeVote/reference/sumOfVotes.html</loc>
+  </url>
+  <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeRankExpt.html</loc>
   </url>
   <url>
     <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeVote.approval.html</loc>
@@ -203,6 +215,9 @@
   </url>
   <url>
     <loc>https://cthombor.github.io/SafeVote/reference/view.SafeVote.stv.html</loc>
+  </url>
+  <url>
+    <loc>https://cthombor.github.io/SafeVote/reference/view.html</loc>
   </url>
   <url>
     <loc>https://cthombor.github.io/SafeVote/reference/winnerMargin.html</loc>

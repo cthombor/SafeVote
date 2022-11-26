@@ -130,140 +130,43 @@ votes)</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by condorcet :</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by condorcet:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Experimental results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $nBallots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC0 PLC1 PLC2 PLC3 PLC4 PLC5 PLC6 PLC7 PLC8 PLC9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20   18   16   14   12   10    8    6    4    2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ranks</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Oranges Pears Chocolate Strawberries Sweets</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC0       2     2         1            2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC1       2     4         1            2      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC2       2     2         1            2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC3       2     4         1            2      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC4       2     4         1            2      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC5       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC6       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC7       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC8       1     1         3            3      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC9       1     2         3            3      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $margins</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Oranges Pears Chocolate Strawberries Sweets</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC0       6    NA        20            6      8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC1      10    NA        19            3      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC2       6    NA        18            4      4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC3       9    NA        18            9      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC4       3     2        10            7     NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC5       6     5         2            4     NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC6       5     5         2            1     NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC7       2     2         2            3     NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC8       2     4         1           NA      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> PLC9       3     4        NA           NA     NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $countMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "condorcet"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $rankMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "safeRank"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $datasetName</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "food_election"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $experimentalMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDeletions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$dlimit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$dstart</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$dinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$drep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SafeRankExpt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-11-26 09:22:46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = condorcet, rankMethod = safeRank</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in matrix(cA, ncol = length(cA), byrow = TRUE, dimnames = list(c("countArgs"),     names(cA))):</span> 'data' must be of a vector type, was 'NULL'</span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>  countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv :</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Experimental results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $nBallots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ0 NHQ1 NHQ2 NHQ3 NHQ4 NHQ5 NHQ6 NHQ7 NHQ8 NHQ9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20   18   16   14   12   10    8    6    4    2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-11-26 09:22:46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ranks</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Oranges Pears Chocolate Strawberries Sweets</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ0       2     2         1            2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ1       2     2         1            2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ2       2     2         1            2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ3       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ4       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ5       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ6       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ7       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ8       1     1         1            1      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ9       1     2         2            2      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $margins</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Oranges Pears Chocolate Strawberries    Sweets</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ0 0.11144444    NA         8    2.7771111 1.8885556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ1 0.09127273    NA         7    1.0902727 1.9087273</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ2 0.88922222    NA         5    0.2215556 1.1107778</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ3 1.00042857    NA         3    0.6660952 0.3334762</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ4 1.33400000    NA         2    0.3330000 1.3330000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ5 0.00000000    NA         3    0.3995000 0.6997500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ6 0.00000000 0.000         2    0.9990000        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ7 0.00000000 0.000         1    0.1990000        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ8 1.00000000 0.401         0    0.5990000        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NHQ9 2.00000000 0.000         0    0.0000000        NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $countMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "stv"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $rankMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "safeRank"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $datasetName</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "food_election"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $experimentalMethod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "testDeletions"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$dlimit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$dstart</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$dinc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$drep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $otherFactors$countArgs$complete.ranking</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |          | complete.ranking|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|----------------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |             TRUE|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | dlimit| dstart| dinc| drep|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|------:|------:|----:|----:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |     18|      0|    2|   10|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SafeRankExpt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ0   |       20|       2|     2|         1|            2|      2| 0.1114444|        |           8|      2.7771111| 1.8885556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ1   |       18|       2|     2|         1|            2|      2| 0.0912727|        |           7|      1.0902727| 1.9087273|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ2   |       16|       2|     2|         1|            2|      2| 0.8892222|        |           5|      0.2215556| 1.1107778|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ3   |       14|       1|     1|         1|            1|      1| 1.0004286|        |           3|      0.6660952| 0.3334762|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ4   |       12|       1|     1|         1|            1|      1| 1.3340000|        |           2|      0.3330000| 1.3330000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ5   |       10|       1|     1|         1|            1|      1| 0.0000000|        |           3|      0.3995000| 0.6997500|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ6   |        8|       1|     1|         1|            1|      1| 0.0000000|   0.000|           2|      0.9990000|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ7   |        6|       1|     1|         1|            1|      1| 0.0000000|   0.000|           1|      0.1990000|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ8   |        4|       1|     1|         1|            1|      1| 1.0000000|   0.401|           0|      0.5990000|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHQ9   |        2|       1|     2|         2|            2|      2| 2.0000000|   0.000|           0|      0.0000000|          |</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
