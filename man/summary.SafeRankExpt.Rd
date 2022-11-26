@@ -4,10 +4,10 @@
 \alias{summary.SafeRankExpt}
 \title{summary method for SafeRankExpt}
 \usage{
-\method{summary}{SafeRankExpt}(x, ...)
+\method{summary}{SafeRankExpt}(object, ...)
 }
 \arguments{
-\item{x}{experimental results to be summarised}
+\item{object}{experimental results to be summarised}
 
 \item{...}{args for generic summary()}
 }

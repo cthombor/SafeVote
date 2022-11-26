@@ -6,7 +6,7 @@
 \usage{
 testDeletions(
   votes = "food_election",
-  countMethod = "condorcet",
+  countMethod = "stv",
   countArgs = NULL,
   dlimit = NULL,
   dstart = NULL,

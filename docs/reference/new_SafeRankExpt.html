@@ -43,30 +43,25 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_SafeRankExpt</span><span class="op">(</span></span>
-<span>  nBallots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  ranks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  rankNames <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  marginNames <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  countMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rankMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  datasetName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  experimentalMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countArgs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  otherFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>nBallots</dt>
-<dd><p>primary factor: number of ballots counted in this
-experimental unit</p></dd>
+    <dl><dt>rankNames</dt>
+<dd><p>colnames for per-candidate ranks</p></dd>
 
 
-<dt>ranks</dt>
-<dd><p>a matrix with colnames(ballots), one row per experimental unit</p></dd>
-
-
-<dt>margins</dt>
-<dd><p>a matrix with colnames(ballots), one row per unit</p></dd>
+<dt>marginNames</dt>
+<dd><p>colnames for per-candidate margins</p></dd>
 
 
 <dt>countMethod</dt>
@@ -86,9 +81,13 @@ experimental unit</p></dd>
 simulated these elections e.g. "testFraction"</p></dd>
 
 
+<dt>countArgs</dt>
+<dd><p>secondary factor: args passed to countMethod</p></dd>
+
+
 <dt>otherFactors</dt>
 <dd><p>other secondary factors, e.g. parameters to
-experimentalMethod, a timestamp.</p></dd>
+experimentalMethod.</p></dd>
 
 </dl></div>
     <div class="section level2">
