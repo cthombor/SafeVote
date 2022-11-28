@@ -134,22 +134,28 @@ assemble.args.for.check.stv <- function(x, equal.ranking = FALSE, ...) {
   return(list(equal.ranking=equal.ranking))
 }
 
-#' undocumented internal method
-#' @param data,fsep undocumented
-#' @return undocumented
-#' @import utils
+#' Coerce input 'data' into a matrix 'votes'
+#' @param data possibly a .csv file, possibly an R object
+#' @param fsep separation character for .csv e.g. tab or comma
+#' @return a matrix with one row per ballot, one column per candidate, with
+#'   named rows and columns
+#' @importFrom utils read.table
 prepare.votes <- function(data, fsep="\n") {
-  if(is.character(data)) {
+  if (is.character(data)) {
     data <- utils::read.table(file = data, header = TRUE, 
                               sep=fsep, row.names = NULL)
   }
   x <- as.matrix(data)
+  ##TODO: see if data.table offers any performance improvement over matrix, e.g.
+  ## through multithreading
   x[is.na(x)] <- 0
-  if(is.null(colnames(x))) {
+  if (is.null(colnames(x))) {
     warning("Candidate names not supplied, dummy names used instead.")
     colnames(x) <- LETTERS[1:ncol(x)]
   }
-  rownames(x) <- 1:nrow(x)
+  if (is.null(rownames(x))) {
+    rownames(x) <- 1:nrow(x)
+  }
   return(x)
 }
 
