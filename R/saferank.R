@@ -12,9 +12,10 @@
 #' @param countArgs List of args to be passed to countMethod (in addition to
 #'   votes)
 #' @param rankMethod Name of a ranking attribute in the output of countMethod
-#' @param dlimit Maximum number of ballots to delete
-#' @param dstart Number of ballots to be deleted after the initial ballot-count
+#' @param dstart Number of ballots in the first ballot-count (selected at random
+#'   from votes, without replacement)
 #' @param dinc Number of ballots to be deleted in subsequent steps
+#' @param dlimit Maximum number of ballots to delete (in addition to dstart)
 #' @param drep Maximum number of elections (required if dinc=0)
 #' @param exptName stem-name of experimental units e.g. "E"
 #' @param quiet TRUE to suppress all output
@@ -33,17 +34,69 @@ testDeletions <-
   function(votes = "food_election",
            countMethod = "stv",
            countArgs = NULL,
-           dlimit = NULL,
            dstart = NULL,
            dinc = NULL,
+           dlimit = NULL,
            drep = NULL,
            rankMethod = "safeRank",
            exptName = NULL,
            quiet = FALSE,
            verbose = FALSE) {
     
+    ## stv() throws an error if there are fewer than two ballots
+    stopifnot(nrow(votes) > 1)
+
     marginNames <- sapply(colnames(votes), function(x) paste0("m.",x))
     
+    if (is.null(dstart)) {
+      dstart <- nrow(votes)
+    }
+    if (dstart < 2) {
+      dstart <- 2
+    }
+    
+    ## construct an initial ballot box by sampling from input 'votes'
+    sv <- sample(nrow(votes), dstart)
+    ballots <- votes[sv,]
+    
+    ## suppress all output from counting unless verbose=TRUE
+    cArgs <-
+      append(countArgs, list(quiet = !verbose, verbose = verbose))
+    cr <- do.call(countMethod, append(cArgs, list(votes = ballots)))
+    if (!rankMethod %in% attributes(cr)$names) {
+      stop(paste("countMethod", countMethod, "does not produce a",
+                 rankMethod))
+    }
+    
+    nib <- nrow(votes) - nrow(cr$data) - dstart
+    if (nib > 0) {
+      warning(paste(nib, "informal ballots were deleted."))
+      if (nib > dstart) {
+        dstart <- nib
+      }
+      if (nrow(cr$data) < 2) {
+        stop("Insufficient ballots to run the test.")
+      }
+    }
+    
+    ballots <- cr$data ## ballots are renumbered and valid (possibly corrected)
+    nb <- nrow(ballots)
+    
+    dlimit = min(dlimit, nb - 2) 
+    
+    if (is.null(dinc)) {
+      dinc <- (dstart - dlimit + 4) %/% 10  ## deciles (roughly)
+      if (dinc == 0) {
+        dinc = 1
+      }
+    }
+    stopifnot(dinc >= 0)
+
+    if (is.null(drep)) {
+      stopifnot(dinc != 0)
+      drep <- trunc((dstart - dlimit) / dinc) + 1
+    }
+ 
     result <- new_SafeRankExpt(
       rankNames = colnames(votes),
       marginNames = marginNames,
@@ -53,43 +106,22 @@ testDeletions <-
       experimentalMethod = "testDeletions",
       countArgs = countArgs,
       otherFactors = list(
-        dlimit = NULL,
-        dstart = NULL,
-        dinc = NULL,
-        drep = NULL
+        dstart = dstart,
+        dinc = dinc,
+        dlimit = dlimit,
+        drep = drep,
+        initSample = sv,
+        removedBallots = list()
       )
     )
-    
+  
     if (is.null(exptName)) {
       exptName <-
         paste(LETTERS[sample(length(LETTERS), 3, replace = TRUE)],
               collapse = "")
     }
-    
-    ## suppress all output from counting unless verbose=TRUE
-    cArgs <-
-      append(countArgs, list(quiet = !verbose, verbose = verbose))
-    
-    ## an initial count of all ballots
-    cr <- do.call(countMethod, append(cArgs, list(votes = votes)))
-    if (!rankMethod %in% attributes(cr)$names) {
-      stop(paste("countMethod", countMethod, "does not produce a",
-                 rankMethod))
-    }
-
-    if (nrow(votes) != nrow(cr$data)) {
-      warning(paste(
-        nrow(votes) - nrow(cr$data),
-        "informal ballots were deleted."
-      ))
-    }
-    ballots <- cr$data ## ballots are numbered and corrected
-    nb <- nrow(ballots)
-    
-    ## include the initial ballot count in the experimental record
-    ## TODO: consider a major refactoring, using doExperiment(result) to
-    ##    fill in the table of observations given the experimental units.
     exptID = paste0(exptName,0)
+    
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- cr$margins
     names(crMargins) <- marginNames
@@ -103,41 +135,12 @@ testDeletions <-
       cat(paste0("Number of ballots counted by ",
                  countMethod, ":\n  ", nb))
     }
-    
-    ## stv() throws an error if there are fewer than two ballots
-    dlimit = min(dlimit, nb - 2) 
-    attr(result, "otherFactors")$dlimit <- dlimit
-    
-    if (is.null(dstart)) {
-        dstart <- 0
-    }
-    attr(result, "otherFactors")$dstart <- dstart
-    
-    if (is.null(dinc)) {
-      dinc <- (dlimit-dstart+4) %/% 10  ## deciles (roughly)
-      if (dinc==0) dinc=1
-    }
-    stopifnot(dinc >= 0)
-    attr(result, "otherFactors")$dinc <- dinc
+  
+    nbv <- dstart - dinc * (1:(drep - 1))
+    nbv <- nbv[nbv > 1]
 
-    if (is.null(drep)) {
-      stopifnot(dinc != 0)
-      drep <- trunc(dlimit / dinc) + 1
-    }
-    attr(result, "otherFactors")$drep <- drep
-    
-    if (dinc == 0) {
-      nbv <- rep(nb - dstart, drep-1)
-    } else {
-      if (dstart == 0) { ## special case: we have already counted all ballots
-        nbv <- nb - dstart - dinc * (1:drep)
-      } else {
-        nbv <- nb - dstart - dinc * (0:(drep-1))
-      }
-      nbv <- nbv[nbv > 1]
-    }
-    
     nrep <- 0
+    removedBallots <- list()
     for (nBallots in nbv) {
 
       nrep <- nrep + 1
@@ -146,8 +149,9 @@ testDeletions <-
         cat(ifelse((nrep %% 10) == 0, ",\n", ","), nBallots)
       }
       
-      rvn <- sample(nrow(ballots), nBallots)
-      ballots <- ballots[rvn,]
+      rbn <- sample(nrow(ballots), dinc)
+      removedBallots <- append(removedBallots, rownames(ballots)[rbn])
+      ballots <- ballots[-rbn,]
       cr <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
       
@@ -161,6 +165,8 @@ testDeletions <-
       result <- rbind.SafeRankExpt(result, newResult)
       
     }
+    
+    attr(result, "otherFactors")$removedBallots <- removedBallots
     
     if (!quiet) {
       cat("\n")
@@ -352,17 +358,18 @@ testAdditions <- function(votes,
 }
 
 
-#' Bootstrapping experiment, with fractional counts of ballots.
+#' Bootstrapping experiment, with fractional counts of a ballot box.
 #'
-#' Starting from some number ('astart') of randomly-selected ballots,
-#' increasingly larger number of randomly-selected ballots are counted. The
-#' ballots are chosen independently for each experiment. The rankings and
-#' margins produced by each simulated election are returned as a matrix with one
-#' row per election.
+#' Starting from some number ('astart') of randomly-selected ballots, an
+#' increasingly-large collection of randomly-selected ballots are counted. The
+#' ballots are chosen independently without replacement for each experimental
+#' unit; if you want to count decreasingly-sized portions of a single sample of
+#' ballots, use testDeletions().  The rankings and margins produced by each
+#' simulated election are returned as a matrix with one row per election.
 #'
-#' @param votes A set of ballots
+#' @param votes A numeric matrix: one row per ballot, one column per candidate 
 #' @param countMethod The name of a function which will count the ballots, e.g.
-#'   "stv", "condorcet".
+#'   "stv", "condorcet"
 #' @param countArgs List of args to be passed to countMethod (in addition to
 #'   votes)
 #' @param rankMethod Name of a ranking attribute in the output of countMethod,
@@ -416,15 +423,15 @@ testFraction <- function(votes,
   cArgs <-
     append(countArgs, list(quiet = !verbose, verbose = verbose))
   
-  nb <- astart + ainc * (1:arep)
+  
+  nb <- astart + ainc * (0:(arep - 1))
   if ((ainc != 0) && (arep > trunc((nv - astart) / ainc))) {
     nb <- nb[-which(nb >= nv)]
     nb <- c(nb, nv) ## use all ballots in the last experimental run
   }
   
   if (verbose && !quiet) {
-    cat(
-      "\nSelecting an increasingly-large fraction of",
+    cat("\nSelecting an increasingly-large fraction of",
       nv,
       "ballots until the ultimate ranking is found.\n"
     )
@@ -584,7 +591,8 @@ rbind.SafeRankExpt <- function(object, row) {
 
 #' summary method for SafeRankExpt
 #'
-#' @param object experimental results to be summarised
+#' @param object
+#'  experimental results to be summarised
 #' @param ... args for generic summary()
 #'
 #' @return summary.SafeRankExpt object
