@@ -2,16 +2,19 @@
 % Please edit documentation in R/check_votes.R
 \name{prepare.votes}
 \alias{prepare.votes}
-\title{undocumented internal method}
+\title{Coerce input 'data' into a matrix 'votes'}
 \usage{
 prepare.votes(data, fsep = "\\n")
 }
 \arguments{
-\item{data, fsep}{undocumented}
+\item{data}{possibly a .csv file, possibly an R object}
+
+\item{fsep}{separation character for .csv e.g. tab or comma}
 }
 \value{
-undocumented
+a matrix with one row per ballot, one column per candidate, with
+  named rows and columns
 }
 \description{
-undocumented internal method
+Coerce input 'data' into a matrix 'votes'
 }

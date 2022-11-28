@@ -8,9 +8,9 @@ testDeletions(
   votes = "food_election",
   countMethod = "stv",
   countArgs = NULL,
-  dlimit = NULL,
   dstart = NULL,
   dinc = NULL,
+  dlimit = NULL,
   drep = NULL,
   rankMethod = "safeRank",
   exptName = NULL,
@@ -26,11 +26,12 @@ testDeletions(
 \item{countArgs}{List of args to be passed to countMethod (in addition to
 votes)}
 
-\item{dlimit}{Maximum number of ballots to delete}
-
-\item{dstart}{Number of ballots to be deleted after the initial ballot-count}
+\item{dstart}{Number of ballots in the first ballot-count (selected at random
+from votes, without replacement)}
 
 \item{dinc}{Number of ballots to be deleted in subsequent steps}
+
+\item{dlimit}{Maximum number of ballots to delete (in addition to dstart)}
 
 \item{drep}{Maximum number of elections (required if dinc=0)}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/saferank.R
 \name{testFraction}
 \alias{testFraction}
-\title{Bootstrapping experiment, with fractional counts of ballots.}
+\title{Bootstrapping experiment, with fractional counts of a ballot box.}
 \usage{
 testFraction(
   votes,
@@ -18,7 +18,7 @@ testFraction(
 )
 }
 \arguments{
-\item{votes}{A set of ballots}
+\item{votes}{A numeric matrix: one row per ballot, one column per candidate}
 
 \item{astart}{Starting number of ballots (min 2)}
 
@@ -31,7 +31,7 @@ non-null if ainc==0.}
 e.g. "elected", "ranking", "safeRank".}
 
 \item{countMethod}{The name of a function which will count the ballots, e.g.
-"stv", "condorcet".}
+"stv", "condorcet"}
 
 \item{countArgs}{List of args to be passed to countMethod (in addition to
 votes)}
@@ -49,11 +49,12 @@ a matrix of experimental results, of dimension n by 2m+1, where n is
   of each candidate in each election.
 }
 \description{
-Starting from some number ('astart') of randomly-selected ballots,
-increasingly larger number of randomly-selected ballots are counted. The
-ballots are chosen independently for each experiment. The rankings and
-margins produced by each simulated election are returned as a matrix with one
-row per election.
+Starting from some number ('astart') of randomly-selected ballots, an
+increasingly-large collection of randomly-selected ballots are counted. The
+ballots are chosen independently without replacement for each experimental
+unit; if you want to count decreasingly-sized portions of a single sample of
+ballots, use testDeletions().  The rankings and margins produced by each
+simulated election are returned as a matrix with one row per election.
 }
 \examples{
 data(food_election)
