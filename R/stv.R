@@ -862,7 +862,7 @@ view.SafeVote.stv <- function(object, ...) {
       area(row = 1, col = seq(1, ncol(s), by = 2)) ~ color_text("blue", "blue")
       ##Quota=color_text("blue", "blue")
     )
-  formattable(s, formatter, ...)
+  formattable::formattable(s, formatter, ...)
 }
 
 #' image() method for the result of an stv() ballot-count
@@ -870,7 +870,9 @@ view.SafeVote.stv <- function(object, ...) {
 #' @param x,xpref,ypref,all.pref,proportion,... undocumented (legacy code)
 #'
 #' @return image object, with side-effect in RStudio Plots pane
-#' @import grDevices graphics data.table
+#' @importFrom grDevices hcl.colors
+#' @importFrom graphics axis mtext text par
+#' @importFrom fields image.plot
 #' @export
 #'
 image.SafeVote.stv <- function(x,
@@ -887,7 +889,7 @@ image.SafeVote.stv <- function(x,
   nc <- ncol(xd)
   if (all.pref) {
     nij <- ordered.preferences(xd)[nc:1, ]
-    fields::image.plot(
+    image.plot(
       x = 1:nc,
       y = 1:nc,
       t(nij),
@@ -905,7 +907,7 @@ image.SafeVote.stv <- function(x,
       tick = FALSE,
       las = 2
     )
-    mtext("Ranking", side = 1, line = 0.5)
+    graphics::mtext("Ranking", side = 1, line = 0.5)
   } else {
     xdt <- data.table(xd)
     xdt[, voter := 1:nrow(xd)]
@@ -935,7 +937,7 @@ image.SafeVote.stv <- function(x,
       axes = FALSE,
       xlab = "",
       ylab = "",
-      col = hcl.colors(12, "YlOrRd", rev = TRUE),
+      col = grDevices::hcl.colors(12, "YlOrRd", rev = TRUE),
       ...
     )
     graphics::axis(
@@ -945,18 +947,18 @@ image.SafeVote.stv <- function(x,
       tick = FALSE,
       las = 1
     )
-    text(
+    graphics::text(
       1:nc,
-      y = par("usr")[4],
+      y = graphics::par("usr")[4],
       labels = colnames(ctbl),
       xpd = NA,
       srt = 45,
       adj = 0
     )
-    mtext(paste("Preference", ypref),
+    graphics::mtext(paste("Preference", ypref),
           side = 4,
           line = 0.1)
-    mtext(paste("Preference", xpref),
+    graphics::mtext(paste("Preference", xpref),
           side = 1,
           line = 0.5)
   }
