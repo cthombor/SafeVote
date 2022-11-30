@@ -33,7 +33,7 @@
 testDeletions <-
   function(votes = "food_election",
            countMethod = "stv",
-           countArgs = NULL,
+           countArgs = list(),
            dstart = NULL,
            dinc = NULL,
            dlimit = NULL,
@@ -55,20 +55,23 @@ testDeletions <-
       dstart <- 2
     }
     
+    stopifnot(is.list(countArgs))
+    ## suppress all output from counting unless verbose=TRUE
+    cArgs <-
+      append(countArgs, list(quiet = !verbose, verbose = verbose))
+    
     ## construct an initial ballot box by sampling from input 'votes'
     sv <- sample(nrow(votes), dstart)
     ballots <- votes[sv,]
     
-    ## suppress all output from counting unless verbose=TRUE
-    cArgs <-
-      append(countArgs, list(quiet = !verbose, verbose = verbose))
     cr <- do.call(countMethod, append(cArgs, list(votes = ballots)))
+
     if (!rankMethod %in% attributes(cr)$names) {
       stop(paste("countMethod", countMethod, "does not produce a",
                  rankMethod))
     }
     
-    nib <- nrow(votes) - nrow(cr$data) - dstart
+    nib <- nrow(cr$data) - dstart
     if (nib > 0) {
       warning(paste(nib, "informal ballots were deleted."))
       if (nib > dstart) {
@@ -79,10 +82,11 @@ testDeletions <-
       }
     }
     
-    ballots <- cr$data ## ballots are renumbered and valid (possibly corrected)
-    nb <- nrow(ballots)
+    ballots <- cr$data 
+    nb <- nrow(ballots) ## nb < dstart, if there were any invalid ballots
+    dstart <- nb ## our (possibly corrected) starting-point
     
-    dlimit = min(dlimit, nb - 2) 
+    dlimit = min(dlimit, 2) 
     
     if (is.null(dinc)) {
       dinc <- (dstart - dlimit + 4) %/% 10  ## deciles (roughly)
@@ -109,10 +113,10 @@ testDeletions <-
         dstart = dstart,
         dinc = dinc,
         dlimit = dlimit,
-        drep = drep,
+        drep = drep),
+      unitFactors = list(
         initSample = sv,
-        removedBallots = list()
-      )
+        removedBallots = list())
     )
   
     if (is.null(exptName)) {
@@ -136,11 +140,15 @@ testDeletions <-
                  countMethod, ":\n  ", nb))
     }
   
-    nbv <- dstart - dinc * (1:(drep - 1))
+    if (drep > 1) {
+      nbv <- dstart - dinc * (1:(drep - 1))
+    } else {
+      nbv <- NULL
+    }
     nbv <- nbv[nbv > 1]
 
     nrep <- 0
-    removedBallots <- list()
+    rBallots <- list()
     for (nBallots in nbv) {
 
       nrep <- nrep + 1
@@ -150,7 +158,7 @@ testDeletions <-
       }
       
       rbn <- sample(nrow(ballots), dinc)
-      removedBallots <- append(removedBallots, rownames(ballots)[rbn])
+      rBallots <- append(rBallots, rownames(ballots)[rbn])
       ballots <- ballots[-rbn,]
       cr <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
@@ -166,13 +174,20 @@ testDeletions <-
       
     }
     
-    attr(result, "otherFactors")$removedBallots <- removedBallots
+    uF <- attr(result, "unitFactors")
+    uF$removedBallots <- rBallots
+    attr(result, "unitFactors") <- uF
+    ## copying result seems to repair a corruption in its attributes
+    cResult <- copy(result)
+    
+    ## TODO: use data.frame rather than data.table internally, converting
+    ## to a data.table only after all experimental data has been collected
     
     if (!quiet) {
       cat("\n")
-      print(summary(result))
+      print(summary(cResult))
     }
-    return(invisible(result))
+    return(invisible(cResult))
   }
 
 #' Test the sensitivity of a result to tactical voting.
@@ -217,7 +232,7 @@ testAdditions <- function(votes,
                           tacticalBallot = NULL,
                           rankMethod = "safeRank",
                           countMethod = "stv",
-                          countArgs = NULL,
+                          countArgs = list(),
                           exptName = NULL,
                           quiet = FALSE,
                           verbose = FALSE) {
@@ -245,7 +260,8 @@ testAdditions <- function(votes,
       ainc = ainc,
       arep = arep,
       tacticalBallot = NULL
-    )
+    ),
+    unitFactors = NULL
   )
   
   if (is.null(exptName)) {
@@ -315,8 +331,10 @@ testAdditions <- function(votes,
         ")\n")
   }
   
-  attr(result, "otherFactors")$tacticalBallot <- fb
-  
+  oF <- attr(result, "otherFactors")
+  oF$tacticalBallot <- fb
+  attr(result, "otherFactors") <- oF
+
   if (!quiet)
     cat("Testing progress: ")
   
@@ -398,7 +416,7 @@ testFraction <- function(votes,
                          arep = NULL,
                          rankMethod = "safeRank",
                          countMethod = "stv",
-                         countArgs = NULL,
+                         countArgs = list(),
                          exptName = NULL,
                          quiet = FALSE,
                          verbose = FALSE) {
@@ -460,7 +478,8 @@ testFraction <- function(votes,
       astart = astart,
       ainc = ainc,
       arep = arep
-    )
+    ),
+    unitFactors = NULL
   )
   
   nreps <- 0
@@ -534,7 +553,9 @@ extractRank <- function(rankMethod, countMethod, cr) {
 #'   simulated these elections e.g. "testFraction"
 #' @param countArgs secondary factor: args passed to countMethod
 #' @param otherFactors other secondary factors, e.g. parameters to
-#'   experimentalMethod.
+#'   experimentalMethod
+#' @param unitFactors per-unit factors derived from PRNG of the experimental
+#'   harness, e.g describing the ballots randomly deleted during testDeletions 
 #' @return object of class SafeRankExpt
 new_SafeRankExpt <-
   function(rankNames = NULL,
@@ -543,8 +564,9 @@ new_SafeRankExpt <-
            rankMethod = NULL,
            datasetName = NULL,
            experimentalMethod = NULL,
-           countArgs = NULL,
-           otherFactors = list()) {
+           countArgs = list(),
+           otherFactors = list(),
+           unitFactors = list()) {
     
     dt <- data.table(
       exptID = matrix(character(0), ncol = 1),
@@ -559,7 +581,8 @@ new_SafeRankExpt <-
     setattr(dt, "experimentalMethod", experimentalMethod)
     setattr(dt, "countArgs",          countArgs)
     setattr(dt, "startTime",          format(as.POSIXlt(Sys.time())))
-    setattr(dt, "otherFactors",       otherFactors)
+    setattr(dt, "otherFactors", otherFactors)
+    setattr(dt, "unitFactors",        unitFactors)
     class(dt) <- append("SafeRankExpt", class(dt))
     return(dt)
   }
@@ -584,7 +607,30 @@ rbind.SafeRankExpt <- function(object, row) {
   ## rbind() produces a SafeRankExpt object with no attributes
   ao <- attributes(object)
   object = rbind(object, row, use.names = TRUE)
+  
   attributes(object) <- ao
+  ## at this point 'object' is apparently corrupt, because the following attempt
+  ## to create a new column (for analytic purposes) triggers a warning.
+  ##
+  ## > object[, s.Bonnie := Bonnie + m.Bonnie/nBallots] Warning message:
+  ## In`[.data.table`(object, , `:=`(s.Bonnie, Bonnie + m.Bonnie/nBallots)) :
+  ## Invalid .internal.selfref detected and fixed by taking a (shallow) copy of
+  ## the data.table so that := can add this new column by reference. At an
+  ## earlier point, this data.table has been copied by R (or was created
+  ## manually using structure() or similar). Avoid names<- and attr<- which in R
+  ## currently (and oddly) may copy the whole data.table. Use set* syntax
+  ## instead to avoid copying: ?set, ?setnames and ?setattr. If this message
+  ## doesn't help, please report your use case to the data.table issue tracker
+  ## so the root cause can be fixed or this message improved.
+  ##
+  ## TODO: either do some more hacking (e.g. using setattr() to copy all
+  ## object-level attributes individually into the modified data.table), or give
+  ## up on data.table (which apparently is not an appropriate choice for data
+  ## collection during stochastic experimentation, unless you collect your data
+  ## in a transposed fashion (with experimental units on columns and variables
+  ## on rows) *and* you do something to reliably work-around its lack of support
+  ## for object-level attributes.
+  
   stopifnot(is.SafeRankExpt(object))
   return(object)
 }
@@ -618,7 +664,7 @@ print.summary.SafeRankExpt <- function(x, ...) {
       attr(x, "experimentalMethod"),
       " at ",
       attr(x, "startTime"),
-      "\nDataset = ",
+      "\n\nDataset = ",
       attr(x, "datasetName"),
       ", countMethod = ",
       attr(x, "countMethod"),
@@ -627,7 +673,7 @@ print.summary.SafeRankExpt <- function(x, ...) {
     )
   )
   cA <- attr(x, "countArgs")
-  if (!is.null(cA)) {
+  if (length(cA) > 0) {
     print(knitr::kable(matrix(
       cA,
       ncol = length(cA),
@@ -637,7 +683,7 @@ print.summary.SafeRankExpt <- function(x, ...) {
     align = "r"))
   }
   oF <- attr(x, "otherFactors")
-  if (!is.null(oF)) {
+  if (length(oF) > 0) {
     print(knitr::kable(matrix(
       oF,
       ncol = length(oF),
@@ -646,7 +692,20 @@ print.summary.SafeRankExpt <- function(x, ...) {
     ),
     align = "r"))
   }
+  uF <- attr(x, "unitFactors")
+  if (length(uF) > 0) {
+    cat("\nUnit factors: ")
+    cat(names(uF), sep=", ")
+    cat("\n")
+  }
   cat("\nExperiment ID, number of ballots in simulated election, ranks, winning margins:")
   options(knitr.kable.NA = '')
-  print(knitr::kable(x))
+  if (nrow(x) > 20) {
+    print(knitr::kable(x[1:10,]))
+    cat("...\n")
+    nr <- nrow(x)
+    print(knitr::kable(x[(nrow(x)-9):nrow(x),]))
+  } else {
+    print(knitr::kable(x))
+  }
 }
