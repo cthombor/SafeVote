@@ -11,8 +11,9 @@ new_SafeRankExpt(
   rankMethod = NULL,
   datasetName = NULL,
   experimentalMethod = NULL,
-  countArgs = NULL,
-  otherFactors = list()
+  countArgs = list(),
+  otherFactors = list(),
+  unitFactors = list()
 )
 }
 \arguments{
@@ -32,7 +33,10 @@ simulated these elections e.g. "testFraction"}
 \item{countArgs}{secondary factor: args passed to countMethod}
 
 \item{otherFactors}{other secondary factors, e.g. parameters to
-experimentalMethod.}
+experimentalMethod}
+
+\item{unitFactors}{per-unit factors derived from PRNG of the experimental
+harness, e.g describing the ballots randomly deleted during testDeletions}
 }
 \value{
 object of class SafeRankExpt

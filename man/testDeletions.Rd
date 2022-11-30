@@ -7,7 +7,7 @@
 testDeletions(
   votes = "food_election",
   countMethod = "stv",
-  countArgs = NULL,
+  countArgs = list(),
   dstart = NULL,
   dinc = NULL,
   dlimit = NULL,

@@ -11,7 +11,7 @@ testFraction(
   arep = NULL,
   rankMethod = "safeRank",
   countMethod = "stv",
-  countArgs = NULL,
+  countArgs = list(),
   exptName = NULL,
   quiet = FALSE,
   verbose = FALSE
