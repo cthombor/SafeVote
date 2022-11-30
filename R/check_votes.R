@@ -134,7 +134,7 @@ assemble.args.for.check.stv <- function(x, equal.ranking = FALSE, ...) {
   return(list(equal.ranking=equal.ranking))
 }
 
-#' Coerce input 'data' into a matrix 'votes'
+#' Coerce input 'data' into a matrix
 #' @param data possibly a .csv file, possibly an R object
 #' @param fsep separation character for .csv e.g. tab or comma
 #' @return a matrix with one row per ballot, one column per candidate, with
