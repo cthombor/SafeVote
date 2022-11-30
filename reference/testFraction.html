@@ -64,7 +64,7 @@ simulated election are returned as a matrix with one row per election.</p>
 <span>  arep <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rankMethod <span class="op">=</span> <span class="st">"safeRank"</span>,</span>
 <span>  countMethod <span class="op">=</span> <span class="st">"stv"</span>,</span>
-<span>  countArgs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  countArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  exptName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -135,7 +135,8 @@ votes)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fraction of condorcet ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-11-28 03:24:52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-11-30 19:02:35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = condorcet, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |          | safety| complete.ranking|</span>
@@ -151,21 +152,22 @@ votes)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD1   |        2|       1|     4|         1|            4|      1|         1|        |           1|               |        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD2   |        4|       1|     4|         1|            3|      4|         2|        |           2|              6|         |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD3   |        6|       1|     5|         1|            3|      4|         6|        |           6|              3|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD4   |        8|       2|     5|         1|            2|      2|         8|        |          10|              1|        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD5   |       10|       2|     5|         1|            2|      4|         5|        |           9|              3|        7|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD6   |       12|       2|     4|         1|            3|      4|         5|        |           6|              4|        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD7   |       14|       3|     5|         1|            2|      3|         7|        |          14|              9|        2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD8   |       16|       2|     5|         1|            2|      2|         2|        |          17|              1|        8|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |CZD9   |       18|       3|     5|         1|            2|      3|         2|        |          19|              7|        8|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE1   |        2|       3|     3|         1|            2|      3|          |        |           2|              6|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE2   |        4|       3|     5|         1|            2|      3|         1|        |           6|              2|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE3   |        6|       2|     4|         1|            2|      4|         3|       1|           7|              2|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE4   |        8|       4|     4|         1|            2|      3|          |        |          12|              7|        9|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE5   |       10|       2|     5|         1|            2|      2|         2|        |          12|              2|       10|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE6   |       12|       3|     4|         1|            2|      4|         9|        |           9|              4|        2|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE7   |       14|       3|     5|         1|            2|      3|         3|        |          15|             13|        9|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE8   |       16|       3|     5|         1|            2|      4|         5|        |          14|              4|        5|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VJE9   |       18|       2|     5|         1|            2|      4|         6|        |          18|              6|        8|</span>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">dublin_west</span>, astart<span class="op">=</span><span class="fl">20</span>, ainc<span class="op">=</span><span class="fl">20</span>, arep<span class="op">=</span><span class="fl">2</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>             rankMethod<span class="op">=</span><span class="st">"elected"</span>, quiet<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fraction of stv ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  0.1%, 0.1%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-11-28 03:24:52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-11-30 19:02:35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = dublin_west, countMethod = stv, rankMethod = elected</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |             | astart| ainc| arep|</span>
@@ -174,10 +176,10 @@ votes)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry| m.Bonnie| m.Burton|    m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|   m.Terry|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|--------:|--------:|---------:|---------:|---------:|----------:|-----------:|-------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |JTA1   |       20|      1|      2|    1|       2|       2|        1|         1|     1|     2|         |        2|          | 0.9338101|   2.59538|           |            |        | 0.3331667|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |JTA2   |       40|      1|      1|    2|       2|       2|        1|         1|     1|     2|         |         | 0.8797988| 2.0803008|   4.00000|           |            |        | 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry| m.Bonnie|  m.Burton| m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|  m.Terry|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|--------:|---------:|------:|---------:|---------:|----------:|-----------:|-------:|--------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |JXS1   |       20|      1|      2|    1|       2|       2|        2|         1|     1|     1|         | 0.5715714|       |         1|  3.428429|  0.5207901|            |        |         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |JXS2   |       40|      1|      2|    1|       2|       2|        1|         1|     1|     2|         | 0.1371656|       |         2|  2.409802|           |            |        | 2.727364|</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
