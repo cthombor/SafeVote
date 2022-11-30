@@ -49,8 +49,9 @@
 <span>  rankMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  datasetName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  experimentalMethod <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  countArgs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  otherFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  countArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  otherFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  unitFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,7 +88,12 @@ simulated these elections e.g. "testFraction"</p></dd>
 
 <dt>otherFactors</dt>
 <dd><p>other secondary factors, e.g. parameters to
-experimentalMethod.</p></dd>
+experimentalMethod</p></dd>
+
+
+<dt>unitFactors</dt>
+<dd><p>per-unit factors derived from PRNG of the experimental
+harness, e.g describing the ballots randomly deleted during testDeletions</p></dd>
 
 </dl></div>
     <div class="section level2">
