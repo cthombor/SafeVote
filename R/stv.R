@@ -794,7 +794,6 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
   attr(df, "equal.pref.allowed") <- object$equal.pref.allowed
   attr(df, "rankingTable") <- object$rankingTable
   attr(df, "fuzz") <- object$fuzz
-  
   return(df)
 }
 
