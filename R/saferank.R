@@ -127,8 +127,7 @@ testDeletions <-
     exptID = paste0(exptName,0)
     
     crRank <- extractRank(rankMethod, countMethod, cr)
-    crMargins <- cr$margins
-    names(crMargins) <- marginNames
+    crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID, 
                              nBallots = nb), 
                         append(crRank, 
@@ -164,8 +163,7 @@ testDeletions <-
         do.call(countMethod, append(cArgs, list(votes = ballots)))
       
       crRank <- extractRank(rankMethod, countMethod, cr)
-      crMargins <- cr$margins
-      names(crMargins) <- marginNames
+      crMargins <- extractMargins(marginNames, rankMethod, cr)
       newResult <- append(list(exptID = exptID, 
                                nBallots = nBallots), 
                           append(crRank, 
@@ -283,8 +281,7 @@ testAdditions <- function(votes,
   ## include the initial ballot count in the experimental record
   exptID = paste0(exptName,0)
   crRank <- extractRank(rankMethod, countMethod, cr)
-  crMargins <- cr$margins
-  names(crMargins) <- marginNames
+  crMargins <- extractMargins(marginNames, rankMethod, cr)
   newResult <- append(list(exptID = exptID, 
                            nBallots = nrow(votes)), 
                       append(crRank, 
@@ -358,8 +355,7 @@ testAdditions <- function(votes,
 
     exptID = paste0(exptName, repct)
     crRank <- extractRank(rankMethod, countMethod, cr)
-    crMargins <- cr$margins
-    names(crMargins) <- marginNames
+    crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID, 
                              nBallots = nrow(svotes)), 
                         append(crRank, 
@@ -500,8 +496,7 @@ testFraction <- function(votes,
     
     exptID = paste0(exptName, nreps)
     crRank <- extractRank(rankMethod, countMethod, cr)
-    crMargins <- cr$margins
-    names(crMargins) <- marginNames
+    crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID, 
                              nBallots = nBallots), 
                         append(crRank, 
@@ -540,6 +535,32 @@ extractRank <- function(rankMethod, countMethod, cr) {
     ranks <- cr[[rankMethod]][colnames(cr$data)]
   }
   return(ranks)
+}
+
+#' extract margins from the results of a ballot count
+#'
+#' @param marginNames list of colnames of the margins in our SafeRank result
+#' @param rankMethod if "safeRank", margins are adjusted appropriately
+#' @param cr structure returned by a ballot-counting method
+#'
+#' @return named list of margins
+extractMargins <- function(marginNames, rankMethod, cr) {
+  crMargins <- cr$margins
+  if (rankMethod == "safeRank") {
+    sRank <- cr$safeRank[colnames(cr$data)]
+    ## reverse the order of margins for tied candidates, so that candidates
+    ## within a safeRank tie group have margins indicative of their relative
+    ## strengths.  A margin of 0 is possible, and reveals a tied vote-count.
+    ## Extremely small margins are indicative of floating-point roundoff errors.
+    for (i in 1:length(sRank)) {
+      tieMask <- sRank == i
+      if (sum(tieMask) > 1) {
+        crMargins[tieMask] <- rev(crMargins[tieMask])
+      }
+    }
+  }
+  names(crMargins) <- marginNames
+  return(crMargins)
 }
 
 #' Constructor for the results of a SafeRank experiment
@@ -602,35 +623,12 @@ is.SafeRankExpt <- function(x) {
 #' @param row    new observations
 #'
 #' @return updated SafeRankExpt object
+#' 
+#' @importFrom dplyr bind_rows
 rbind.SafeRankExpt <- function(object, row) {
   stopifnot(is.SafeRankExpt(object))
-  ## rbind() produces a SafeRankExpt object with no attributes
-  ao <- attributes(object)
-  object = rbind(object, row, use.names = TRUE)
-  
-  attributes(object) <- ao
-  ## at this point 'object' is apparently corrupt, because the following attempt
-  ## to create a new column (for analytic purposes) triggers a warning.
-  ##
-  ## > object[, s.Bonnie := Bonnie + m.Bonnie/nBallots] Warning message:
-  ## In`[.data.table`(object, , `:=`(s.Bonnie, Bonnie + m.Bonnie/nBallots)) :
-  ## Invalid .internal.selfref detected and fixed by taking a (shallow) copy of
-  ## the data.table so that := can add this new column by reference. At an
-  ## earlier point, this data.table has been copied by R (or was created
-  ## manually using structure() or similar). Avoid names<- and attr<- which in R
-  ## currently (and oddly) may copy the whole data.table. Use set* syntax
-  ## instead to avoid copying: ?set, ?setnames and ?setattr. If this message
-  ## doesn't help, please report your use case to the data.table issue tracker
-  ## so the root cause can be fixed or this message improved.
-  ##
-  ## TODO: either do some more hacking (e.g. using setattr() to copy all
-  ## object-level attributes individually into the modified data.table), or give
-  ## up on data.table (which apparently is not an appropriate choice for data
-  ## collection during stochastic experimentation, unless you collect your data
-  ## in a transposed fashion (with experimental units on columns and variables
-  ## on rows) *and* you do something to reliably work-around its lack of support
-  ## for object-level attributes.
-  
+  ##TODO: optimise this code, if level 2 of the R Inferno is ever painfully hot
+  object = dplyr::bind_rows(object, row)
   stopifnot(is.SafeRankExpt(object))
   return(object)
 }
@@ -646,7 +644,7 @@ rbind.SafeRankExpt <- function(object, row) {
 summary.SafeRankExpt <- function(object, ...) {
   stopifnot(is.SafeRankExpt(object))
   class(object) <- append("summary.SafeRankExpt", class(object))
-  return(invisible(object))
+  return(object)
 }
 
 #' Print method for summary.SafeRankExpt
