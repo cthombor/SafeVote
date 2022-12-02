@@ -1070,9 +1070,10 @@ completeRankingTable <- function(object, ...) {
     Candidate = object$elected,
     Elected = "x"
   )
+  
+  ## A possible pseudo-round: candidates who were neither elected nor eliminated
+  ## are ranked by their position in the last round
   if (any(cand.in.play)) {
-    ## Candidates which were neither elected nor eliminated are
-    ## ranked by their position in the last round
     lastRound <-
       object$preferences[nrow(object$preferences), cand.in.play]
     names(lastRound) <-
@@ -1097,8 +1098,9 @@ completeRankingTable <- function(object, ...) {
       )
   }
   
+  ## Another pseudo-round, if any candidate was eliminated: shift losing margins
+  ## onto the (pairwise) winners
   if (length(loseMargins) > 0) {
-    ## shift losing margins onto the (pairwise) winners
     marg <- c(loseMargins[-1], NA)
     rnk <-
       seq(max(result$Rank) + 1, length = length(eliminated))
@@ -1115,9 +1117,9 @@ completeRankingTable <- function(object, ...) {
       )
   }
   
+  ## iterative 1-d clustering to produce a "safe" ranking
   safeRank <- result$Rank
   for (i in 2:nrow(result)) {
-    ## iterative 1-d clustering
     if (is.na(result$Margin[i - 1])) {
       warning("NA margin at rank ", i)
       safeRank[i] <- safeRank[i - 1]
