@@ -109,8 +109,8 @@ Church of England's STV methodology.</p></dd>
 
 <dt>complete.ranking</dt>
 <dd><p>TRUE if the balloting is intended to produce a
-ranking of all candidates.  This affects the value assigned to nseats when
-stv() is called with nseats=NULL</p></dd>
+complete ranking of all candidates.  This affects the value assigned to
+nseats when stv() is called with nseats=NULL</p></dd>
 
 
 <dt>invalid.partial</dt>
@@ -123,9 +123,18 @@ do not specify a complete ranking of candidates</p></dd>
 
 
 <dt>seed</dt>
-<dd><p>integer seed for tie-breaking.  Warning: if non-null, the
-PRNG for R will be reseeded prior to every tie-break, making it advisable
-to use an independent PRNG stream in randomised experimentation on stv().</p></dd>
+<dd><p>integer seed for tie-breaking.  Warning: if non-null, the PRNG
+for R will be reseeded prior to every random tie-break among the
+possibly-elected candidates.  Because this may be desired behaviour in
+vote_2.3.2 we have preserved this functionality in this branch, although it
+is no longer the default behaviour -- for convenience and safety in our
+stochastic experimentation.  The legacy codebase for stv(), as preserved in
+vote_2.3.2, had a default seed=1234 -- presumably to provide
+fully-repeatable counts in the (presumably very rare) elections where there
+are any random tie-breaks.  Note: the PRNG enshrined in New Zealand's STV
+legislation is initialised prior to every ballot-count, so that election
+results are well-determined and easily-auditable rather than stochastic and
+difficult to reproduce.</p></dd>
 
 
 <dt>quiet</dt>
@@ -149,7 +158,9 @@ safeRank by clustering near-ties in a complete ranking</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>object of class vote.stv</p>
+<p>object of class vote.stv.  Note: winning margins are valid for the
+  elected candidates and their ranking, but must be adjusted within tiegroups
+  to be valid for the safeRank.</p>
     </div>
 
     <div class="section level2">
@@ -167,13 +178,13 @@ safeRank by clustering near-ties in a complete ranking</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fuzz on safeRank:	 2.236068</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Complete ranking:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | Rank|Margin    |  Candidate   | Elected|SafeRank |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |----:|:---------|:------------:|-------:|:--------|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    1|8.0000000 |  Chocolate   |       x|1        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    2|2.7771111 | Strawberries |       x|2        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    3|0.1114444 |   Oranges    |       x|3        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    4|1.8885556 |    Sweets    |       x|3        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    5|NA        |    Pears     |       x|3        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | Rank|SafeRank |  Margin   |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|:--------|:---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    3|3        | 0.1114444 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    5|3        |    NA     |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    1|1        | 8.0000000 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    2|2        | 2.7771111 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    4|3        | 1.8885556 |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Vote transfers:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -207,13 +218,13 @@ safeRank by clustering near-ties in a complete ranking</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fuzz on safeRank:	 4.472136</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Complete ranking:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> | Rank|Margin    |  Candidate   | Elected|SafeRank |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |----:|:---------|:------------:|-------:|:--------|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    1|8.0000000 |  Chocolate   |       x|1        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    2|0.5548889 | Strawberries |       x|2        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    3|1.2225556 |   Oranges    |        |2        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    4|0.7774444 |    Sweets    |        |2        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |    5|NA        |    Pears     |        |2        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | Rank|SafeRank |  Margin   |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|:--------|:---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    3|2        | 1.2225556 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    5|2        |    NA     |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    1|1        | 8.0000000 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    2|2        | 0.5548889 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    4|2        | 0.7774444 |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Vote transfers:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
