@@ -38,13 +38,6 @@ check.nseats <- function(nseats = NULL, ncandidates, default=1, mcan = NULL,
             ") to be in 1..", ncandidates
             )
     nseats <- max(1, min(nseats, ncandidates))
-  } else {
-    if( !complete.ranking && nseats == ncandidates) {
-      nseats <- ncandidates-1
-      warning("Adjusting nseats (originally ", nseats, ") to be less",
-              " than the number of candidates (", ncandidates, ")" 
-              )
-    }
   }
   return(nseats)
 }
