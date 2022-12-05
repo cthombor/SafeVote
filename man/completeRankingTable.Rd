@@ -6,12 +6,14 @@
 to discover a complete ranking of all candidates.  The ranking may depend
 on the value of nseats, because this affects how votes are transferred.}
 \usage{
-completeRankingTable(object, ...)
+completeRankingTable(object, quiet, verbose)
 }
 \arguments{
 \item{object}{partial results}
 
-\item{...}{undocumented, currently unused}
+\item{quiet}{TRUE to suppress console output}
+
+\item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
 data.frame with columns Rank, Margin, Candidate, Elected, SafeRank

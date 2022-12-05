@@ -529,11 +529,10 @@ extractRank <- function(rankMethod, countMethod, cr) {
   if (rankMethod == "elected") {
     ## convert a list of names to a 1-2 ranking vector
     ranks <- c(ifelse(colnames(cr$data) %in% cr$elected,2,1))
-    names(ranks) <- colnames(cr$data)
   } else {
-    ## rearrange a numeric ranking vector, if necessary
-    ranks <- cr[[rankMethod]][colnames(cr$data)]
+    ranks <- cr[[rankMethod]]
   }
+  names(ranks) <- colnames(cr$data)
   return(ranks)
 }
 
@@ -547,7 +546,7 @@ extractRank <- function(rankMethod, countMethod, cr) {
 extractMargins <- function(marginNames, rankMethod, cr) {
   crMargins <- cr$margins
   if (rankMethod == "safeRank") {
-    sRank <- cr$safeRank[colnames(cr$data)]
+    sRank <- cr$safeRank
     ## reverse the order of margins for tied candidates, so that candidates
     ## within a safeRank tie group have margins indicative of their relative
     ## strengths.  A margin of 0 is possible, and reveals a tied vote-count.

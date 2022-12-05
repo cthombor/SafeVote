@@ -12,21 +12,32 @@
 #'   Church of England's STV methodology.
 #' @param group.members vector of members of a group with reserved seats
 #' @param complete.ranking TRUE if the balloting is intended to produce a
-#'   ranking of all candidates.  This affects the value assigned to nseats when
-#'   stv() is called with nseats=NULL
+#'   complete ranking of all candidates.  This affects the value assigned to
+#'   nseats when stv() is called with nseats=NULL
 #' @param invalid.partial TRUE if ballots are invalid (aka "informal") if they
 #'   do not specify a complete ranking of candidates
 #' @param verbose TRUE for diagnostic output
-#' @param seed integer seed for tie-breaking.  Warning: if non-null, the
-#'   PRNG for R will be reseeded prior to every tie-break, making it advisable
-#'   to use an independent PRNG stream in randomised experimentation on stv().
+#' @param seed integer seed for tie-breaking.  Warning: if non-null, the PRNG
+#'   for R will be reseeded prior to every random tie-break among the
+#'   possibly-elected candidates.  Because this may be desired behaviour in
+#'   vote_2.3.2 we have preserved this functionality in this branch, although it
+#'   is no longer the default behaviour -- for convenience and safety in our
+#'   stochastic experimentation.  The legacy codebase for stv(), as preserved in
+#'   vote_2.3.2, had a default seed=1234 -- presumably to provide
+#'   fully-repeatable counts in the (presumably very rare) elections where there
+#'   are any random tie-breaks.  Note: the PRNG enshrined in New Zealand's STV
+#'   legislation is initialised prior to every ballot-count, so that election
+#'   results are well-determined and easily-auditable rather than stochastic and
+#'   difficult to reproduce.
 #' @param quiet TRUE to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param safety number of standard deviations on vote-counts, when producing a
 #'   safeRank by clustering near-ties in a complete ranking
 #' @param ... undocumented intent
 #'
-#' @return object of class vote.stv
+#' @return object of class vote.stv.  Note: winning margins are valid for the
+#'   elected candidates and their ranking, but must be adjusted within tiegroups
+#'   to be valid for the safeRank.
 #' @export
 #'
 #' @examples data(food_election)
@@ -453,9 +464,10 @@ stv <-
       )
     )
     
-    crt <- completeRankingTable(partialResult)
+    crt <- completeRankingTable(partialResult, quiet=quiet, verbose=verbose)
+    partialResult$ranking <- crt$ranking ## update; could delete
     sr <- crt$SafeRank
-    names(sr) <- crt$Candidate
+    names(sr) <- row.names(sr)
     result <- structure(append(partialResult,
                                list(
                                  rankingTable = crt, safeRank = sr
@@ -591,7 +603,8 @@ ordered.tiebreak <- function(vmat, seed = NULL) {
   ## resolve ranking duplicates by moving to the next column
   if (any(dpl)) {
     if (!is.null(seed))
-      ## TODO: verify that the intent is to reseed prior to every tie-break
+      ## TODO: verify that the specification of this ballot-counting method
+      ## requires (or at least allows) a reseed prior to every random tie-break
       set.seed(seed)
     for (pref in 1:ncol(vmat)) {
       if (!pref %in% rnk[dpl])
@@ -981,15 +994,14 @@ plot.SafeVote.stv <-
       i.Count <- NULL
     
     ## Plot evolution of the preferences
+
     ## prepare data in the long format
     df <- data.table(x$preferences)
     df[, Count := 1:nrow(df)]
     dfl <-
       data.table::melt(df, id.vars = "Count", variable.name = "Candidate")
     dfl <- rbind(dfl, dfl[Count == 1][, Count := 0]) ## add Count 0
-    ## with initial
-    ## values
-    ## dataset for plotting the quota
+    ## with initial values dataset for plotting the quota
     dfq <- data.table(
       Count = 1:length(x$quotas),
       value = x$quotas,
@@ -1043,94 +1055,82 @@ plot.SafeVote.stv <-
 #' on the value of nseats, because this affects how votes are transferred.
 #'
 #' @param object partial results
-#' @param ... undocumented, currently unused
+#' @param quiet TRUE to suppress console output
+#' @param verbose TRUE to produce diagnostic output
 #'
 #' @return data.frame with columns Rank, Margin, Candidate, Elected, SafeRank
 #'
-completeRankingTable <- function(object, ...) {
+completeRankingTable <- function(object, quiet, verbose) {
   cand.in.play <- colSums(abs(object$elect.elim)) == 0
   ## list the eliminated candidates in reverse order of elimination
   eliminated <- rev(names(unlist(
     apply(object$elect.elim, 1, function(r)
       which(r < 0))
   )))
+  ranking <- object$ranking
   loseMargins <- object$margins[eliminated]
-  winMarg = as.numeric(object$margins[object$elected])
-  if (is.na(winMarg[length(object$elected)])) {
-    ## The winning margin of a candidate elected unopposed in the
-    ## last round is the losing margin of the first-eliminated
-    ## candidate (if any).
-    if (length(loseMargins) > 0) {
-      winMarg[length(winMarg)] <- loseMargins[1]
-    }
-  }
-  result <- data.frame(
-    Rank = 1:length(object$elected),
-    Margin = winMarg,
-    Candidate = object$elected,
-    Elected = "x"
-  )
+  winMargins = object$margins
   
-  ## A possible pseudo-round: candidates who were neither elected nor eliminated
-  ## are ranked by their position in the last round
+  ## Candidates who were neither elected nor eliminated are ranked by their
+  ## position in the last round
   if (any(cand.in.play)) {
     lastRound <-
       object$preferences[nrow(object$preferences), cand.in.play]
-    names(lastRound) <-
-      colnames(object$preferences)[cand.in.play]
-    rnk <- rank(-lastRound, ties.method = "random")
-    lastRound <- lastRound[order(rnk)]
+    ranking[cand.in.play] <-
+      length(object$elected) + rank(-lastRound, ties.method = "random")
+    if (verbose && !quiet) {
+      cat("Ranking of unelected uneliminated candidates in a final round:")
+      print(ranking[cand.in.play])
+    }
+    lastRound <- lastRound[order(ranking[cand.in.play])]
     winMarg <- lastRound - c(lastRound[-1], NA)
     if (length(loseMargins) > 0) {
       ## The winning margin of the last in-play candidate is the
       ## losing margin of the first-eliminated candidate (if any).
       winMarg[length(winMarg)] <- loseMargins[1]
     }
-    result <-
-      rbind(
-        result,
-        data.frame(
-          Rank = seq(max(result$Rank) + 1, length = length(rnk)),
-          Margin = as.numeric(winMarg),
-          Candidate = names(lastRound),
-          Elected = ""
-        )
-      )
-  }
-  
-  ## Another pseudo-round, if any candidate was eliminated: shift losing margins
-  ## onto the (pairwise) winners
-  if (length(loseMargins) > 0) {
-    marg <- c(loseMargins[-1], NA)
-    rnk <-
-      seq(max(result$Rank) + 1, length = length(eliminated))
-    result <-
-      rbind(
-        result,
-        data.frame(
-          row.names = rnk,
-          Rank = rnk,
-          Margin = marg,
-          Candidate = eliminated,
-          Elected = ""
-        )
-      )
-  }
-  
-  ## iterative 1-d clustering to produce a "safe" ranking
-  safeRank <- result$Rank
-  for (i in 2:nrow(result)) {
-    if (is.na(result$Margin[i - 1])) {
-      warning("NA margin at rank ", i)
-      safeRank[i] <- safeRank[i - 1]
-    } else {
-      if (result$Margin[i - 1] < object$fuzz) {
-        safeRank[i] <- safeRank[i - 1]
+    ## Copy winMarg into the matching positions of winMargins
+    winMargins[names(cand.in.play)[cand.in.play]
+               [order(ranking[cand.in.play])]] <- winMarg
+  } else {  ## all candidates have been either elected or eliminated
+    if (is.na(winMargins[length(object$elected)])) {
+      ## If a candidate had been elected unopposed, their winning margin is the
+      ## losing margin of the first-eliminated candidate (if any).
+      if (length(loseMargins) > 0) {
+        winMargins[length(object$elected)] <- loseMargins[1]
       }
     }
   }
   
-  result <- cbind(result, SafeRank = safeRank)
+  ## Push the loseMargin of each eliminated candidate (other than the
+  ## highest-ranked one) into the winMargin of the next-higher ranked candidate
+  ## (if any) among the eliminated candidates.
+  if (length(loseMargins) > 1) {
+    winMargins[eliminated] <- c(loseMargins[-1], NA) 
+  }
   
+  ## iterative 1-d clustering to produce a "safe" ranking
+  safeRank <- ranking[order(ranking)]
+  rmargs <- winMargins[order(ranking)]
+  for (i in 2:length(ranking)) {
+    if (is.na(rmargs[i - 1])) {
+      warning("NA margin at rank ", i)
+      safeRank[i] <- safeRank[i - 1]
+    } else {
+      if (rmargs[i - 1] < object$fuzz) {
+        safeRank[i] <- safeRank[i - 1]
+      }
+    }
+  }
+  ## rearrange safeRank into canonical order (as on ballots)
+  safeRank <- safeRank[names(ranking)]
+  
+  result <-
+    data.frame(
+      Rank = ranking,
+      SafeRank = safeRank,
+      Margin = winMargins
+    )
+
   return(result)
 }

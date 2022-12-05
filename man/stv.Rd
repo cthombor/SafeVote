@@ -48,17 +48,26 @@ Church of England's STV methodology.}
 \item{group.members}{vector of members of a group with reserved seats}
 
 \item{complete.ranking}{TRUE if the balloting is intended to produce a
-ranking of all candidates.  This affects the value assigned to nseats when
-stv() is called with nseats=NULL}
+complete ranking of all candidates.  This affects the value assigned to
+nseats when stv() is called with nseats=NULL}
 
 \item{invalid.partial}{TRUE if ballots are invalid (aka "informal") if they
 do not specify a complete ranking of candidates}
 
 \item{verbose}{TRUE for diagnostic output}
 
-\item{seed}{integer seed for tie-breaking.  Warning: if non-null, the
-PRNG for R will be reseeded prior to every tie-break, making it advisable
-to use an independent PRNG stream in randomised experimentation on stv().}
+\item{seed}{integer seed for tie-breaking.  Warning: if non-null, the PRNG
+for R will be reseeded prior to every random tie-break among the
+possibly-elected candidates.  Because this may be desired behaviour in
+vote_2.3.2 we have preserved this functionality in this branch, although it
+is no longer the default behaviour -- for convenience and safety in our
+stochastic experimentation.  The legacy codebase for stv(), as preserved in
+vote_2.3.2, had a default seed=1234 -- presumably to provide
+fully-repeatable counts in the (presumably very rare) elections where there
+are any random tie-breaks.  Note: the PRNG enshrined in New Zealand's STV
+legislation is initialised prior to every ballot-count, so that election
+results are well-determined and easily-auditable rather than stochastic and
+difficult to reproduce.}
 
 \item{quiet}{TRUE to suppress console output}
 
@@ -70,7 +79,9 @@ safeRank by clustering near-ties in a complete ranking}
 \item{...}{undocumented intent}
 }
 \value{
-object of class vote.stv
+object of class vote.stv.  Note: winning margins are valid for the
+  elected candidates and their ranking, but must be adjusted within tiegroups
+  to be valid for the safeRank.
 }
 \description{
 Count preferential ballots using an STV method
