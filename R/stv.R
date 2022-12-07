@@ -465,7 +465,8 @@ stv <-
     )
     
     crt <- completeRankingTable(partialResult, quiet=quiet, verbose=verbose)
-    partialResult$ranking <- crt$ranking ## update; could delete
+    partialResult$ranking <- crt$ranking
+    partialResult$margins <- crt$Margin
     sr <- crt$SafeRank
     names(sr) <- row.names(sr)
     result <- structure(append(partialResult,
