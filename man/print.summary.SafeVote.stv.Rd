@@ -7,9 +7,9 @@
 \method{print}{summary.SafeVote.stv}(x, ...)
 }
 \arguments{
-\item{x}{undocumented}
+\item{x}{election results}
 
-\item{...}{undocumented}
+\item{...}{args to be passed to kable()}
 }
 \description{
 print() method for a summary() of a SafeVote result

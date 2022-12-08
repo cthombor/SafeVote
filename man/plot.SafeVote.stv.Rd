@@ -7,7 +7,13 @@
 \method{plot}{SafeVote.stv}(x, xlab = "Count", ylab = "Preferences", point.size = 2, ...)
 }
 \arguments{
-\item{x, xlab, ylab, point.size, ...}{undocumented (legacy code)}
+\item{x}{stv results}
+
+\item{xlab, ylab}{axis labels}
+
+\item{point.size}{diameter of elected/eliminated points}
+
+\item{...}{params for generic plot()}
 }
 \value{
 graphics object, with side-effect in RStudio's Plots pane

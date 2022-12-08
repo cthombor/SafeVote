@@ -7,12 +7,12 @@
 \method{view}{SafeVote.stv}(object, ...)
 }
 \arguments{
-\item{object}{undocumented}
+\item{object}{object to be viewed}
 
-\item{...}{undocumented}
+\item{...}{additional parameters, passed to formattable::formattable()}
 }
 \value{
-formatted object
+html-formatted object
 }
 \description{
 view method for the result of an stv() ballot-count

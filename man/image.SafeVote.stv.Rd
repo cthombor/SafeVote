@@ -7,7 +7,9 @@
 \method{image}{SafeVote.stv}(x, xpref = 2, ypref = 1, all.pref = FALSE, proportion = TRUE, ...)
 }
 \arguments{
-\item{x, xpref, ypref, all.pref, proportion, ...}{undocumented (legacy code)}
+\item{x, xpref, ypref, all.pref, proportion}{undocumented (legacy code)}
+
+\item{...}{args passed to fields::image.plot()}
 }
 \value{
 image object, with side-effect in RStudio Plots pane

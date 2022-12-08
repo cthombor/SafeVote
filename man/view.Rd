@@ -9,7 +9,7 @@ view(object, ...)
 \arguments{
 \item{object}{election object to be viewed}
 
-\item{...}{additional parameters, passed to formatter()}
+\item{...}{additional parameters, passed to formattable::formattable()}
 }
 \value{
 html-formatted object, with side-effect in RStudio's Viewer pane

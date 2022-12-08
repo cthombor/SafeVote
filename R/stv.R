@@ -813,8 +813,8 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
 
 #' print() method for a summary() of a SafeVote result
 #'
-#' @param x undocumented
-#' @param ... undocumented
+#' @param x election results
+#' @param ... args to be passed to kable()
 #'
 #' @export
 print.summary.SafeVote.stv <- function(x, ...) {
@@ -850,7 +850,7 @@ print.summary.SafeVote.stv <- function(x, ...) {
 #' generic view() for classes defined in this package
 #'
 #' @param object election object to be viewed
-#' @param ... additional parameters, passed to formatter()
+#' @param ... additional parameters, passed to formattable::formattable()
 #'
 #' @return html-formatted object, with side-effect in RStudio's Viewer pane
 #' @export
@@ -859,11 +859,11 @@ view <- function(object, ...) {
 }
 
 #' view method for the result of an stv() ballot-count
-#' @param object undocumented
-#' @param ... undocumented
+#' @param object object to be viewed
+#' @param ... additional parameters, passed to formattable::formattable()
 #'
-#' @return formatted object
-#' @import formattable
+#' @return html-formatted object
+#' @importFrom formattable formattable formatter
 #' @export
 #'
 view.SafeVote.stv <- function(object, ...) {
@@ -880,7 +880,8 @@ view.SafeVote.stv <- function(object, ...) {
 
 #' image() method for the result of an stv() ballot-count
 #'
-#' @param x,xpref,ypref,all.pref,proportion,... undocumented (legacy code)
+#' @param x,xpref,ypref,all.pref,proportion undocumented (legacy code)
+#' @param ... args passed to fields::image.plot()
 #'
 #' @return image object, with side-effect in RStudio Plots pane
 #' @importFrom grDevices hcl.colors
@@ -894,6 +895,8 @@ image.SafeVote.stv <- function(x,
                                all.pref = FALSE,
                                proportion = TRUE,
                                ...) {
+  stopifnot(requireNamespace("ggplot2", quietly = TRUE))
+  
   
   ## Declaring temps for data.table calls.  Warning: overloads rank() 
   voter <- rank <- NULL 
@@ -978,7 +981,10 @@ image.SafeVote.stv <- function(x,
 }
 
 #' plot() method for the result of an stv() ballot-count
-#' @param x,xlab,ylab,point.size,... undocumented (legacy code)
+#' @param x stv results
+#' @param xlab,ylab axis labels
+#' @param point.size diameter of elected/eliminated points
+#' @param ... params for generic plot()
 #' @return graphics object, with side-effect in RStudio's Plots pane
 #' @export
 plot.SafeVote.stv <-
