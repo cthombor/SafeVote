@@ -863,17 +863,19 @@ view <- function(object, ...) {
 #' @param ... additional parameters, passed to formattable::formattable()
 #'
 #' @return html-formatted object
-#' @importFrom formattable formattable formatter
+#' @import formattable 
 #' @export
 #'
 view.SafeVote.stv <- function(object, ...) {
   s <- summary(object)
   formatter <-
     list(
-      area(row = 2:(nrow(s) - 2),
-           col = seq(1, ncol(s), by = 2)) ~ color_text("red", "red"),
-      area(row = 1, col = seq(1, ncol(s), by = 2)) ~ color_text("blue", "blue")
-      ##Quota=color_text("blue", "blue")
+      formattable::area(row = 2:(nrow(s) - 2),
+                        col = seq(1, ncol(s), by = 2)) ~
+        formattable::color_text("red", "red"),
+      formattable::area(row = 1, col = seq(1, ncol(s), by = 2)) ~
+        formattable::color_text("blue", "blue")
+      ## Quota = color_text("blue", "blue")  # comment from legacy code
     )
   formattable::formattable(s, formatter, ...)
 }
