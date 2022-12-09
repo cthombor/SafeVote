@@ -708,22 +708,31 @@ print.summary.SafeRankExpt <- function(x, ...) {
 }
 
 #' plot() method for the result of an experiment with varying numbers of ballots
+#' 
+#' The score of a candidate is their ranking plus their scaled "winning margin".
+#' The scaled margin is \eqn{e^{-cx/\sqrt{n}}}, where \eqn{x} is the
+#' unscaled margin (i.e. the number of votes by which this candidate is ahead of
+#' the next-weaker candidate), \eqn{n} is the number of ballots in this
+#' simulated election, and \eqn{c} is the scaling parameter `cmargin`.
+#' 
+#' Todo: invert the y axis so that the higher-ranked candidates are the "cream"
+#' rather than the "dregs" on the chart.
+#' 
+#' Todo: list candidates in order of final ranking
+#' 
+#' Todo: amend so that testFraction(..., ainc=0) is a 2-d plot.
+#' 
 #' @param x object containing experimental results
 #' @param facetWrap TRUE provides per-candidate scatterplots
 #' @param cMargin adjustable parameter in scoring
 #' @param xlab,ylab axis labels
 #' @param point.size diameter of elected/eliminated points
 #' @param ... params for generic plot()
-#' @return graphics object, with side-effect in RStudio's Plots pane
+#' @return graphics object, with side-effect in RStudio Plots pane
 #'
-#'   The score of a candidate is their ranking plus their scaled "winning
-#'   margin".  The scaling factor is \eqn{\sqrt{n}/\mbox{\rm cmargin}}, where
-#'   \eqn{n} is the number of ballots in this simulated election, and
-#'   \eqn{\mbox{\rm cmargin}} is the scaling parameter,
-#'   
-#'   Todo: amend so that testFraction(..., ainc=0) is a 2-d plot
 #' @export
 #' @importFrom stringr str_detect
+#' 
 plot.SafeRankExpt <-
   function(x,
            facetWrap = FALSE,
