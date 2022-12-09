@@ -4,10 +4,22 @@
 \alias{plot.SafeRankExpt}
 \title{plot() method for the result of an experiment with varying numbers of ballots}
 \usage{
-\method{plot}{SafeRankExpt}(x, xlab = "Ballots", ylab = "Score", point.size = 2, ...)
+\method{plot}{SafeRankExpt}(
+  x,
+  facetWrap = FALSE,
+  cMargin = 0.25,
+  xlab = "Ballots",
+  ylab = "Adjusted Rank",
+  point.size = 2,
+  ...
+)
 }
 \arguments{
 \item{x}{object containing experimental results}
+
+\item{facetWrap}{TRUE provides per-candidate scatterplots}
+
+\item{cMargin}{adjustable parameter in scoring}
 
 \item{xlab, ylab}{axis labels}
 
@@ -19,13 +31,11 @@
 graphics object, with side-effect in RStudio's Plots pane
 
   The score of a candidate is their ranking plus their scaled "winning
-  margin".  The scaling factor is \eqn{\sqrt{n}/4}, where \eqn{n} is the
-  number of ballots in this simulated election.
-
-  Todo: amend scoring so that the margin is visually at the "top" of the
-  tier. 
+  margin".  The scaling factor is \eqn{\sqrt{n}/\mbox{\rm cmargin}}, where
+  \eqn{n} is the number of ballots in this simulated election, and
+  \eqn{\mbox{\rm cmargin}} is the scaling parameter,
   
-  Todo: extend to visualise results of testFraction(..., ainc=0)
+  Todo: amend so that testFraction(..., ainc=0) is a 2-d plot
 }
 \description{
 plot() method for the result of an experiment with varying numbers of ballots

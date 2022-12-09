@@ -706,3 +706,83 @@ print.summary.SafeRankExpt <- function(x, ...) {
     print(knitr::kable(x))
   }
 }
+
+#' plot() method for the result of an experiment with varying numbers of ballots
+#' @param x object containing experimental results
+#' @param facetWrap TRUE provides per-candidate scatterplots
+#' @param cMargin adjustable parameter in scoring
+#' @param xlab,ylab axis labels
+#' @param point.size diameter of elected/eliminated points
+#' @param ... params for generic plot()
+#' @return graphics object, with side-effect in RStudio's Plots pane
+#'
+#'   The score of a candidate is their ranking plus their scaled "winning
+#'   margin".  The scaling factor is \eqn{\sqrt{n}/\mbox{\rm cmargin}}, where
+#'   \eqn{n} is the number of ballots in this simulated election, and
+#'   \eqn{\mbox{\rm cmargin}} is the scaling parameter,
+#'   
+#'   Todo: amend so that testFraction(..., ainc=0) is a 2-d plot
+#' @export
+#' @importFrom stringr str_detect
+plot.SafeRankExpt <-
+  function(x,
+           facetWrap = FALSE,
+           cMargin = 0.25,
+           xlab = "Ballots",
+           ylab = "Adjusted Rank",
+           point.size = 2,
+           ...) {
+    stopifnot(requireNamespace("ggplot2", quietly = TRUE))
+    stopifnot(requireNamespace("stringr", quietly = TRUE))
+    
+    ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
+    integer_breaks <- function(n = 5, ...) {
+      fxn <- function(x) {
+        breaks <- floor(pretty(x, n, ...))
+        names(breaks) <- attr(breaks, "labels")
+        breaks
+      }
+      return(fxn)
+    }
+    
+    ## colnames of margins, ranks, and scores
+    lmnames <- colnames(x)[stringr::str_detect(colnames(x), "^m.")]
+    cnames <- unlist(lapply(lmnames, function(x)
+      stringr::str_sub(x, 3, stringr::str_length(x))))
+    snames <- unlist(lapply(cnames, function(x)
+      paste0("s.", x)))
+    mnames <- unlist(lmnames)
+    
+    scores <- x[, ..mnames]
+    setnames(scores, cnames)
+    ## scale by 1/sqrt(n)
+    scores <- scores / sqrt(x[, nBallots])  
+    ## a small winning margin adds almost a full point of rank
+    scores <- exp(-cMargin * scores)
+    ## transformed margins of NA are set to 0.0
+    for (j in cnames) {
+      set(scores, which(is.na(scores[[j]])), j, 0.0)
+    }
+    ## scores += ranks
+    scores <- scores + x[, .SD, .SDcols = cnames] 
+    ## include descriptive info
+    t <- x[, .SD, .SDcols = c("exptID", "nBallots")]
+    scores <- cbind(t, scores)
+    
+    scores <-
+      melt(
+        scores,
+        id.vars = c("exptID", "nBallots"),
+        measure.vars = unlist(cnames),
+        variable.name = "Candidate",
+        value.name = "Score"
+      )
+    g <-
+      ggplot2::ggplot(scores, aes(x = nBallots, y = Score, colour = Candidate))
+    g <- g + geom_point()
+    g <- g + scale_y_continuous(breaks = integer_breaks())
+    if (facetWrap) {
+      g <- g + facet_wrap(~ Candidate)
+    }
+    return(g)
+  }
