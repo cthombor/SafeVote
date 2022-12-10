@@ -67,7 +67,7 @@
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<p>This mod of <code>vote_2.3.2</code> reports the <code>Margins</code> of victory in an election. In cases where there are near-ties, the value of the <code>safety</code> parameter (default 1.0) will affect the completeness of the <code>SafeRank</code> ordering of the candidates.</p>
+<p>This mod of <a href="https://cran.r-project.org/web/packages/vote/index.html" class="external-link">vote_2.3.2</a> reports the margins of victory in an election. In cases where there are near-ties, the value of the <code>safety</code> parameter (default 1.0) will affect the completeness of the safeRank ordering of the candidates.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SafeVote)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(food_election)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stv</span>(food_election, <span class="at">complete.ranking=</span><span class="cn">TRUE</span>, <span class="at">safety=</span><span class="fl">0.5</span>)</span></code></pre></div>
