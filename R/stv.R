@@ -7,33 +7,29 @@
 #' @param fsep column-separator for output
 #' @param ties vector of tie-breaking methods: 'f' for forward, 'b' for backward
 #' @param constant.quota TRUE if quota is held constant.  Over-rides quota.hare.
-#' @param quota.hare TRUE if Hare quota, FALSE if Droop quota
+#'   Default is FALSE.
+#' @param quota.hare TRUE if Hare quota, FALSE if Droop quota (default)
 #' @param group.nseats number of seats reserved to members of a group, as in the
 #'   Church of England's STV methodology.
 #' @param group.members vector of members of a group with reserved seats
-#' @param complete.ranking TRUE if the balloting is intended to produce a
-#'   complete ranking of all candidates.  This affects the value assigned to
-#'   nseats when stv() is called with nseats=NULL
-#' @param invalid.partial TRUE if ballots are invalid (aka "informal") if they
-#'   do not specify a complete ranking of candidates
+#' @param complete.ranking TRUE (default) if a complete ranking of all
+#'   candidates will be produced.  This affects the value assigned to nseats
+#'   when stv() is called with nseats=NULL, but does not affect elections in
+#'   which nseats is explicitly specified.
+#' @param invalid.partial TRUE if ballots are informal (aka "invalid") if they
+#'   do not specify a complete ranking of candidates.  Default is FALSE.
 #' @param verbose TRUE for diagnostic output
 #' @param seed integer seed for tie-breaking.  Warning: if non-null, the PRNG
-#'   for R will be reseeded prior to every random tie-break among the
-#'   possibly-elected candidates.  Because this may be desired behaviour in
-#'   vote_2.3.2 we have preserved this functionality in this branch, although it
-#'   is no longer the default behaviour -- for convenience and safety in our
-#'   stochastic experimentation.  The legacy codebase for stv(), as preserved in
-#'   vote_2.3.2, had a default seed=1234 -- presumably to provide
-#'   fully-repeatable counts in the (presumably very rare) elections where there
-#'   are any random tie-breaks.  Note: the PRNG enshrined in New Zealand's STV
-#'   legislation is initialised prior to every ballot-count, so that election
-#'   results are well-determined and easily-auditable rather than stochastic and
-#'   difficult to reproduce.
+#'   for R is reseeded prior to every random tie-break among the
+#'   possibly-elected candidates.  We have preserved this functionality in
+#'   this branch, and seed=1234 should be used when regression-testing against 
+#'   vote_2.3.2.  However the default value for seed is NULL in SafeVote, to
+#'   make it easier to perform our stochastic experimentation.
 #' @param quiet TRUE to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param safety number of standard deviations on vote-counts, when producing a
 #'   safeRank by clustering near-ties in a complete ranking
-#' @param ... undocumented intent
+#' @param ... undocumented intent (preserved from legacy code)
 #'
 #' @return object of class vote.stv.  Note: winning margins are valid for the
 #'   elected candidates and their ranking, but must be adjusted within tiegroups
@@ -41,13 +37,8 @@
 #' @export
 #'
 #' @examples data(food_election)
-#' @examples stv(food_election, complete.ranking=TRUE, safety=0.5)
-#' @examples stv(food_election, nseats = NULL, eps = 0.001,
-#'   equal.ranking = FALSE, fsep = "\t", ties = c("f", "b"),
-#'   constant.quota = FALSE, quota.hare = FALSE,
-#'   group.nseats = NULL, group.members = NULL,
-#'   complete.ranking = FALSE, invalid.partial = FALSE,
-#'   verbose = FALSE, seed = 1234, quiet = FALSE, digits = 3)
+#' @examples stv(food_election, safety = 0.0)
+#' @examples stv(food_election, nseats = 2)
 #'
 stv <-
   function(votes,

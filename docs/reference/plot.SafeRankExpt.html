@@ -58,10 +58,10 @@ simulated election, and \(c\) is the scaling parameter `cmargin`.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  facetWrap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  cMargin <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>  cMargin <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Ballots"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Adjusted Rank"</span>,</span>
-<span>  point.size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  pointSize <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -77,15 +77,15 @@ simulated election, and \(c\) is the scaling parameter `cmargin`.</p>
 
 
 <dt>cMargin</dt>
-<dd><p>adjustable parameter in scoring</p></dd>
+<dd><p>parameter in rank-adjustment formula</p></dd>
 
 
 <dt>xlab, ylab</dt>
 <dd><p>axis labels</p></dd>
 
 
-<dt>point.size</dt>
-<dd><p>diameter of elected/eliminated points</p></dd>
+<dt>pointSize</dt>
+<dd><p>diameter of points</p></dd>
 
 
 <dt>...</dt>
@@ -100,10 +100,12 @@ simulated election, and \(c\) is the scaling parameter `cmargin`.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Todo: invert the y axis so that the higher-ranked candidates are the "cream"
-rather than the "dregs" on the chart.</p>
-<p>Todo: list candidates in order of final ranking</p>
-<p>Todo: amend so that testFraction(..., ainc=0) is a 2-d plot.</p>
+    <p>The default value of cmargin = 1.0 preserves the slope of score-trends across
+rank-boundaries.  Smaller values of cmargin make it easier to see the
+statistical fluctuations in margins as a function of nBallots.  cmargin = 0
+displays only the ranks.</p>
+<p>Todo: accept a list of experimental results.  Multiple runs with the same
+number of ballots should be shown with a box-and-whisker rather than a point.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

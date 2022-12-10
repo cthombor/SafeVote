@@ -7,10 +7,10 @@
 \method{plot}{SafeRankExpt}(
   x,
   facetWrap = FALSE,
-  cMargin = 0.25,
+  cMargin = 1,
   xlab = "Ballots",
   ylab = "Adjusted Rank",
-  point.size = 2,
+  pointSize = 1,
   ...
 )
 }
@@ -19,11 +19,11 @@
 
 \item{facetWrap}{TRUE provides per-candidate scatterplots}
 
-\item{cMargin}{adjustable parameter in scoring}
+\item{cMargin}{parameter in rank-adjustment formula}
 
 \item{xlab, ylab}{axis labels}
 
-\item{point.size}{diameter of elected/eliminated points}
+\item{pointSize}{diameter of points}
 
 \item{...}{params for generic plot()}
 }
@@ -38,10 +38,11 @@ the next-weaker candidate), \eqn{n} is the number of ballots in this
 simulated election, and \eqn{c} is the scaling parameter `cmargin`.
 }
 \details{
-Todo: invert the y axis so that the higher-ranked candidates are the "cream"
-rather than the "dregs" on the chart.
+The default value of cmargin = 1.0 preserves the slope of score-trends across
+rank-boundaries.  Smaller values of cmargin make it easier to see the
+statistical fluctuations in margins as a function of nBallots.  cmargin = 0
+displays only the ranks.
 
-Todo: list candidates in order of final ranking
-
-Todo: amend so that testFraction(..., ainc=0) is a 2-d plot.
+Todo: accept a list of experimental results.  Multiple runs with the same
+number of ballots should be shown with a box-and-whisker rather than a point.
 }
