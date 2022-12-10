@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{of type SafeVote.condorcet}
 
-\item{...}{see [view.SafeVote.approval]}
+\item{...}{see \link{view.SafeVote.approval}}
 }
 \value{
 view object

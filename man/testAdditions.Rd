@@ -19,20 +19,21 @@ testAdditions(
 )
 }
 \arguments{
-\item{votes}{A set of ballots}
+\item{votes}{A set of ballots, as in
+\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}}
 
 \item{ainc}{Number of ballots to be added in each step}
 
 \item{arep}{Maximum number of ballot-stuffed elections to run}
 
-\item{favoured}{Name of the candidate being "plumped".  If NULL, a random
+\item{favoured}{Name of the candidate being "plumped".  If \code{NULL}, a random
 candidate is selected from among the candidates not initially top-ranked.
 All other candidates are fully-ranked at random, with an identical ballot
-paper being stuffed multiple times.  An integer value for 'favoured' is
+paper being stuffed multiple times.  An integer value for \code{favoured} is
 interpreted as an index into the candidate names.}
 
-\item{tacticalBallot}{A ballot paper i.e. a vector of length ncol(ballots).
-If this argument is non-null, it takes precedence over 'favoured' when the
+\item{tacticalBallot}{A ballot paper i.e. a vector of length \code{ncol(ballots)}.
+If this argument is non-\code{NULL}, it takes precedence over \code{favoured} when the
 ballot box is being stuffed.}
 
 \item{rankMethod}{Name of a ranking attribute in the output of countMethod}
@@ -42,23 +43,26 @@ ballot box is being stuffed.}
 \item{countArgs}{List of args to be passed to countMethod (in addition to
 votes)}
 
-\item{exptName}{stem-name of experimental units e.g. "E"}
+\item{exptName}{stem-name of experimental units \emph{e.g.} "E"}
 
-\item{quiet}{TRUE to suppress all output}
+\item{quiet}{\code{TRUE} to suppress all output}
 
-\item{verbose}{TRUE to produce diagnostic output}
+\item{verbose}{\code{TRUE} to produce diagnostic output}
 }
 \value{
-A matrix of experimental results, of dimension n by 2m+1, where n is
-  the number of elections and m is the number of candidates.  The first
-  column is named "nBallots".  Other columns indicate the ranking of the
-  eponymous candidate, and their margin over the next-lower-ranked candidate.
+A matrix of experimental results, of dimension \eqn{n} by \eqn{2m+1},
+where \eqn{n} is the number of elections and \eqn{m} is the number of
+candidates.  The first column is named "nBallots".  Other columns indicate
+the ranking of the eponymous candidate, and their margin over the
+next-lower-ranked candidate.
 }
 \description{
-Ballots are added until a specified number of simulated elections (`arep`)
-have been held   A tactic of "plumping" is used when stuffing the ballot
-box, if a `favoured` candidate is specified.  Alternatively, a
-`tacticalBallot` may be specified.
+Ballots are added until a specified number of simulated elections (\code{arep})
+have been held.   If a \code{favoured} candidate is specified, then the ballot-box
+is stuffed with ballots awarding first-preference to this candidate.
+Alternatively, a \code{tacticalBallot} may be specified.  If both \code{favoured} and
+\code{tacticalBallot} are \code{NULL}, then a random candidate is selected as the
+favoured one.
 }
 \examples{
 data(food_election)

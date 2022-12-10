@@ -5,15 +5,15 @@
 \alias{dublin_west}
 \title{Dublin West}
 \format{
-A data frame with 29988 observations and 9 candidates. Each record 
-corresponds to one ballot with candidates being ranked between 1 and 9 with 
+A data frame with 29988 observations and 9 candidates. Each record
+corresponds to one ballot with candidates being ranked between 1 and 9 with
 zeros allowed.
 }
 \usage{
 data(dublin_west)
 }
 \description{
-Dataset containing ranked votes for the Dublin West 
+Dataset containing ranked votes for the Dublin West
 constituency in 2002, Ireland. Results of that STV election can be viewed
 at https://en.wikipedia.org/wiki/Dublin_West#2002_general_election.
 }

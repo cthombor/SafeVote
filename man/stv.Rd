@@ -26,46 +26,49 @@ stv(
 )
 }
 \arguments{
-\item{votes}{an array with one column per candidate and one row per ballot}
+\item{votes}{an array with one column per candidate and one row per ballot,
+as described in the \href{condorcet.html#details}{Details for condorcet()}}
 
 \item{nseats}{the number of seats to be filled in this election}
 
 \item{eps}{fuzz-factor when comparing fractional votes}
 
-\item{equal.ranking}{TRUE if ballots are allowed to rank candidates equally}
+\item{equal.ranking}{\code{TRUE} if ballots are allowed to rank candidates equally}
 
 \item{fsep}{column-separator for output}
 
-\item{ties}{vector of tie-breaking methods: 'f' for forward, 'b' for backward}
+\item{ties}{vector of tie-breaking methods: \code{'f'} for forward, \code{'b'} for
+backward}
 
-\item{constant.quota}{TRUE if quota is held constant.  Over-rides quota.hare.
-Default is FALSE.}
+\item{constant.quota}{\code{TRUE} if quota is held constant.  Over-rides
+quota.hare. Default is \code{FALSE}.}
 
-\item{quota.hare}{TRUE if Hare quota, FALSE if Droop quota (default)}
+\item{quota.hare}{\code{TRUE} if Hare quota, \code{FALSE} if Droop quota (default)}
 
 \item{group.nseats}{number of seats reserved to members of a group, as in the
 Church of England's STV methodology.}
 
 \item{group.members}{vector of members of a group with reserved seats}
 
-\item{complete.ranking}{TRUE (default) if a complete ranking of all
+\item{complete.ranking}{\code{TRUE} (default) if a complete ranking of all
 candidates will be produced.  This affects the value assigned to nseats
-when stv() is called with nseats=NULL, but does not affect elections in
+when \code{\link[=stv]{stv()}} is called with \code{nseats=NULL}, but does not affect elections in
 which nseats is explicitly specified.}
 
-\item{invalid.partial}{TRUE if ballots are informal (aka "invalid") if they
-do not specify a complete ranking of candidates.  Default is FALSE.}
+\item{invalid.partial}{\code{TRUE} if ballots are informal (aka "invalid") if they
+do not specify a complete ranking of candidates.  Default is \code{FALSE}.}
 
-\item{verbose}{TRUE for diagnostic output}
+\item{verbose}{\code{TRUE} for diagnostic output}
 
 \item{seed}{integer seed for tie-breaking.  Warning: if non-null, the PRNG
 for R is reseeded prior to every random tie-break among the
-possibly-elected candidates.  We have preserved this functionality in
-this branch, and seed=1234 should be used when regression-testing against 
-vote_2.3.2.  However the default value for seed is NULL in SafeVote, to
-make it easier to perform our stochastic experimentation.}
+possibly-elected candidates.  We have preserved this functionality in this
+branch, and \code{seed=1234} should be used when regression-testing against
+\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}.
+However the default value for seed is \code{NULL} in \link{SafeVote}, to make it
+easier to perform our stochastic experimentation.}
 
-\item{quiet}{TRUE to suppress console output}
+\item{quiet}{\code{TRUE} to suppress console output}
 
 \item{digits}{number of significant digits in the output table}
 
@@ -75,9 +78,9 @@ safeRank by clustering near-ties in a complete ranking}
 \item{...}{undocumented intent (preserved from legacy code)}
 }
 \value{
-object of class vote.stv.  Note: winning margins are valid for the
-  elected candidates and their ranking, but must be adjusted within tiegroups
-  to be valid for the safeRank.
+object of class \code{vote.stv}.  Note: winning margins are valid for the
+elected candidates and their ranking, but must be adjusted within tiegroups
+to be valid for the safeRank.
 }
 \description{
 Count preferential ballots using an STV method

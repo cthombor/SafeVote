@@ -13,7 +13,7 @@ prepare.votes(data, fsep = "\\n")
 }
 \value{
 a matrix with one row per ballot, one column per candidate, with
-  named rows and columns
+named rows and columns
 }
 \description{
 Coerce input 'data' into a matrix

@@ -13,5 +13,6 @@ Encoding: UTF-8
 License: GPL (>= 2)
 NeedsCompilation: no
 RoxygenNote: 7.2.1
+Roxygen: list(markdown = TRUE)
 LazyData: true
 URL: https://cthombor.github.io/SafeVote/

@@ -35,7 +35,7 @@ The score of a candidate is their ranking plus their scaled "winning margin".
 The scaled margin is \eqn{e^{-cx/\sqrt{n}}}, where \eqn{x} is the
 unscaled margin (i.e. the number of votes by which this candidate is ahead of
 the next-weaker candidate), \eqn{n} is the number of ballots in this
-simulated election, and \eqn{c} is the scaling parameter `cmargin`.
+simulated election, and \eqn{c} is the scaling parameter \code{cmargin}.
 }
 \details{
 The default value of cmargin = 1.0 preserves the slope of score-trends across

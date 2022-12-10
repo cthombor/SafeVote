@@ -44,9 +44,9 @@ votes)}
 }
 \value{
 a matrix of experimental results, of dimension n by 2m+1, where n is
-  the number of elections and m is the number of candidates.  The first
-  column is named "nBallots".  Other columns indicate the ranking and margin
-  of each candidate in each election.
+the number of elections and m is the number of candidates.  The first
+column is named "nBallots".  Other columns indicate the ranking and margin
+of each candidate in each election.
 }
 \description{
 Starting from some number ('astart') of randomly-selected ballots, an

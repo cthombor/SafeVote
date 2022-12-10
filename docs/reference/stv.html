@@ -67,7 +67,8 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>votes</dt>
-<dd><p>an array with one column per candidate and one row per ballot</p></dd>
+<dd><p>an array with one column per candidate and one row per ballot,
+as described in the <a href="condorcet.html#details">Details for condorcet()</a></p></dd>
 
 
 <dt>nseats</dt>
@@ -79,7 +80,7 @@
 
 
 <dt>equal.ranking</dt>
-<dd><p>TRUE if ballots are allowed to rank candidates equally</p></dd>
+<dd><p><code>TRUE</code> if ballots are allowed to rank candidates equally</p></dd>
 
 
 <dt>fsep</dt>
@@ -87,16 +88,17 @@
 
 
 <dt>ties</dt>
-<dd><p>vector of tie-breaking methods: 'f' for forward, 'b' for backward</p></dd>
+<dd><p>vector of tie-breaking methods: <code>'f'</code> for forward, <code>'b'</code> for
+backward</p></dd>
 
 
 <dt>constant.quota</dt>
-<dd><p>TRUE if quota is held constant.  Over-rides quota.hare.
-Default is FALSE.</p></dd>
+<dd><p><code>TRUE</code> if quota is held constant.  Over-rides
+quota.hare. Default is <code>FALSE</code>.</p></dd>
 
 
 <dt>quota.hare</dt>
-<dd><p>TRUE if Hare quota, FALSE if Droop quota (default)</p></dd>
+<dd><p><code>TRUE</code> if Hare quota, <code>FALSE</code> if Droop quota (default)</p></dd>
 
 
 <dt>group.nseats</dt>
@@ -109,32 +111,33 @@ Church of England's STV methodology.</p></dd>
 
 
 <dt>complete.ranking</dt>
-<dd><p>TRUE (default) if a complete ranking of all
+<dd><p><code>TRUE</code> (default) if a complete ranking of all
 candidates will be produced.  This affects the value assigned to nseats
-when stv() is called with nseats=NULL, but does not affect elections in
+when <code>stv()</code> is called with <code>nseats=NULL</code>, but does not affect elections in
 which nseats is explicitly specified.</p></dd>
 
 
 <dt>invalid.partial</dt>
-<dd><p>TRUE if ballots are informal (aka "invalid") if they
-do not specify a complete ranking of candidates.  Default is FALSE.</p></dd>
+<dd><p><code>TRUE</code> if ballots are informal (aka "invalid") if they
+do not specify a complete ranking of candidates.  Default is <code>FALSE</code>.</p></dd>
 
 
 <dt>verbose</dt>
-<dd><p>TRUE for diagnostic output</p></dd>
+<dd><p><code>TRUE</code> for diagnostic output</p></dd>
 
 
 <dt>seed</dt>
 <dd><p>integer seed for tie-breaking.  Warning: if non-null, the PRNG
 for R is reseeded prior to every random tie-break among the
-possibly-elected candidates.  We have preserved this functionality in
-this branch, and seed=1234 should be used when regression-testing against 
-vote_2.3.2.  However the default value for seed is NULL in SafeVote, to
-make it easier to perform our stochastic experimentation.</p></dd>
+possibly-elected candidates.  We have preserved this functionality in this
+branch, and <code>seed=1234</code> should be used when regression-testing against
+<a href="https://cran.r-project.org/web/packages/vote/index.html" class="external-link">vote_2.3.2</a>.
+However the default value for seed is <code>NULL</code> in <a href="SafeVote-package.html">SafeVote</a>, to make it
+easier to perform our stochastic experimentation.</p></dd>
 
 
 <dt>quiet</dt>
-<dd><p>TRUE to suppress console output</p></dd>
+<dd><p><code>TRUE</code> to suppress console output</p></dd>
 
 
 <dt>digits</dt>
@@ -154,9 +157,9 @@ safeRank by clustering near-ties in a complete ranking</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>object of class vote.stv.  Note: winning margins are valid for the
-  elected candidates and their ranking, but must be adjusted within tiegroups
-  to be valid for the safeRank.</p>
+<p>object of class <code>vote.stv</code>.  Note: winning margins are valid for the
+elected candidates and their ranking, but must be adjusted within tiegroups
+to be valid for the safeRank.</p>
     </div>
 
     <div class="section level2">

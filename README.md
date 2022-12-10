@@ -23,10 +23,11 @@ devtools::install_github("cthombor/SafeVote")
 
 ## Examples
 
-This mod of `vote_2.3.2` reports the `Margins` of victory in an
-election. In cases where there are near-ties, the value of the `safety`
-parameter (default 1.0) will affect the completeness of the `SafeRank`
-ordering of the candidates.
+This mod of
+[vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
+reports the margins of victory in an election. In cases where there are
+near-ties, the value of the `safety` parameter (default 1.0) will affect
+the completeness of the safeRank ordering of the candidates.
 
     library(SafeVote)
     data(food_election)

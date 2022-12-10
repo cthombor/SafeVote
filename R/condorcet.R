@@ -21,27 +21,29 @@
 #' then the candidates are lettered `A, B, C, ...`. If the dataset 
 #' contains missing values ([NA]), they are replaced by zeros.
 #' 
-#' Note that if equal preferences are used, they are automatically converted
-#' into a format where, for each preference $i$ which does not have any
-#' duplicate, there must be exactly $i - 1$ preferences $j$ with $0 < j < i$. 
-#' It is the same ranking as one would obtain with 
-#' `rank(x, ties.method = "min")`. If a conversion of a vote occurs, 
-#' a warning is issued. That is done internally by calling the
-#' [correct.ranking] function.
-#' 
+#' Note that if a ballot has equally-ranked candidates, it is informal (*i.e.*
+#' invalid) and therefore ignored (with a warning) if `equal.preferences=FALSE`.
+#' If `equal.preferences=TRUE`, then all ballots are automatically "converted"
+#' (if necessary) so that, for each preference \eqn{i} which does not have any
+#' duplicate, there are exactly \eqn{i - 1} preferences \eqn{j} with \eqn{0
+#' < j < i}.  If a conversion of a ballot occurs, a warning is issued.
+#' The conversion of ballots is performed by the [correct.ranking] function,
+#' which performs `x <- rank(x, ties.method = "min")` on ballots `x`. 
+#'
 #' This method also computes a Borda ranking of all candidates, using
-#' tournament-style scoring.  This ranking is "fuzzed" into a SafeRank, with
-#' approximately 1 s.d. of fuzz when `safety` = 1.0 and voter preferences are
-#' i.u.d.  A warning is thrown if SafeRank violates the (extended) Condorcet
-#' principle: that Candidate $i$ is more highly ranked than Candidate $j$ only
-#' if a majority of voters agree with this.
+#' tournament-style scoring.  This ranking is "fuzzed" into a `safeRank`, with
+#' approximately 1 s.d. of fuzz when `safety=1.0` and voter preferences are
+#' i.u.d.  A warning is thrown if a `safeRank` violates the (extended) Condorcet
+#' principle: that Candidate \eqn{i} is more highly ranked than Candidate
+#' \eqn{j} only if a majority of voters agree with this.
 #' 
-#' @param votes [Matrix] or [data frame] containing the votes. Rows
-#' correspond to the votes, columns correspond to the candidates. If `votes`
-#' is a character string, it is interpreted as a file name from which the
-#' votes are to be read. See below for more details.
+#' @param votes A [matrix] or [data.frame] containing the votes. Rows correspond
+#'   to the votes, columns correspond to the candidates. If `votes` is a
+#'   character string, it is interpreted as a file name from which the votes are
+#'   to be read. See [below](condorcet.html#details).
+#' @param equal.ranking `TRUE` if ballots are allowed to rank candidates equally
 #' @param runoff Logical. If [TRUE] and no Condorcet winner exists,
-#' the election goes into a run-off, see below for details.
+#' the election goes into a run-off, see [below](condorcet.html#details).
 #' @param nseats the number of seats to be filled in this election
 #' @param safety Parameter for a clustering heuristic on a total ranking of
 #' the candidates.  Conjecture: the default of `1.0` ensures a separation
@@ -52,9 +54,9 @@
 #' @param quiet If [TRUE] no output is printed.
 #' @param ... Additional arguments passed to the underlying functions. 
 #' For the [image] function, see arguments for [image.SafeVote.stv], especially
-#' [xpref], [ypref], [all.pref] and [proportion].
+#' `xpref`, `ypref`, `all.pref` and `proportion`.
 #'
-#' @return Object of class SafeVote.condorcet
+#' @return Object of class `SafeVote.condorcet`
 #' @export
 #'
 #' @examples {
@@ -62,10 +64,16 @@
 #' condorcet(food_election)
 #' }
 
-condorcet <- function(votes, runoff = FALSE, nseats = 1, safety = 1.0, 
-                      fsep = '\t', quiet = FALSE, ...) {
-    
-  compare.two.candidates <- function(v1, v2) {
+condorcet <-
+  function(votes,
+           equal.ranking = FALSE,
+           runoff = FALSE,
+           nseats = 1,
+           safety = 1.0,
+           fsep = '\t',
+           quiet = FALSE,
+           ...) {
+    compare.two.candidates <- function(v1, v2) {
     i.wins <- sum(v1 < v2)
     j.wins <- sum(v1 > v2)
     c(i.wins > j.wins, i.wins < j.wins, i.wins, j.wins)
@@ -385,8 +393,8 @@ view.SafeVote.condorcet <- function(object, ...) {
 #' (if `proportion=FALSE`).
 #' 
 #' @param x object of type SafeVote.condorcet
-#' @param ... See arguments for [image.SafeVote.stv], especially
-#' [xpref], [ypref], [all.pref] and [proportion].
+#' @param ... See arguments for [image.SafeVote.stv], especially `xpref`,
+#'   `ypref`, `all.pref` and `proportion`.
 #' @export
 image.SafeVote.condorcet <- function(x, ...) {
     image.SafeVote.stv(x, ...)

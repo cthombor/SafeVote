@@ -1,26 +1,28 @@
 #' Assess the safety of a preliminary result for an election
 #'
 #' Ballots are deleted at random from the ballot-box, with election results
-#' computed once per 'dinc' ballot-deletions.  The experiment terminates after a
+#' computed once per `dinc` ballot-deletions.  The experiment terminates after a
 #' specified number of ballots have been deleted, or a specified number of
 #' ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-#' testFraction() to experiment with independently-drawn samples from the
+#' [testFraction()] to experiment with independently-drawn samples from the
 #' ballot-box.
 #'
-#' @param votes A set of ballots
+#' @param votes A set of ballots, as in 
+#'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
 #' @param countMethod The name of a function which will count the ballots
-#' @param countArgs List of args to be passed to countMethod (in addition to
-#'   votes)
+#' @param countArgs List of args to be passed to `countMethod` (in addition to
+#'   `votes`)
 #' @param rankMethod Name of a ranking attribute in the output of countMethod
 #' @param dstart Number of ballots in the first ballot-count (selected at random
-#'   from votes, without replacement)
+#'   from `votes`, without replacement)
 #' @param dinc Number of ballots to be deleted in subsequent steps
-#' @param dlimit Maximum number of ballots to delete (in addition to dstart)
-#' @param drep Maximum number of elections (required if dinc=0)
-#' @param exptName stem-name of experimental units e.g. "E"
+#' @param dlimit Maximum number of ballots to delete (in addition to `dstart`)
+#' @param drep Maximum number of elections (required if `dinc=0`)
+#' @param exptName stem-name of experimental units *e.g.* "E"
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
-#' @return SafeRankExpt object, describing this experiment and its results
+#' @return [SafeRankExpt](new_SafeRankExpt.html) object, describing this experiment
+#'   and its results
 #' @export
 #' @import data.table
 #' @examples
@@ -31,7 +33,7 @@
 #' 
 
 testDeletions <-
-  function(votes = "food_election",
+  function(votes,
            countMethod = "stv",
            countArgs = list(),
            dstart = NULL,
@@ -191,32 +193,36 @@ testDeletions <-
 #' Test the sensitivity of a result to tactical voting.
 #'
 #' Ballots are added until a specified number of simulated elections (`arep`)
-#' have been held   A tactic of "plumping" is used when stuffing the ballot
-#' box, if a `favoured` candidate is specified.  Alternatively, a
-#' `tacticalBallot` may be specified.
+#' have been held.   If a `favoured` candidate is specified, then the ballot-box
+#' is stuffed with ballots awarding first-preference to this candidate.
+#' Alternatively, a `tacticalBallot` may be specified.  If both `favoured` and
+#' `tacticalBallot` are `NULL`, then a random candidate is selected as the
+#' favoured one.
 #'
-#' @param votes A set of ballots
+#' @param votes A set of ballots, as in
+#'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
 #' @param countMethod The name of a function which will count the ballots
 #' @param countArgs List of args to be passed to countMethod (in addition to
 #'   votes)
 #' @param rankMethod Name of a ranking attribute in the output of countMethod
-#' @param favoured Name of the candidate being "plumped".  If NULL, a random
+#' @param favoured Name of the candidate being "plumped".  If `NULL`, a random
 #'   candidate is selected from among the candidates not initially top-ranked.
 #'   All other candidates are fully-ranked at random, with an identical ballot
-#'   paper being stuffed multiple times.  An integer value for 'favoured' is
+#'   paper being stuffed multiple times.  An integer value for `favoured` is
 #'   interpreted as an index into the candidate names.
-#' @param tacticalBallot A ballot paper i.e. a vector of length ncol(ballots).
-#'   If this argument is non-null, it takes precedence over 'favoured' when the
+#' @param tacticalBallot A ballot paper i.e. a vector of length `ncol(ballots)`.
+#'   If this argument is non-`NULL`, it takes precedence over `favoured` when the
 #'   ballot box is being stuffed.
 #' @param ainc Number of ballots to be added in each step
 #' @param arep Maximum number of ballot-stuffed elections to run
-#' @param exptName stem-name of experimental units e.g. "E"
-#' @param quiet TRUE to suppress all output
-#' @param verbose TRUE to produce diagnostic output
-#' @return A matrix of experimental results, of dimension n by 2m+1, where n is
-#'   the number of elections and m is the number of candidates.  The first
-#'   column is named "nBallots".  Other columns indicate the ranking of the
-#'   eponymous candidate, and their margin over the next-lower-ranked candidate.
+#' @param exptName stem-name of experimental units *e.g.* "E"
+#' @param quiet `TRUE` to suppress all output
+#' @param verbose `TRUE` to produce diagnostic output
+#' @return A matrix of experimental results, of dimension \eqn{n} by \eqn{2m+1},
+#'   where \eqn{n} is the number of elections and \eqn{m} is the number of
+#'   candidates.  The first column is named "nBallots".  Other columns indicate
+#'   the ranking of the eponymous candidate, and their margin over the
+#'   next-lower-ranked candidate.
 #' @export
 #' @examples
 #' data(food_election)
@@ -577,6 +583,8 @@ extractMargins <- function(marginNames, rankMethod, cr) {
 #' @param unitFactors per-unit factors derived from PRNG of the experimental
 #'   harness, e.g describing the ballots randomly deleted during testDeletions 
 #' @return object of class SafeRankExpt
+#' 
+#' @export
 new_SafeRankExpt <-
   function(rankNames = NULL,
            marginNames = NULL,

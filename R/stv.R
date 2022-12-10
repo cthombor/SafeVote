@@ -1,37 +1,40 @@
 #' Count preferential ballots using an STV method
 #'
-#' @param votes an array with one column per candidate and one row per ballot
+#' @param votes an array with one column per candidate and one row per ballot,
+#'   as described in the [Details for condorcet()](condorcet.html#details)
 #' @param nseats the number of seats to be filled in this election
 #' @param eps fuzz-factor when comparing fractional votes
-#' @param equal.ranking TRUE if ballots are allowed to rank candidates equally
+#' @param equal.ranking `TRUE` if ballots are allowed to rank candidates equally
 #' @param fsep column-separator for output
-#' @param ties vector of tie-breaking methods: 'f' for forward, 'b' for backward
-#' @param constant.quota TRUE if quota is held constant.  Over-rides quota.hare.
-#'   Default is FALSE.
-#' @param quota.hare TRUE if Hare quota, FALSE if Droop quota (default)
+#' @param ties vector of tie-breaking methods: `'f'` for forward, `'b'` for
+#'   backward
+#' @param constant.quota `TRUE` if quota is held constant.  Over-rides
+#'   quota.hare. Default is `FALSE`.
+#' @param quota.hare `TRUE` if Hare quota, `FALSE` if Droop quota (default)
 #' @param group.nseats number of seats reserved to members of a group, as in the
 #'   Church of England's STV methodology.
 #' @param group.members vector of members of a group with reserved seats
-#' @param complete.ranking TRUE (default) if a complete ranking of all
+#' @param complete.ranking `TRUE` (default) if a complete ranking of all
 #'   candidates will be produced.  This affects the value assigned to nseats
-#'   when stv() is called with nseats=NULL, but does not affect elections in
+#'   when [stv()] is called with `nseats=NULL`, but does not affect elections in
 #'   which nseats is explicitly specified.
-#' @param invalid.partial TRUE if ballots are informal (aka "invalid") if they
-#'   do not specify a complete ranking of candidates.  Default is FALSE.
-#' @param verbose TRUE for diagnostic output
+#' @param invalid.partial `TRUE` if ballots are informal (aka "invalid") if they
+#'   do not specify a complete ranking of candidates.  Default is `FALSE`.
+#' @param verbose `TRUE` for diagnostic output
 #' @param seed integer seed for tie-breaking.  Warning: if non-null, the PRNG
 #'   for R is reseeded prior to every random tie-break among the
-#'   possibly-elected candidates.  We have preserved this functionality in
-#'   this branch, and seed=1234 should be used when regression-testing against 
-#'   vote_2.3.2.  However the default value for seed is NULL in SafeVote, to
-#'   make it easier to perform our stochastic experimentation.
-#' @param quiet TRUE to suppress console output
+#'   possibly-elected candidates.  We have preserved this functionality in this
+#'   branch, and `seed=1234` should be used when regression-testing against
+#'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html).
+#'   However the default value for seed is `NULL` in [SafeVote], to make it
+#'   easier to perform our stochastic experimentation.
+#' @param quiet `TRUE` to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param safety number of standard deviations on vote-counts, when producing a
 #'   safeRank by clustering near-ties in a complete ranking
 #' @param ... undocumented intent (preserved from legacy code)
 #'
-#' @return object of class vote.stv.  Note: winning margins are valid for the
+#' @return object of class `vote.stv`.  Note: winning margins are valid for the
 #'   elected candidates and their ranking, but must be adjusted within tiegroups
 #'   to be valid for the safeRank.
 #' @export

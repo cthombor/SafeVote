@@ -5,7 +5,7 @@
 \title{Assess the safety of a preliminary result for an election}
 \usage{
 testDeletions(
-  votes = "food_election",
+  votes,
   countMethod = "stv",
   countArgs = list(),
   dstart = NULL,
@@ -19,39 +19,41 @@ testDeletions(
 )
 }
 \arguments{
-\item{votes}{A set of ballots}
+\item{votes}{A set of ballots, as in
+\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}}
 
 \item{countMethod}{The name of a function which will count the ballots}
 
-\item{countArgs}{List of args to be passed to countMethod (in addition to
-votes)}
+\item{countArgs}{List of args to be passed to \code{countMethod} (in addition to
+\code{votes})}
 
 \item{dstart}{Number of ballots in the first ballot-count (selected at random
-from votes, without replacement)}
+from \code{votes}, without replacement)}
 
 \item{dinc}{Number of ballots to be deleted in subsequent steps}
 
-\item{dlimit}{Maximum number of ballots to delete (in addition to dstart)}
+\item{dlimit}{Maximum number of ballots to delete (in addition to \code{dstart})}
 
-\item{drep}{Maximum number of elections (required if dinc=0)}
+\item{drep}{Maximum number of elections (required if \code{dinc=0})}
 
 \item{rankMethod}{Name of a ranking attribute in the output of countMethod}
 
-\item{exptName}{stem-name of experimental units e.g. "E"}
+\item{exptName}{stem-name of experimental units \emph{e.g.} "E"}
 
 \item{quiet}{TRUE to suppress all output}
 
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-SafeRankExpt object, describing this experiment and its results
+\href{new_SafeRankExpt.html}{SafeRankExpt} object, describing this experiment
+and its results
 }
 \description{
 Ballots are deleted at random from the ballot-box, with election results
-computed once per 'dinc' ballot-deletions.  The experiment terminates after a
+computed once per \code{dinc} ballot-deletions.  The experiment terminates after a
 specified number of ballots have been deleted, or a specified number of
 ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-testFraction() to experiment with independently-drawn samples from the
+\code{\link[=testFraction]{testFraction()}} to experiment with independently-drawn samples from the
 ballot-box.
 }
 \examples{

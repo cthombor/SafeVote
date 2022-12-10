@@ -3,23 +3,23 @@
 \name{image.SafeVote.condorcet}
 \alias{image.SafeVote.condorcet}
 \title{The image function visualizes the joint distribution of two preferences
-(if `all.pref=FALSE`) given `xpref` and `ypref`, as well as the marginal
-distribution of all preferences (if `all.pref=TRUE`). The joint distribution
-can be shown as proportions (if `proportion=TRUE`) or raw vote counts
-(if `proportion=FALSE`).}
+(if \code{all.pref=FALSE}) given \code{xpref} and \code{ypref}, as well as the marginal
+distribution of all preferences (if \code{all.pref=TRUE}). The joint distribution
+can be shown as proportions (if \code{proportion=TRUE}) or raw vote counts
+(if \code{proportion=FALSE}).}
 \usage{
 \method{image}{SafeVote.condorcet}(x, ...)
 }
 \arguments{
 \item{x}{object of type SafeVote.condorcet}
 
-\item{...}{See arguments for [image.SafeVote.stv], especially
-[xpref], [ypref], [all.pref] and [proportion].}
+\item{...}{See arguments for \link{image.SafeVote.stv}, especially \code{xpref},
+\code{ypref}, \code{all.pref} and \code{proportion}.}
 }
 \description{
 The image function visualizes the joint distribution of two preferences
-(if `all.pref=FALSE`) given `xpref` and `ypref`, as well as the marginal
-distribution of all preferences (if `all.pref=TRUE`). The joint distribution
-can be shown as proportions (if `proportion=TRUE`) or raw vote counts
-(if `proportion=FALSE`).
+(if \code{all.pref=FALSE}) given \code{xpref} and \code{ypref}, as well as the marginal
+distribution of all preferences (if \code{all.pref=TRUE}). The joint distribution
+can be shown as proportions (if \code{proportion=TRUE}) or raw vote counts
+(if \code{proportion=FALSE}).
 }

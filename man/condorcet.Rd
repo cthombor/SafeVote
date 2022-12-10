@@ -6,6 +6,7 @@
 \usage{
 condorcet(
   votes,
+  equal.ranking = FALSE,
   runoff = FALSE,
   nseats = 1,
   safety = 1,
@@ -15,32 +16,34 @@ condorcet(
 )
 }
 \arguments{
-\item{votes}{[Matrix] or [data frame] containing the votes. Rows
-correspond to the votes, columns correspond to the candidates. If `votes`
-is a character string, it is interpreted as a file name from which the
-votes are to be read. See below for more details.}
+\item{votes}{A \link{matrix} or \link{data.frame} containing the votes. Rows correspond
+to the votes, columns correspond to the candidates. If \code{votes} is a
+character string, it is interpreted as a file name from which the votes are
+to be read. See \href{condorcet.html#details}{below}.}
 
-\item{runoff}{Logical. If [TRUE] and no Condorcet winner exists,
-the election goes into a run-off, see below for details.}
+\item{equal.ranking}{\code{TRUE} if ballots are allowed to rank candidates equally}
+
+\item{runoff}{Logical. If \link{TRUE} and no Condorcet winner exists,
+the election goes into a run-off, see \href{condorcet.html#details}{below}.}
 
 \item{nseats}{the number of seats to be filled in this election}
 
 \item{safety}{Parameter for a clustering heuristic on a total ranking of
-the candidates.  Conjecture: the default of `1.0` ensures a separation
-of one s.d. between clusters, when `votes` are i.u.d. permutations on the
+the candidates.  Conjecture: the default of \code{1.0} ensures a separation
+of one s.d. between clusters, when \code{votes} are i.u.d. permutations on the
 candidates.}
 
-\item{fsep}{If `votes` is a file name, this argument gives the column
+\item{fsep}{If \code{votes} is a file name, this argument gives the column
 separator in the file.}
 
-\item{quiet}{If [TRUE] no output is printed.}
+\item{quiet}{If \link{TRUE} no output is printed.}
 
-\item{...}{Additional arguments passed to the underlying functions. 
-For the [image] function, see arguments for [image.SafeVote.stv], especially
-[xpref], [ypref], [all.pref] and [proportion].}
+\item{...}{Additional arguments passed to the underlying functions.
+For the \link{image} function, see arguments for \link{image.SafeVote.stv}, especially
+\code{xpref}, \code{ypref}, \code{all.pref} and \code{proportion}.}
 }
 \value{
-Object of class SafeVote.condorcet
+Object of class \code{SafeVote.condorcet}
 }
 \description{
 The Condorcet method elects the candidate who wins a majority of the ranked
@@ -51,34 +54,35 @@ who loses against all other candidates. Neither Condorcet winner nor loser
 might exist.
 }
 \details{
-If the runoff argument is set to `TRUE` and no Condorcet winner exists,
+If the runoff argument is set to \code{TRUE} and no Condorcet winner exists,
 two or more candidates with the most pairwise wins are selected and
 the method is applied to such subset. If more than two candidates are in
 such run-off, the selection is performed repeatedly, until either a winner
 is selected or no more selection is possible.
 
-The input data votes is structured the same way as for the [stv] method: 
-Row `i` contains the preferences of voter `i` numbered 
-`1; 2; : : : ; r; 0; 0; 0; 0`, in some order, while equal preferences
-are allowed. The columns correspond to the candidates. The [dimnames] of
+The input data votes is structured the same way as for the \link{stv} method:
+Row \code{i} contains the preferences of voter \code{i} numbered
+\verb{1; 2; : : : ; r; 0; 0; 0; 0}, in some order, while equal preferences
+are allowed. The columns correspond to the candidates. The \link{dimnames} of
 the columns are the names of the candidates; if these are not supplied
-then the candidates are lettered `A, B, C, ...`. If the dataset 
-contains missing values ([NA]), they are replaced by zeros.
+then the candidates are lettered \verb{A, B, C, ...}. If the dataset
+contains missing values (\link{NA}), they are replaced by zeros.
 
-Note that if equal preferences are used, they are automatically converted
-into a format where, for each preference $i$ which does not have any
-duplicate, there must be exactly $i - 1$ preferences $j$ with $0 < j < i$. 
-It is the same ranking as one would obtain with 
-`rank(x, ties.method = "min")`. If a conversion of a vote occurs, 
-a warning is issued. That is done internally by calling the
-[correct.ranking] function.
+Note that if a ballot has equally-ranked candidates, it is informal (\emph{i.e.}
+invalid) and therefore ignored (with a warning) if \code{equal.preferences=FALSE}.
+If \code{equal.preferences=TRUE}, then all ballots are automatically "converted"
+(if necessary) so that, for each preference \eqn{i} which does not have any
+duplicate, there are exactly \eqn{i - 1} preferences \eqn{j} with \eqn{0
+< j < i}.  If a conversion of a ballot occurs, a warning is issued.
+The conversion of ballots is performed by the \link{correct.ranking} function,
+which performs \code{x <- rank(x, ties.method = "min")} on ballots \code{x}.
 
 This method also computes a Borda ranking of all candidates, using
-tournament-style scoring.  This ranking is "fuzzed" into a SafeRank, with
-approximately 1 s.d. of fuzz when `safety` = 1.0 and voter preferences are
-i.u.d.  A warning is thrown if SafeRank violates the (extended) Condorcet
-principle: that Candidate $i$ is more highly ranked than Candidate $j$ only
-if a majority of voters agree with this.
+tournament-style scoring.  This ranking is "fuzzed" into a \code{safeRank}, with
+approximately 1 s.d. of fuzz when \code{safety=1.0} and voter preferences are
+i.u.d.  A warning is thrown if a \code{safeRank} violates the (extended) Condorcet
+principle: that Candidate \eqn{i} is more highly ranked than Candidate
+\eqn{j} only if a majority of voters agree with this.
 }
 \examples{
 {

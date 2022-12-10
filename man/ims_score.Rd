@@ -5,7 +5,7 @@
 \alias{ims_score}
 \title{IMS Score}
 \format{
-A data frame with 620 observations and 10 candidates (names were 
+A data frame with 620 observations and 10 candidates (names were
 made up). Each record corresponds to one ballot, with higher values
 indicating the more-preferred candidates.
 }

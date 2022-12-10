@@ -59,6 +59,7 @@ might exist.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">condorcet</span><span class="op">(</span></span>
 <span>  <span class="va">votes</span>,</span>
+<span>  equal.ranking <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  runoff <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nseats <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  safety <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -71,15 +72,19 @@ might exist.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>votes</dt>
-<dd><p>[Matrix] or [data frame] containing the votes. Rows
-correspond to the votes, columns correspond to the candidates. If `votes`
-is a character string, it is interpreted as a file name from which the
-votes are to be read. See below for more details.</p></dd>
+<dd><p>A <a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a> or <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> containing the votes. Rows correspond
+to the votes, columns correspond to the candidates. If <code>votes</code> is a
+character string, it is interpreted as a file name from which the votes are
+to be read. See <a href="condorcet.html#details">below</a>.</p></dd>
+
+
+<dt>equal.ranking</dt>
+<dd><p><code>TRUE</code> if ballots are allowed to rank candidates equally</p></dd>
 
 
 <dt>runoff</dt>
-<dd><p>Logical. If [TRUE] and no Condorcet winner exists,
-the election goes into a run-off, see below for details.</p></dd>
+<dd><p>Logical. If <a href="https://rdrr.io/r/base/logical.html" class="external-link">TRUE</a> and no Condorcet winner exists,
+the election goes into a run-off, see <a href="condorcet.html#details">below</a>.</p></dd>
 
 
 <dt>nseats</dt>
@@ -88,59 +93,62 @@ the election goes into a run-off, see below for details.</p></dd>
 
 <dt>safety</dt>
 <dd><p>Parameter for a clustering heuristic on a total ranking of
-the candidates.  Conjecture: the default of `1.0` ensures a separation
-of one s.d. between clusters, when `votes` are i.u.d. permutations on the
+the candidates.  Conjecture: the default of <code>1.0</code> ensures a separation
+of one s.d. between clusters, when <code>votes</code> are i.u.d. permutations on the
 candidates.</p></dd>
 
 
 <dt>fsep</dt>
-<dd><p>If `votes` is a file name, this argument gives the column
+<dd><p>If <code>votes</code> is a file name, this argument gives the column
 separator in the file.</p></dd>
 
 
 <dt>quiet</dt>
-<dd><p>If [TRUE] no output is printed.</p></dd>
+<dd><p>If <a href="https://rdrr.io/r/base/logical.html" class="external-link">TRUE</a> no output is printed.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Additional arguments passed to the underlying functions. 
-For the [image] function, see arguments for [image.SafeVote.stv], especially
-[xpref], [ypref], [all.pref] and [proportion].</p></dd>
+<dd><p>Additional arguments passed to the underlying functions.
+For the <a href="https://rdrr.io/r/graphics/image.html" class="external-link">image</a> function, see arguments for <a href="image.SafeVote.stv.html">image.SafeVote.stv</a>, especially
+<code>xpref</code>, <code>ypref</code>, <code>all.pref</code> and <code>proportion</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Object of class SafeVote.condorcet</p>
+<p>Object of class <code>SafeVote.condorcet</code></p>
+
+
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If the runoff argument is set to `TRUE` and no Condorcet winner exists,
+    <p>If the runoff argument is set to <code>TRUE</code> and no Condorcet winner exists,
 two or more candidates with the most pairwise wins are selected and
 the method is applied to such subset. If more than two candidates are in
 such run-off, the selection is performed repeatedly, until either a winner
 is selected or no more selection is possible.</p>
-<p>The input data votes is structured the same way as for the [stv] method: 
-Row `i` contains the preferences of voter `i` numbered 
-`1; 2; : : : ; r; 0; 0; 0; 0`, in some order, while equal preferences
-are allowed. The columns correspond to the candidates. The [dimnames] of
+<p>The input data votes is structured the same way as for the <a href="stv.html">stv</a> method:
+Row <code>i</code> contains the preferences of voter <code>i</code> numbered
+<code>1; 2; : : : ; r; 0; 0; 0; 0</code>, in some order, while equal preferences
+are allowed. The columns correspond to the candidates. The <a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a> of
 the columns are the names of the candidates; if these are not supplied
-then the candidates are lettered `A, B, C, ...`. If the dataset 
-contains missing values ([NA]), they are replaced by zeros.</p>
-<p>Note that if equal preferences are used, they are automatically converted
-into a format where, for each preference $i$ which does not have any
-duplicate, there must be exactly $i - 1$ preferences $j$ with $0 &lt; j &lt; i$. 
-It is the same ranking as one would obtain with 
-`rank(x, ties.method = "min")`. If a conversion of a vote occurs, 
-a warning is issued. That is done internally by calling the
-[correct.ranking] function.</p>
+then the candidates are lettered <code>A, B, C, ...</code>. If the dataset
+contains missing values (<a href="https://rdrr.io/r/base/NA.html" class="external-link">NA</a>), they are replaced by zeros.</p>
+<p>Note that if a ballot has equally-ranked candidates, it is informal (<em>i.e.</em>
+invalid) and therefore ignored (with a warning) if <code>equal.preferences=FALSE</code>.
+If <code>equal.preferences=TRUE</code>, then all ballots are automatically "converted"
+(if necessary) so that, for each preference \(i\) which does not have any
+duplicate, there are exactly \(i - 1\) preferences \(j\) with \(0
+&lt; j &lt; i\).  If a conversion of a ballot occurs, a warning is issued.
+The conversion of ballots is performed by the <a href="correct.ranking.html">correct.ranking</a> function,
+which performs <code>x &lt;- rank(x, ties.method = "min")</code> on ballots <code>x</code>.</p>
 <p>This method also computes a Borda ranking of all candidates, using
-tournament-style scoring.  This ranking is "fuzzed" into a SafeRank, with
-approximately 1 s.d. of fuzz when `safety` = 1.0 and voter preferences are
-i.u.d.  A warning is thrown if SafeRank violates the (extended) Condorcet
-principle: that Candidate $i$ is more highly ranked than Candidate $j$ only
-if a majority of voters agree with this.</p>
+tournament-style scoring.  This ranking is "fuzzed" into a <code>safeRank</code>, with
+approximately 1 s.d. of fuzz when <code>safety=1.0</code> and voter preferences are
+i.u.d.  A warning is thrown if a <code>safeRank</code> violates the (extended) Condorcet
+principle: that Candidate \(i\) is more highly ranked than Candidate
+\(j\) only if a majority of voters agree with this.</p>
     </div>
 
     <div class="section level2">

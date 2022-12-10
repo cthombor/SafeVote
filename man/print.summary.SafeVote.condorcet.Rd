@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{object of type summary.SafeVote.condorcet}
 
-\item{...}{parameters passed to generic [print]}
+\item{...}{parameters passed to generic \link{print}}
 }
 \value{
-textual description of `x`
+textual description of \code{x}
 }
 \description{
 print method for summary.SafeVote.condorcet

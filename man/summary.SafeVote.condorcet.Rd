@@ -12,7 +12,7 @@
 \item{...}{undocumented, currently unused}
 }
 \value{
-[data.frame] object
+\link{data.frame} object
 }
 \description{
 Summary method for condorcet() results
