@@ -1,4 +1,4 @@
-#' parameter-checking method for nseats (not exported)
+#' parameter-checking method for nseats (internal)
 #'
 #' @param nseats initially-specified number of seats to be filled in an election
 #' @param ncandidates the number of candidates standing for election
@@ -11,20 +11,28 @@
 #' @return a valid non-NULL value for the number of seats to be filled
 #'
 #' @examples
-#'    ## appropriately default nseats, when testing stv() with five candidates  
+#' ## TODO: port the following tests (from legacy code) into testthat 3e tests
+#' unitTestStatus <- TRUE
+#' ## appropriately default nseats, when testing stv() with five candidates
 #'    nc<-5
 #'    nseats<-NULL
-#'    nseats<-SafeVote:::check.nseats(nseats=nseats, 
-#'       ncandidates=nc, default=floor(nc/2))
-#' # https://www.r-bloggers.com/2021/06/documentation-for-internal-functions/ 
-#
-#' @examples
-#'    ## appropriately default nseats, when using stv() to rank candidates 
+#'    nseats<-SafeVote:::check.nseats(nseats=nseats, ncandidates=nc,
+#'                                    default=floor(nc/2))
+#'    if (nseats != floor(nc/2)) {
+#'      warning("Unit test 1 on check.nseats() failed with nseats =", nseats)
+#'      unitTestStatus <- FALSE
+#'    }
+#' ## appropriately default nseats, when using stv() to rank candidates 
 #'    nc<-5
 #'    nseats<-NULL
 #'    nseats<-SafeVote:::check.nseats(nseats=nseats, ncandidates=nc, 
-#'      complete.ranking=TRUE, default=nc)
-#' 
+#'                                    complete.ranking=TRUE, default=nc)
+#'    if (nseats != nc) {
+#'      warning("Unit test 2 on check.nseats() failed with nseats =", nseats)
+#'      unitTestStatus <- FALSE
+#'    }
+#' cat("Unit tests on check.seats():", ifelse(unitTestStatus, "Pass", "Fail"))
+#'
 check.nseats <- function(nseats = NULL, ncandidates, default=1, mcan = NULL,
                          complete.ranking = FALSE) {
   if(!is.null(mcan)) {
@@ -107,9 +115,15 @@ is.valid.vote <- function(x, method, ...) {
 #' @return undocumented
 check.votes <- function(x, ..., quiet = FALSE) {
   ok <- is.valid.vote(x, ...)
-  if(any(!ok) && !quiet)
-    cat("Detected ", sum(!ok), "invalid votes. Number of valid votes is", sum(ok), ".\nUse invalid.votes(...) function to view discarded records.\n")
-  return(x[ok, ])
+  if (any(!ok) && !quiet)
+    cat(
+      "Detected ",
+      sum(!ok),
+      "invalid votes. Number of valid votes is",
+      sum(ok),
+      ".\nUse invalid.votes(...) function to view discarded records.\n"
+    )
+  return(x[ok,])
 }
 
 #' undocumented internal method
@@ -155,33 +169,42 @@ prepare.votes <- function(data, fsep="\n") {
 #' undocumented internal method
 #' @param votes,partial,quiet undocumented
 #' @return undocumented
-correct.ranking <- function(votes, partial = FALSE, quiet = FALSE){
-  do.rank <- function(x){
+correct.ranking <- function(votes,
+                            partial = FALSE,
+                            quiet = FALSE) {
+  do.rank <- function(x) {
     res <- rep(0, length(x))
     res[x > 0] <- rank(x[x > 0], ties.method = "min")
     res
   }
   do.partial <- function(x) {
     d <- diff(sort(c(0, x))) # handle gaps in ranking
-    if(any(d > 1)) {
+    if (any(d > 1)) {
       r <- x[names(d[d > 1][1])]
       x[x >= r] <- 0
     }
     d <- which(duplicated(x) & x > 0)
-    if(length(d) > 0) x[x >= min(x[d])] <- 0
+    if (length(d) > 0)
+      x[x >= min(x[d])] <- 0
     return(x)
   }
-  if(partial) {
+  if (partial) {
     fct <- do.partial
     wrn <- "partially corrected (some may be still invalid)"
   } else {
     fct <- do.rank
     wrn <- "corrected to comply with the required format"
   }
-  if(partial) do.partial else do.rank
+  if (partial)
+    do.partial
+  else
+    do.rank
   v <- t(apply(votes, 1, fct))
   dif <- rowSums(v != votes)
-  if(any(dif > 0) && !quiet) warning("Votes ", paste(which(dif>0), collapse = ", "), " were ", wrn, ".\n")
+  if (any(dif > 0) &&
+      !quiet)
+    warning("Votes ", 
+            paste(which(dif > 0), collapse = ", "), " were ", wrn, ".\n")
   colnames(v) <- colnames(votes)
   rownames(v) <- rownames(votes)
   return(v)
@@ -190,12 +213,13 @@ correct.ranking <- function(votes, partial = FALSE, quiet = FALSE){
 #' undocumented internal method
 #' @param votes,can,quiet undocumented
 #' @return undocumented
-remove.candidate <- function(votes, can, quiet = TRUE){
-  if(!all(can %in% colnames(votes)) || (is.numeric(can) && !all(can %in% 1:nrow(votes))))
+remove.candidate <- function(votes, can, quiet = TRUE) {
+  if (!all(can %in% colnames(votes)) ||
+      (is.numeric(can) && !all(can %in% 1:nrow(votes))))
     stop("Value(s) of can not found in the set of candidates.")
-  if(is.numeric(can))
-    votes <- votes[,-can, drop = FALSE]
+  if (is.numeric(can))
+    votes <- votes[, -can, drop = FALSE]
   else
-    votes <- votes[,!colnames(votes) %in% can]
+    votes <- votes[, !colnames(votes) %in% can]
   return(correct.ranking(votes, quiet = quiet))
 }
