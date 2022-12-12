@@ -33,7 +33,7 @@ as described in the \href{condorcet.html#details}{Details for condorcet()}}
 
 \item{eps}{fuzz-factor when comparing fractional votes}
 
-\item{equal.ranking}{\code{TRUE} if ballots are allowed to rank candidates equally}
+\item{equal.ranking}{= FALSE,}
 
 \item{fsep}{column-separator for output}
 
@@ -51,22 +51,24 @@ Church of England's STV methodology.}
 \item{group.members}{vector of members of a group with reserved seats}
 
 \item{complete.ranking}{\code{TRUE} (default) if a complete ranking of all
-candidates will be produced.  This affects the value assigned to nseats
-when \code{\link[=stv]{stv()}} is called with \code{nseats=NULL}, but does not affect elections in
-which nseats is explicitly specified.}
+candidates will be produced.  This parameter affects the value assigned to
+\code{nseats} when \code{\link[=stv]{stv()}} is called with \code{nseats=NULL}, but has no effect on
+elections in which \code{nseats} is explicitly specified.}
 
-\item{invalid.partial}{\code{TRUE} if ballots are informal (aka "invalid") if they
-do not specify a complete ranking of candidates.  Default is \code{FALSE}.}
+\item{invalid.partial}{\code{TRUE} if ballots which do not specify a complete
+ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored
+(with a warning).  Default is \code{FALSE}.}
 
 \item{verbose}{\code{TRUE} for diagnostic output}
 
-\item{seed}{integer seed for tie-breaking.  Warning: if non-null, the PRNG
-for R is reseeded prior to every random tie-break among the
+\item{seed}{integer seed for tie-breaking.  Warning: if non-\code{NULL}, the PRNG
+for R is reseeded prior to \emph{every} random tie-break among the
 possibly-elected candidates.  We have preserved this functionality in this
-branch, and \code{seed=1234} should be used when regression-testing against
-\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}.
-However the default value for seed is \code{NULL} in \link{SafeVote}, to make it
-easier to perform our stochastic experimentation.}
+branch to allow regression against the legacy codebase of
+\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}. In
+\link{SafeVote} the default value for seed is \code{NULL} rather than the legacy
+value of 1234, to mitigate the validity hazard of PRNG reseedings during a
+stochastic experiment.}
 
 \item{quiet}{\code{TRUE} to suppress console output}
 
@@ -78,12 +80,18 @@ safeRank by clustering near-ties in a complete ranking}
 \item{...}{undocumented intent (preserved from legacy code)}
 }
 \value{
-object of class \code{vote.stv}.  Note: winning margins are valid for the
-elected candidates and their ranking, but must be adjusted within tiegroups
-to be valid for the safeRank.
+object of class \code{vote.stv}.  Note: the winning margins in this object
+are valid for the elected candidates and their (total) ranking, but must be
+adjusted within tiegroups to be valid for the candidates' (possibly
+partial) safeRank.
 }
 \description{
-Count preferential ballots using an STV method
+The \code{votes} parameter is as described in the \href{condorcet.html#details}{Details for condorcet()} with the following additional semantics.
+If a ballot fails to rank all candidates, it is informal (\emph{i.e.} "invalid")
+unless \code{invalid.partial=FALSE}. If a ballot has equally-ranked candidates, it
+is informal unless \code{equal.preferences=TRUE}. Informal ballots are removed
+from the ballot box before counting, a warning is issued,
+and the ballots
 }
 \examples{
 data(food_election)
