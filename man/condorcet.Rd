@@ -6,7 +6,6 @@
 \usage{
 condorcet(
   votes,
-  equal.ranking = FALSE,
   runoff = FALSE,
   nseats = 1,
   safety = 1,
@@ -20,8 +19,6 @@ condorcet(
 to the votes, columns correspond to the candidates. If \code{votes} is a
 character string, it is interpreted as a file name from which the votes are
 to be read. See \href{condorcet.html#details}{below}.}
-
-\item{equal.ranking}{\code{TRUE} if ballots are allowed to rank candidates equally}
 
 \item{runoff}{Logical. If \link{TRUE} and no Condorcet winner exists,
 the election goes into a run-off, see \href{condorcet.html#details}{below}.}
@@ -38,9 +35,7 @@ separator in the file.}
 
 \item{quiet}{If \link{TRUE} no output is printed.}
 
-\item{...}{Additional arguments passed to the underlying functions.
-For the \link{image} function, see arguments for \link{image.SafeVote.stv}, especially
-\code{xpref}, \code{ypref}, \code{all.pref} and \code{proportion}.}
+\item{...}{Undocumented intent (preserved from legacy code)}
 }
 \value{
 Object of class \code{SafeVote.condorcet}
@@ -68,14 +63,12 @@ the columns are the names of the candidates; if these are not supplied
 then the candidates are lettered \verb{A, B, C, ...}. If the dataset
 contains missing values (\link{NA}), they are replaced by zeros.
 
-Note that if a ballot has equally-ranked candidates, it is informal (\emph{i.e.}
-invalid) and therefore ignored (with a warning) if \code{equal.preferences=FALSE}.
-If \code{equal.preferences=TRUE}, then all ballots are automatically "converted"
-(if necessary) so that, for each preference \eqn{i} which does not have any
-duplicate, there are exactly \eqn{i - 1} preferences \eqn{j} with \eqn{0
-< j < i}.  If a conversion of a ballot occurs, a warning is issued.
-The conversion of ballots is performed by the \link{correct.ranking} function,
-which performs \code{x <- rank(x, ties.method = "min")} on ballots \code{x}.
+If a ballot has equally-ranked candidates, its rankings are tested for
+validity: for each preference \eqn{i} which does not have any duplicate,
+there are exactly \eqn{i - 1} preferences \eqn{j} with \eqn{0 < j < i}. If
+any ballot \code{x} fails this validity test, it is automatically corrected (aka
+"converted") into a valid ballot using \code{x <- rank(x, ties.method = "min")},
+and a warning is issued.
 
 This method also computes a Borda ranking of all candidates, using
 tournament-style scoring.  This ranking is "fuzzed" into a \code{safeRank}, with

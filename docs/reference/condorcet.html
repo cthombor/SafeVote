@@ -59,7 +59,6 @@ might exist.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">condorcet</span><span class="op">(</span></span>
 <span>  <span class="va">votes</span>,</span>
-<span>  equal.ranking <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  runoff <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nseats <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  safety <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -76,10 +75,6 @@ might exist.</p>
 to the votes, columns correspond to the candidates. If <code>votes</code> is a
 character string, it is interpreted as a file name from which the votes are
 to be read. See <a href="condorcet.html#details">below</a>.</p></dd>
-
-
-<dt>equal.ranking</dt>
-<dd><p><code>TRUE</code> if ballots are allowed to rank candidates equally</p></dd>
 
 
 <dt>runoff</dt>
@@ -108,9 +103,7 @@ separator in the file.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Additional arguments passed to the underlying functions.
-For the <a href="https://rdrr.io/r/graphics/image.html" class="external-link">image</a> function, see arguments for <a href="image.SafeVote.stv.html">image.SafeVote.stv</a>, especially
-<code>xpref</code>, <code>ypref</code>, <code>all.pref</code> and <code>proportion</code>.</p></dd>
+<dd><p>Undocumented intent (preserved from legacy code)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -135,14 +128,12 @@ are allowed. The columns correspond to the candidates. The <a href="https://rdrr
 the columns are the names of the candidates; if these are not supplied
 then the candidates are lettered <code>A, B, C, ...</code>. If the dataset
 contains missing values (<a href="https://rdrr.io/r/base/NA.html" class="external-link">NA</a>), they are replaced by zeros.</p>
-<p>Note that if a ballot has equally-ranked candidates, it is informal (<em>i.e.</em>
-invalid) and therefore ignored (with a warning) if <code>equal.preferences=FALSE</code>.
-If <code>equal.preferences=TRUE</code>, then all ballots are automatically "converted"
-(if necessary) so that, for each preference \(i\) which does not have any
-duplicate, there are exactly \(i - 1\) preferences \(j\) with \(0
-&lt; j &lt; i\).  If a conversion of a ballot occurs, a warning is issued.
-The conversion of ballots is performed by the <a href="correct.ranking.html">correct.ranking</a> function,
-which performs <code>x &lt;- rank(x, ties.method = "min")</code> on ballots <code>x</code>.</p>
+<p>If a ballot has equally-ranked candidates, its rankings are tested for
+validity: for each preference \(i\) which does not have any duplicate,
+there are exactly \(i - 1\) preferences \(j\) with \(0 &lt; j &lt; i\). If
+any ballot <code>x</code> fails this validity test, it is automatically corrected (aka
+"converted") into a valid ballot using <code>x &lt;- rank(x, ties.method = "min")</code>,
+and a warning is issued.</p>
 <p>This method also computes a Borda ranking of all candidates, using
 tournament-style scoring.  This ranking is "fuzzed" into a <code>safeRank</code>, with
 approximately 1 s.d. of fuzz when <code>safety=1.0</code> and voter preferences are

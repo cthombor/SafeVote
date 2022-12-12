@@ -21,14 +21,12 @@
 #' then the candidates are lettered `A, B, C, ...`. If the dataset 
 #' contains missing values ([NA]), they are replaced by zeros.
 #' 
-#' Note that if a ballot has equally-ranked candidates, it is informal (*i.e.*
-#' invalid) and therefore ignored (with a warning) if `equal.preferences=FALSE`.
-#' If `equal.preferences=TRUE`, then all ballots are automatically "converted"
-#' (if necessary) so that, for each preference \eqn{i} which does not have any
-#' duplicate, there are exactly \eqn{i - 1} preferences \eqn{j} with \eqn{0
-#' < j < i}.  If a conversion of a ballot occurs, a warning is issued.
-#' The conversion of ballots is performed by the [correct.ranking] function,
-#' which performs `x <- rank(x, ties.method = "min")` on ballots `x`. 
+#' If a ballot has equally-ranked candidates, its rankings are tested for
+#' validity: for each preference \eqn{i} which does not have any duplicate,
+#' there are exactly \eqn{i - 1} preferences \eqn{j} with \eqn{0 < j < i}. If
+#' any ballot `x` fails this validity test, it is automatically corrected (aka
+#' "converted") into a valid ballot using `x <- rank(x, ties.method = "min")`,
+#' and a warning is issued.
 #'
 #' This method also computes a Borda ranking of all candidates, using
 #' tournament-style scoring.  This ranking is "fuzzed" into a `safeRank`, with
@@ -41,7 +39,6 @@
 #'   to the votes, columns correspond to the candidates. If `votes` is a
 #'   character string, it is interpreted as a file name from which the votes are
 #'   to be read. See [below](condorcet.html#details).
-#' @param equal.ranking `TRUE` if ballots are allowed to rank candidates equally
 #' @param runoff Logical. If [TRUE] and no Condorcet winner exists,
 #' the election goes into a run-off, see [below](condorcet.html#details).
 #' @param nseats the number of seats to be filled in this election
@@ -52,9 +49,7 @@
 #' @param fsep If `votes` is a file name, this argument gives the column
 #' separator in the file.
 #' @param quiet If [TRUE] no output is printed.
-#' @param ... Additional arguments passed to the underlying functions. 
-#' For the [image] function, see arguments for [image.SafeVote.stv], especially
-#' `xpref`, `ypref`, `all.pref` and `proportion`.
+#' @param ... Undocumented intent (preserved from legacy code)
 #'
 #' @return Object of class `SafeVote.condorcet`
 #' @export
@@ -66,7 +61,6 @@
 
 condorcet <-
   function(votes,
-           equal.ranking = FALSE,
            runoff = FALSE,
            nseats = 1,
            safety = 1.0,
