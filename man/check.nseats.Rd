@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_votes.R
 \name{check.nseats}
 \alias{check.nseats}
-\title{parameter-checking method for nseats (not exported)}
+\title{parameter-checking method for nseats (internal)}
 \usage{
 check.nseats(
   nseats = NULL,
@@ -29,19 +29,29 @@ compatibility)}
 a valid non-NULL value for the number of seats to be filled
 }
 \description{
-parameter-checking method for nseats (not exported)
+parameter-checking method for nseats (internal)
 }
 \examples{
-   ## appropriately default nseats, when testing stv() with five candidates  
+## TODO: port the following tests (from legacy code) into testthat 3e tests
+unitTestStatus <- TRUE
+## appropriately default nseats, when testing stv() with five candidates
    nc<-5
    nseats<-NULL
-   nseats<-SafeVote:::check.nseats(nseats=nseats, 
-      ncandidates=nc, default=floor(nc/2))
-# https://www.r-bloggers.com/2021/06/documentation-for-internal-functions/ 
-   ## appropriately default nseats, when using stv() to rank candidates 
+   nseats<-SafeVote:::check.nseats(nseats=nseats, ncandidates=nc,
+                                   default=floor(nc/2))
+   if (nseats != floor(nc/2)) {
+     warning("Unit test 1 on check.nseats() failed with nseats =", nseats)
+     unitTestStatus <- FALSE
+   }
+## appropriately default nseats, when using stv() to rank candidates 
    nc<-5
    nseats<-NULL
    nseats<-SafeVote:::check.nseats(nseats=nseats, ncandidates=nc, 
-     complete.ranking=TRUE, default=nc)
+                                   complete.ranking=TRUE, default=nc)
+   if (nseats != nc) {
+     warning("Unit test 2 on check.nseats() failed with nseats =", nseats)
+     unitTestStatus <- FALSE
+   }
+cat("Unit tests on check.seats():", ifelse(unitTestStatus, "Pass", "Fail"))
 
 }

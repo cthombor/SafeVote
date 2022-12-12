@@ -5,10 +5,11 @@
 \title{Bootstrapping experiment, with fractional counts of a ballot box.}
 \usage{
 testFraction(
-  votes,
+  votes = NULL,
   astart = NULL,
   ainc = NULL,
   arep = NULL,
+  trep = NULL,
   rankMethod = "safeRank",
   countMethod = "stv",
   countArgs = list(),
@@ -22,44 +23,45 @@ testFraction(
 
 \item{astart}{Starting number of ballots (min 2)}
 
-\item{ainc}{Number of ballots to be added in each step}
+\item{ainc}{Number of ballots to be added in each step. Must be non-negative.}
 
-\item{arep}{Limit on the number of repetitions of the test. Required to be
-non-null if ainc==0.}
+\item{arep}{Number of repetitions of the test on each step. Required to be
+non-\code{NULL} if \code{ainc=0} && is.null(trep)`.}
+
+\item{trep}{Limit on the total number of simulated elections. Required to be
+non-\code{NULL} if \code{ainc=0 && is.null(arep)}.}
 
 \item{rankMethod}{Name of a ranking attribute in the output of countMethod,
 e.g. "elected", "ranking", "safeRank".}
 
-\item{countMethod}{The name of a function which will count the ballots, e.g.
-"stv", "condorcet"}
+\item{countMethod}{The name of a function which will count the ballots,
+\emph{e.g.} "stv", "condorcet"}
 
-\item{countArgs}{List of args to be passed to countMethod (in addition to
-votes)}
+\item{countArgs}{List of args to be passed to \code{countMethod} (in addition to
+\code{votes})}
 
-\item{exptName}{stem-name of experimental units e.g. "E"}
+\item{exptName}{stem-name of experimental units \emph{e.g.} "E".  If \code{NULL}, then
+a 3-character string of capital letters is chosen at random.}
 
-\item{quiet}{TRUE to suppress all output}
+\item{quiet}{\code{TRUE} to suppress all output}
 
-\item{verbose}{TRUE to produce diagnostic output}
+\item{verbose}{\code{TRUE} to produce diagnostic output}
 }
 \value{
-a matrix of experimental results, of dimension n by 2m+1, where n is
-the number of elections and m is the number of candidates.  The first
-column is named "nBallots".  Other columns indicate the ranking and margin
-of each candidate in each election.
+a \href{new_SafeRankExpt.html}{SafeRankExpt} object of experimental
+results.
 }
 \description{
-Starting from some number ('astart') of randomly-selected ballots, an
+Starting from some number (\code{astart}) of randomly-selected ballots, an
 increasingly-large collection of randomly-selected ballots are counted. The
 ballots are chosen independently without replacement for each experimental
 unit; if you want to count decreasingly-sized portions of a single sample of
-ballots, use testDeletions().  The rankings and margins produced by each
-simulated election are returned as a matrix with one row per election.
+ballots, use \code{\link[=testDeletions]{testDeletions()}}.
 }
 \examples{
 data(food_election)
 testFraction(food_election, countMethod="condorcet",
              countArgs=list(safety=0.5,complete.ranking=TRUE))
-testFraction(dublin_west, astart=20, ainc=20, arep=2, countMethod="stv",
-             rankMethod="elected", quiet=FALSE)
+testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3, 
+             countMethod="stv", rankMethod="elected", quiet=FALSE)
 }

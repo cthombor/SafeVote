@@ -38,7 +38,8 @@ from \code{votes}, without replacement)}
 
 \item{rankMethod}{Name of a ranking attribute in the output of countMethod}
 
-\item{exptName}{stem-name of experimental units \emph{e.g.} "E"}
+\item{exptName}{stem-name of experimental units \emph{e.g.} "E".  If \code{NULL}, then
+a 3-character string of capital letters is chosen at random.}
 
 \item{quiet}{TRUE to suppress all output}
 

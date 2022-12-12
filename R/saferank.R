@@ -18,7 +18,8 @@
 #' @param dinc Number of ballots to be deleted in subsequent steps
 #' @param dlimit Maximum number of ballots to delete (in addition to `dstart`)
 #' @param drep Maximum number of elections (required if `dinc=0`)
-#' @param exptName stem-name of experimental units *e.g.* "E"
+#' @param exptName stem-name of experimental units *e.g.* "E".  If `NULL`, then
+#'   a 3-character string of capital letters is chosen at random.
 #' @param quiet TRUE to suppress all output
 #' @param verbose TRUE to produce diagnostic output
 #' @return [SafeRankExpt](new_SafeRankExpt.html) object, describing this experiment
@@ -215,7 +216,8 @@ testDeletions <-
 #'   ballot box is being stuffed.
 #' @param ainc Number of ballots to be added in each step
 #' @param arep Maximum number of ballot-stuffed elections to run
-#' @param exptName stem-name of experimental units *e.g.* "E"
+#' @param exptName stem-name of experimental units *e.g.* "E".  If `NULL`, then
+#'   a 3-character string of capital letters is chosen at random.
 #' @param quiet `TRUE` to suppress all output
 #' @param verbose `TRUE` to produce diagnostic output
 #' @return A matrix of experimental results, of dimension \eqn{n} by \eqn{2m+1},
@@ -380,48 +382,51 @@ testAdditions <- function(votes,
 
 #' Bootstrapping experiment, with fractional counts of a ballot box.
 #'
-#' Starting from some number ('astart') of randomly-selected ballots, an
+#' Starting from some number (`astart`) of randomly-selected ballots, an
 #' increasingly-large collection of randomly-selected ballots are counted. The
 #' ballots are chosen independently without replacement for each experimental
 #' unit; if you want to count decreasingly-sized portions of a single sample of
-#' ballots, use testDeletions().  The rankings and margins produced by each
-#' simulated election are returned as a matrix with one row per election.
+#' ballots, use [testDeletions()].
 #'
-#' @param votes A numeric matrix: one row per ballot, one column per candidate 
-#' @param countMethod The name of a function which will count the ballots, e.g.
-#'   "stv", "condorcet"
-#' @param countArgs List of args to be passed to countMethod (in addition to
-#'   votes)
+#' @param votes A numeric matrix: one row per ballot, one column per candidate
+#' @param countMethod The name of a function which will count the ballots,
+#'   *e.g.* "stv", "condorcet"
+#' @param countArgs List of args to be passed to `countMethod` (in addition to
+#'   `votes`)
 #' @param rankMethod Name of a ranking attribute in the output of countMethod,
 #'   e.g. "elected", "ranking", "safeRank".
 #' @param astart Starting number of ballots (min 2)
-#' @param ainc Number of ballots to be added in each step
-#' @param arep Limit on the number of repetitions of the test. Required to be
-#'   non-null if ainc==0.
-#' @param exptName stem-name of experimental units e.g. "E"
-#' @param quiet TRUE to suppress all output
-#' @param verbose TRUE to produce diagnostic output
-#' @return a matrix of experimental results, of dimension n by 2m+1, where n is
-#'   the number of elections and m is the number of candidates.  The first
-#'   column is named "nBallots".  Other columns indicate the ranking and margin
-#'   of each candidate in each election.
+#' @param ainc Number of ballots to be added in each step. Must be non-negative.
+#' @param arep Number of repetitions of the test on each step. Required to be
+#'   non-`NULL` if `ainc=0` && is.null(trep)`.
+#' @param trep Limit on the total number of simulated elections. Required to be
+#'   non-`NULL` if `ainc=0 && is.null(arep)`.
+#' @param exptName stem-name of experimental units *e.g.* "E".  If `NULL`, then
+#'   a 3-character string of capital letters is chosen at random.
+#' @param quiet `TRUE` to suppress all output
+#' @param verbose `TRUE` to produce diagnostic output
+#' @return a [SafeRankExpt](new_SafeRankExpt.html) object of experimental
+#'   results.
 #' @export
 #' @examples
 #' data(food_election)
 #' testFraction(food_election, countMethod="condorcet",
 #'              countArgs=list(safety=0.5,complete.ranking=TRUE))
-#' testFraction(dublin_west, astart=20, ainc=20, arep=2, countMethod="stv",
-#'              rankMethod="elected", quiet=FALSE)
-testFraction <- function(votes,
+#' testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3, 
+#'              countMethod="stv", rankMethod="elected", quiet=FALSE)
+testFraction <- function(votes = NULL,
                          astart = NULL,
                          ainc = NULL,
                          arep = NULL,
+                         trep = NULL,
                          rankMethod = "safeRank",
                          countMethod = "stv",
                          countArgs = list(),
                          exptName = NULL,
                          quiet = FALSE,
                          verbose = FALSE) {
+  
+  stopifnot(!is.null(votes))
   nv <- nrow(votes)
   nc <- ncol(votes)
   
@@ -430,34 +435,61 @@ testFraction <- function(votes,
   }
   if (is.null(ainc)) {
     ainc <- nv %/% 10  ## deciles (roughly)
+  }
+  stopifnot(ainc >= 0)
+  if (ainc == 0) {
+    stopifnot(!is.null(arep) && !is.null(trep))
+    if (is.null(arep)) {
+      arep = trep
+    } else if (is.null(trep)) {
+      trep = arep
+    }
   } else {
-    if (ainc == 0) {
-      stopifnot(!is.null(arep))
+    if (!is.null(trep) && is.null(arep)) {
+      arep = floor(trep / (floor((nv - astart) / ainc) + 1))
+    } else if (is.null(arep)) {
+      arep = 1
+    }
+    if (is.null(trep)) {
+      trep = arep * (floor((nv - astart) / ainc) + 1)
     }
   }
-  if (is.null(arep)) {
-    arep <- trunc((nv - astart) / ainc)
+
+  ## abort excessively-large experiments
+  stopifnot(trep <= 1e6)
+
+  if (ainc != 0) {
+    nsteps <- min(floor(trep / arep), floor((nv - astart) / ainc))
+  } else {
+    nsteps <- 1
+  }
+  
+  ## `nb` is a vector of distinct `nBallot` values for our experiment
+  nb <- astart + ainc * (0:nsteps)
+  stopifnot(length(nb) > 0 && !any(nb > nv) && !any(nb < 2))
+
+  ## `nbb` is a vector of all `nBallot` values for our experiment
+  nbb <- numeric(trep) ## preallocate, to avoid memory-thrashing
+  i <- 0
+  for (j in 1:(arep+1)) {
+    numToAdd <- min(trep - i, length(nb))
+    if (numToAdd > 0) {
+      nbb[(i + 1):(i + numToAdd)] <- nb[1:numToAdd]
+      i <- i + numToAdd
+    }
+  }
+  if (trep > i) {
+    ## this case may arise when ainc, arep, and trep are all specified,
+    ## because we do at most arep+1 repetitions at each step
+    trep <- i  ## the total number of experiments we'll run
   }
   
   ## Suppress all output from counting unless verbose=TRUE
   cArgs <-
     append(countArgs, list(quiet = !verbose, verbose = verbose))
   
-  
-  nb <- astart + ainc * (0:(arep - 1))
-  if ((ainc != 0) && (arep > trunc((nv - astart) / ainc))) {
-    nb <- nb[-which(nb >= nv)]
-    nb <- c(nb, nv) ## use all ballots in the last experimental run
-  }
-  
-  if (verbose && !quiet) {
-    cat("\nSelecting an increasingly-large fraction of",
-      nv,
-      "ballots until the ultimate ranking is found.\n"
-    )
-  }
   if (!quiet) {
-    cat("Fraction of", countMethod, "ballots:\n")
+    cat("Progress in counting", countMethod, "ballots:\n")
   }
   
   if (is.null(exptName)) {
@@ -484,15 +516,12 @@ testFraction <- function(votes,
     unitFactors = NULL
   )
   
-  nreps <- 0
-  for (nBallots in nb) {
-    nreps <- nreps + 1
+  for (i in (1:trep)) {
+    nBallots <- nbb[i]
     if (!quiet) {
-      cat(paste0(" ", format(round(
-        nBallots / nv * 100, 1
-      ), digits = 4), "%"))
-      cat(ifelse(nreps < length(nb),
-                 ifelse((nreps %% 10) == 0, ",\n", ","), 
+      cat(paste0(" ", format(round(i / trep * 100, 1), digits = 4), "%"))
+      cat(ifelse(i < trep,
+                 ifelse((i %% 10) == 0, ",\n", ","), 
                  ""))
     }
     
@@ -500,13 +529,15 @@ testFraction <- function(votes,
     cr <- do.call(countMethod,
                      append(cArgs, list(votes = votes[selBallots,])))
     
-    exptID = paste0(exptName, nreps)
+    exptID = paste0(exptName, i)
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID, 
                              nBallots = nBallots), 
                         append(crRank, 
                                crMargins))
+    ## note: the following step has runtime quadratic in `trep`, so might be the
+    ## bottleneck for high-rep experiments on small values of nBallots
     result <- rbind.SafeRankExpt(result, newResult)
   }
   
