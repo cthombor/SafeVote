@@ -110,7 +110,8 @@ from <code>votes</code>, without replacement)</p></dd>
 
 
 <dt>exptName</dt>
-<dd><p>stem-name of experimental units <em>e.g.</em> "E"</p></dd>
+<dd><p>stem-name of experimental units <em>e.g.</em> "E".  If <code>NULL</code>, then
+a 3-character string of capital letters is chosen at random.</p></dd>
 
 
 <dt>quiet</dt>
@@ -136,7 +137,7 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-10 21:17:26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-12 15:36:45</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -150,16 +151,16 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU1   |       18|       2|     2|         1|            2|      2| 0.1997000| 1.5996000|           6|               | 0.2007000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU2   |       16|       2|     2|         1|            2|      2|          | 0.9992500|           4|      0.3335833| 1.0007500|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU3   |       14|       1|     1|         1|            1|      1| 0.3331905| 1.6659524|           3|               | 1.0008571|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU4   |       12|       1|     1|         1|            1|      1|          | 0.9990000|           1|      0.0000000| 2.0010000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU5   |       10|       1|     1|         1|            1|      1| 1.0000000| 1.6656667|           2|               | 0.3343333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU6   |        8|       1|     1|         1|            1|      1| 1.0000000| 0.3323333|           2|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU7   |        6|       1|     1|         1|            1|      1| 0.0000000| 0.9990000|           2|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU8   |        4|       1|     1|         1|            1|      1| 1.0000000| 0.6656667|           1|      0.0000000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |SYU9   |        2|       1|     1|         1|            1|      1| 0.0000000|          |           1|      0.0000000| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ1   |       18|       2|     2|         1|            2|      2| 0.5996000| 0.7998000|           6|               | 0.6006000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ2   |       16|       2|     2|         1|            2|      2| 0.5927037| 0.0364815|           5|               | 1.3708148|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ3   |       14|       2|     2|         1|            2|      2| 0.6661667|          |           5|      0.3338333| 0.3338333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ4   |       12|       1|     1|         1|            1|      1| 0.3326667|          |           3|      1.3336667| 0.6673333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ5   |       10|       1|     1|         1|            1|      1| 1.3328333|          |           1|      0.5007500| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ6   |        8|       1|     1|         1|            1|      1| 1.1107778|          |           1|      0.7784444| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ7   |        6|       1|     1|         1|            1|      1| 1.0000000|          |           0|      1.0000000| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ8   |        4|       1|     1|         1|            1|      1| 0.0000000|          |           0|      1.0000000| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |GKJ9   |        2|       1|     1|         1|            1|      1| 0.0000000|          |           0|      1.0000000| 0.0000000|</span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>  countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
@@ -171,7 +172,7 @@ and its results</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NA margin at rank 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-10 21:17:26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-12 15:36:45</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -190,16 +191,16 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA1   |       18|       2|     2|         1|            2|      2| 1.9087273| 1.0902727|           7|               | 0.0912727|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA2   |       16|       2|     2|         1|            2|      2| 0.9329333| 0.3994000|           6|               | 1.0670667|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA3   |       14|       2|     2|         1|            2|      2| 0.0662667| 1.5331333|           7|               | 2.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA4   |       12|       2|     2|         1|            2|      2| 1.9995000| 0.0000000|           5|               | 0.0005000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA5   |       10|       2|     2|         1|            2|      2| 2.2852857| 0.0470476|           4|               | 0.7147143|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA6   |        8|       2|     2|         1|            2|      2| 0.3328333| 0.0000000|           4|               | 2.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA7   |        6|       1|     1|         1|            1|      1| 0.7497500| 0.2492500|           2|               | 1.2502500|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA8   |        4|       1|     1|         1|            1|      1| 0.6661667| 0.0000000|           0|               | 1.3338333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UYA9   |        2|       2|     2|         1|            2|      2| 0.8328333| 0.0000000|           2|              0|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH1   |       18|       2|     2|         1|            2|      2| 1.9996667| 2.9996667|          10|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH2   |       16|       2|     2|         1|            2|      2| 1.1997000| 2.9329333|           8|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH3   |       14|       2|     2|         1|            2|      2| 1.2218889| 2.2218889|           7|               | 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH4   |       12|       2|     2|         1|            2|      2| 0.3330000| 3.3330000|           7|               | 2.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH5   |       10|       2|     2|         1|            2|      2| 1.5235238| 2.8088095|           5|               | 0.4764762|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH6   |        8|       2|     2|         1|            2|      2| 0.6187619| 2.4281429|           6|               | 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH7   |        6|       2|     2|         1|            2|      2| 0.7998000| 2.1992000|           4|               | 0.2002000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH8   |        4|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           2|               | 0.2225556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VYH9   |        2|       2|     2|         1|            2|      2| 0.0000000| 0.8328333|           2|               | 0.0000000|</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
