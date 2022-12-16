@@ -7,9 +7,13 @@
 \method{plot}{SafeRankExpt}(
   x,
   facetWrap = FALSE,
+  anBallots = 0,
+  bnSeats = 0,
   cMargin = 1,
   xlab = "Ballots",
   ylab = "Adjusted Rank",
+  main = NULL,
+  line = TRUE,
   pointSize = 1,
   ...
 )
@@ -19,9 +23,13 @@
 
 \item{facetWrap}{TRUE provides per-candidate scatterplots}
 
-\item{cMargin}{parameter in rank-adjustment formula}
+\item{anBallots, bnSeats, cMargin}{parameters in the rank-adjustment formula}
 
 \item{xlab, ylab}{axis labels}
+
+\item{main}{overall title for the plot}
+
+\item{line}{TRUE will connect points with lines, and will disable jitter}
 
 \item{pointSize}{diameter of points}
 
@@ -31,18 +39,46 @@
 graphics object, with side-effect in RStudio Plots pane
 }
 \description{
-The score of a candidate is their ranking plus their scaled "winning margin".
-The scaled margin is \eqn{e^{-cx/\sqrt{n}}}, where \eqn{x} is the
-unscaled margin (i.e. the number of votes by which this candidate is ahead of
-the next-weaker candidate), \eqn{n} is the number of ballots in this
-simulated election, and \eqn{c} is the scaling parameter \code{cmargin}.
+The "adjusted rank" of a candidate is their ranking \eqn{r} plus their
+adjusted and scaled "winning margin". The scaled margin is
+\eqn{e^{-cx/\sqrt{n}}}, where \eqn{x} is the adjusted margin (i.e. the number
+of votes by which this candidate is ahead of the next-weaker candidate,
+adjusted for the number of ballots \eqn{n} and the number of seats \eqn{s}),
+and \eqn{c>0} is the margin-scaling parameter \code{cmargin}. The adjusted margin
+\eqn{x} is computed from the unadjusted winning margin \eqn{v} by \eqn{x =
+v(1+bs)/(1+a\sqrt{n})} where \eqn{a} is the value of \code{anBallots} and \eqn{b}
+is the value of \code{bnSeats}. Note that the margin is unadjusted if \eqn{a=0}
+and \eqn{b=0}.
 }
 \details{
-The default value of cmargin = 1.0 preserves the slope of score-trends across
-rank-boundaries.  Smaller values of cmargin make it easier to see the
-statistical fluctuations in margins as a function of nBallots.  cmargin = 0
-displays only the ranks.
+A very small margin of victory causes a candidate to have an adjusted rank
+very near to \eqn{r+1}.
 
-Todo: accept a list of experimental results.  Multiple runs with the same
-number of ballots should be shown with a box-and-whisker rather than a point.
+The default value of \code{cmargin=1.0} draws visual attention to candidates with
+a very small winning margin.
+
+Setting \code{cmargin=0} is a special case, causing the winning margin to be
+scaled in proportion to the number of seats and to \eqn{1/\sqrt{n}}.  This
+seems an appropriate scaling for STV elections, because the margin of victory
+for an elected candidate is typically not much larger than the quota of
+\eqn{n/(s+1)} (Droop) or \eqn{n/s} (Hare).  The variance on a winning margin
+seems likely to be proportional to \eqn{n} in any real-world election.  We
+suggest that the SafeVote package could aid election authorities in testing
+and refining this hypothesis, and then using it to determine whether a
+preliminary result from counting a fraction of the ballots is sufficiently
+"safe" to be announced to the public.
+
+If you wish to see only ranks on the plot, use \code{anBallots=0}, \code{bnSeats=0},
+\code{cmargin=0}.
+
+If you wish to see unscaled margins, use \code{anBallots=1}, \code{bnSeats=1},
+\code{cmargin=0}.
+
+Todo: Accept a list of SafeVoteExpt objects.
+
+Todo: Multiple counts with the same number of ballots could be summarised
+with a box-and-whisker graphic, rather than a set of jittered points.
+
+Todo: Consider developing a non-exponential scaling that is appropriate for
+plotting stochastic experimental data derived from Condorcet elections.
 }

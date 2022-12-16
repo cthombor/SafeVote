@@ -12,6 +12,7 @@ new_SafeRankExpt(
   datasetName = NULL,
   experimentalMethod = NULL,
   countArgs = list(),
+  nseats = NULL,
   otherFactors = list(),
   unitFactors = list()
 )
@@ -31,6 +32,8 @@ new_SafeRankExpt(
 simulated these elections e.g. "testFraction"}
 
 \item{countArgs}{secondary factor: args passed to countMethod}
+
+\item{nseats}{secondary factor: number of seats to be filled}
 
 \item{otherFactors}{other secondary factors, e.g. parameters to
 experimentalMethod}
