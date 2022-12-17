@@ -54,10 +54,8 @@ testDeletions <- function(votes,
   if (is.null(dstart)) {
     dstart <- nrow(votes)
   }
-  if (dstart < 2) {
-    dstart <- 2
-  }
-  
+  stopifnot((dstart <= nrow(votes)) && (dstart > 1)) 
+
   stopifnot(is.list(countArgs))
   ## suppress all output from counting unless verbose=TRUE
   cArgs <-
@@ -199,7 +197,7 @@ testDeletions <- function(votes,
   setattr(result, "unitFactors", uF)
   ## TODO: determine whether a deep-copy of `result` is necessary to assure
   ## that all of its attributes are reliably serialisable with `save()`
-  cResult <- copy(result)
+  ## result <- copy(result)
   
   ## TODO: consider using `data.frame` rather than `data.table` internally,
   ## converting to a `data.table` only after all experimental data has been
@@ -214,9 +212,9 @@ testDeletions <- function(votes,
   
   if (!quiet) {
     cat("\n")
-    print(summary(cResult))
+    print(summary(result))
   }
-  return(invisible(cResult))
+  return(invisible(result))
 }
 
 
@@ -708,20 +706,23 @@ new_SafeRankExpt <-
            unitFactors = list()) {
     
     dt <- data.table(
-      exptID = matrix(character(0), ncol = 1),
+      exptID   = matrix(character(0), ncol = 1),
       nBallots = matrix(integer(0),   ncol = 1),
       ranks    = matrix(integer(0),   ncol = length(rankNames)),
       margins  = matrix(double(0),    ncol = length(marginNames))
     )
-    colnames(dt) <- c("exptID", "nBallots", rankNames, marginNames)
+    setnames(dt, c("exptID", "nBallots", rankNames, marginNames))
+    
     setattr(dt, "countMethod",        countMethod)
     setattr(dt, "rankMethod",         rankMethod)
     setattr(dt, "datasetName",        datasetName)
     setattr(dt, "experimentalMethod", experimentalMethod)
     setattr(dt, "countArgs",          countArgs)
     setattr(dt, "startTime",          format(as.POSIXlt(Sys.time())))
-    setattr(dt, "otherFactors", otherFactors)
+    setattr(dt, "nseats",             nseats)
+    setattr(dt, "otherFactors",       otherFactors)
     setattr(dt, "unitFactors",        unitFactors)
+    
     class(dt) <- append("SafeRankExpt", class(dt))
     return(dt)
   }
@@ -829,52 +830,52 @@ print.summary.SafeRankExpt <- function(x, ...) {
 #' plot() method for the result of an experiment with varying numbers of ballots
 #'
 #' The "adjusted rank" of a candidate is their ranking \eqn{r} plus their
-#' adjusted and scaled "winning margin". The scaled margin is
+#' scaled "winning margin". The scaled margin is
 #' \eqn{e^{-cx/\sqrt{n}}}, where \eqn{x} is the adjusted margin (i.e. the number
 #' of votes by which this candidate is ahead of the next-weaker candidate,
 #' adjusted for the number of ballots \eqn{n} and the number of seats \eqn{s}),
-#' and \eqn{c>0} is the margin-scaling parameter `cmargin`. The adjusted margin
-#' \eqn{x} is computed from the unadjusted winning margin \eqn{v} by \eqn{x =
-#' v(1+bs)/(1+a\sqrt{n})} where \eqn{a} is the value of `anBallots` and \eqn{b}
-#' is the value of `bnSeats`. Note that the margin is unadjusted if \eqn{a=0}
-#' and \eqn{b=0}.
+#' and \eqn{c>0} is the margin-scaling parameter `cMargin`.
 #'
-#' A very small margin of victory causes a candidate to have an adjusted rank
-#' very near to \eqn{r+1}.
-#'
-#' The default value of `cmargin=1.0` draws visual attention to candidates with
-#' a very small winning margin.
-#'
-#' Setting `cmargin=0` is a special case, causing the winning margin to be
-#' scaled in proportion to the number of seats and to \eqn{1/\sqrt{n}}.  This
-#' seems an appropriate scaling for STV elections, because the margin of victory
-#' for an elected candidate is typically not much larger than the quota of
-#' \eqn{n/(s+1)} (Droop) or \eqn{n/s} (Hare).  The variance on a winning margin
-#' seems likely to be proportional to \eqn{n} in any real-world election.  We
-#' suggest that the SafeVote package could aid election authorities in testing
-#' and refining this hypothesis, and then using it to determine whether a
-#' preliminary result from counting a fraction of the ballots is sufficiently
-#' "safe" to be announced to the public.
+#' The default value of `cMargin=1.0` draws visual attention to candidates with
+#' a very small winning margin, as their adjusted rank is very near to
+#' \eqn{r+1}.  Candidates with anything more than a small winning margin have
+#' only a small rank adjustment, due to the exponential scaling.
 #' 
-#' If you wish to see only ranks on the plot, use `anBallots=0`, `bnSeats=0`,
-#' `cmargin=0`.
+#' A scaling linear in \eqn{s/n} is applied to margins when `anBallots>0`.  Such
+#' a linear scaling may be a helpful way to visualise the winning margins in STV
+#' elections because the margin of victory for an elected candidate is typically
+#' not much larger than the quota of \eqn{n/(s+1)} (Droop) or \eqn{n/s} (Hare).
+#' The linear scaling factor is \eqn{as/n}, where \eqn{a} is the value of
+#' `anBallots`, \eqn{s} is the number of seats, and \eqn{n} is the number of
+#' ballots. For plotting on the (inverted) adjusted rank scale, the
+#' linearly-scaled margin is added to the candidate's rank.  Note that the
+#' linearly-scaled margins are zero when \eqn{a=0}, and thus have no effect on
+#' the adjusted rank.  You might want to increase the value of `anBallots`,
+#' starting from 1.0, until the winning candidate's adjusted rank is 1.0 when
+#' all ballots are counted, then confirm that the adjusted ranks of other
+#' candidates are still congruent with their ranking (i.e. that the
+#' rank-adjustment is less than 1 in all cases except perhaps on an initial
+#' transient with small numbers of ballots).
 #' 
-#' If you wish to see unscaled margins, use `anBallots=1`, `bnSeats=1`,
-#' `cmargin=0`.
-#'
+#' When both `anBallots` and `cMargins` are non-zero, the ranks are adjusted
+#' with both exponentially-scaled margins and linearly-scaled margins. The
+#' resulting plot would be difficult to interpret in a valid way.
+#' 
 #' Todo: Accept a list of SafeVoteExpt objects.
 #'
 #' Todo: Multiple counts with the same number of ballots could be summarised
 #' with a box-and-whisker graphic, rather than a set of jittered points.
 #'
-#' Todo: Consider developing a non-exponential scaling that is appropriate for
+#' Todo: Consider developing a linear scaling that is appropriate for
 #' plotting stochastic experimental data derived from Condorcet elections.
 #'
 #' @param x object containing experimental results
 #' @param facetWrap TRUE provides per-candidate scatterplots
-#' @param anBallots,bnSeats,cMargin parameters in the rank-adjustment formula
+#' @param anBallots,cMargin parameters in the rank-adjustment formula
 #' @param xlab,ylab axis labels
-#' @param main overall title for the plot
+#' @param title overall title for the plot.  Default: NULL
+#' @param subtitle subtitle for the plot.  Default: value of nSeats and
+#'   any non-zero rank-adjustment parameters
 #' @param line TRUE will connect points with lines, and will disable jitter
 #' @param pointSize diameter of points
 #' @param ... params for generic plot()
@@ -890,11 +891,11 @@ plot.SafeRankExpt <-
   function(x,
            facetWrap = FALSE,
            anBallots = 0.0,
-           bnSeats = 0.0,
            cMargin = 1.0,
            xlab = "Ballots",
            ylab = "Adjusted Rank",
-           main = NULL,
+           title = NULL,
+           subtitle = "(default)",
            line = TRUE,
            pointSize = 1,
            ...) {
@@ -911,6 +912,20 @@ plot.SafeRankExpt <-
       return(fxn)
     }
     
+    nseats <- attr(x,"nseats")
+    stopifnot( !is.null(nseats) && (nseats > 0))
+    
+    if (subtitle == "(default)") {
+      subtitle <- ""
+      if (anBallots != 0) {
+        subtitle <- paste(subtitle, "anBallots =", anBallots)
+      }
+      if (cMargin != 0) {
+        subtitle <- paste(subtitle, "cMargin =", cMargin)
+      }
+      subtitle <- paste(subtitle, "nSeats =", nseats)
+    }
+    
     ## colnames of margins, ranks, and scores
     lmnames <- colnames(x)[stringr::str_detect(colnames(x), "^m.")]
     cnames <- unlist(lapply(lmnames, function(x)
@@ -925,19 +940,14 @@ plot.SafeRankExpt <-
     scores <- scores / sqrt(x[, x$nBallots])
     
     ## transform scores, so that a small winning margin adds almost a full point
-    ## of rank
-    if (cMargin == 0) {
-      scores <- 1 - scores
-    } else {
-      scores <- exp(-cMargin * scores)
-    }
+    ## of rank when `cMargin>0`, and any margin is a full point of rank when
+    ## `c=0`.
+    scores <- exp(-cMargin * scores)
+
     ## transformed scores of NA are interpreted as a rank-adjustment of 0.0
     for (j in cnames) {
       set(scores, which(is.na(scores[[j]])), j, 0.0)
     }
-    
-    ## rank adjustment is proportional in `nseats` if `bnSeats!=0`
-    cscale <- 1 + bnSeats * (attr(x,"nseats") - 1)
     
 # The following warnings were received during my code development. I'm unable to
 # reproduce them reliably -- which suggests that the root cause is some subtle
@@ -985,13 +995,17 @@ plot.SafeRankExpt <-
     ## and convenient ways to copy its contents into a `data.table`, e.g. by
     ## overloading `setDT()` and `data.table()`.
     
-    ## scale scores by \eqn{1/(1+a\sqrt{n})}
-    scale <- cscale / (1 + anBallots * sqrt(x[["nBallots"]]))
-    scores[, (cnames) := lapply(.SD, "*", scale)]
-    
-    ## add ranks to scaled and transformed margins
-    ranks <- x[, .SD, .SDcols = cnames]
-    scores <- scores + ranks
+    ## scale margins by \eqn{as/n}    
+    margins <- x[, .SD, .SDcols = mnames]
+    setnames(margins, cnames)
+    ## margins of NA are treated as 0.0 for linear scaling
+    for (j in cnames) {
+      set(margins, which(is.na(margins[[j]])), j, 0.0)
+    }
+    margins <- margins * (anBallots * nseats / x[["nBallots"]])
+
+    ## subtract linearly-scaled margins from scores, and add ranks
+    scores <- scores - margins + x[, .SD, .SDcols=cnames] 
 
     ## include descriptive cols in `scores`
     desc <- x[, .SD, .SDcols = c("exptID", "nBallots")]
@@ -1025,7 +1039,8 @@ plot.SafeRankExpt <-
       labs(x = xlab,
            y = ylab,
            colour = "Candidate",
-           title = main) +
+           title = title,
+           subtitle = subtitle) +
       scale_y_reverse(breaks = integer_breaks())
     if (line) {
       g <- g + geom_line()

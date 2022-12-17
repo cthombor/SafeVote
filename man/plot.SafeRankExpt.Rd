@@ -8,11 +8,11 @@
   x,
   facetWrap = FALSE,
   anBallots = 0,
-  bnSeats = 0,
   cMargin = 1,
   xlab = "Ballots",
   ylab = "Adjusted Rank",
-  main = NULL,
+  title = NULL,
+  subtitle = "(default)",
   line = TRUE,
   pointSize = 1,
   ...
@@ -23,11 +23,14 @@
 
 \item{facetWrap}{TRUE provides per-candidate scatterplots}
 
-\item{anBallots, bnSeats, cMargin}{parameters in the rank-adjustment formula}
+\item{anBallots, cMargin}{parameters in the rank-adjustment formula}
 
 \item{xlab, ylab}{axis labels}
 
-\item{main}{overall title for the plot}
+\item{title}{overall title for the plot.  Default: NULL}
+
+\item{subtitle}{subtitle for the plot.  Default: value of nSeats and
+any non-zero rank-adjustment parameters}
 
 \item{line}{TRUE will connect points with lines, and will disable jitter}
 
@@ -40,45 +43,43 @@ graphics object, with side-effect in RStudio Plots pane
 }
 \description{
 The "adjusted rank" of a candidate is their ranking \eqn{r} plus their
-adjusted and scaled "winning margin". The scaled margin is
+scaled "winning margin". The scaled margin is
 \eqn{e^{-cx/\sqrt{n}}}, where \eqn{x} is the adjusted margin (i.e. the number
 of votes by which this candidate is ahead of the next-weaker candidate,
 adjusted for the number of ballots \eqn{n} and the number of seats \eqn{s}),
-and \eqn{c>0} is the margin-scaling parameter \code{cmargin}. The adjusted margin
-\eqn{x} is computed from the unadjusted winning margin \eqn{v} by \eqn{x =
-v(1+bs)/(1+a\sqrt{n})} where \eqn{a} is the value of \code{anBallots} and \eqn{b}
-is the value of \code{bnSeats}. Note that the margin is unadjusted if \eqn{a=0}
-and \eqn{b=0}.
+and \eqn{c>0} is the margin-scaling parameter \code{cMargin}.
 }
 \details{
-A very small margin of victory causes a candidate to have an adjusted rank
-very near to \eqn{r+1}.
+The default value of \code{cMargin=1.0} draws visual attention to candidates with
+a very small winning margin, as their adjusted rank is very near to
+\eqn{r+1}.  Candidates with anything more than a small winning margin have
+only a small rank adjustment, due to the exponential scaling.
 
-The default value of \code{cmargin=1.0} draws visual attention to candidates with
-a very small winning margin.
+A scaling linear in \eqn{s/n} is applied to margins when \code{anBallots>0}.  Such
+a linear scaling may be a helpful way to visualise the winning margins in STV
+elections because the margin of victory for an elected candidate is typically
+not much larger than the quota of \eqn{n/(s+1)} (Droop) or \eqn{n/s} (Hare).
+The linear scaling factor is \eqn{as/n}, where \eqn{a} is the value of
+\code{anBallots}, \eqn{s} is the number of seats, and \eqn{n} is the number of
+ballots. For plotting on the (inverted) adjusted rank scale, the
+linearly-scaled margin is added to the candidate's rank.  Note that the
+linearly-scaled margins are zero when \eqn{a=0}, and thus have no effect on
+the adjusted rank.  You might want to increase the value of \code{anBallots},
+starting from 1.0, until the winning candidate's adjusted rank is 1.0 when
+all ballots are counted, then confirm that the adjusted ranks of other
+candidates are still congruent with their ranking (i.e. that the
+rank-adjustment is less than 1 in all cases except perhaps on an initial
+transient with small numbers of ballots).
 
-Setting \code{cmargin=0} is a special case, causing the winning margin to be
-scaled in proportion to the number of seats and to \eqn{1/\sqrt{n}}.  This
-seems an appropriate scaling for STV elections, because the margin of victory
-for an elected candidate is typically not much larger than the quota of
-\eqn{n/(s+1)} (Droop) or \eqn{n/s} (Hare).  The variance on a winning margin
-seems likely to be proportional to \eqn{n} in any real-world election.  We
-suggest that the SafeVote package could aid election authorities in testing
-and refining this hypothesis, and then using it to determine whether a
-preliminary result from counting a fraction of the ballots is sufficiently
-"safe" to be announced to the public.
-
-If you wish to see only ranks on the plot, use \code{anBallots=0}, \code{bnSeats=0},
-\code{cmargin=0}.
-
-If you wish to see unscaled margins, use \code{anBallots=1}, \code{bnSeats=1},
-\code{cmargin=0}.
+When both \code{anBallots} and \code{cMargins} are non-zero, the ranks are adjusted
+with both exponentially-scaled margins and linearly-scaled margins. The
+resulting plot would be difficult to interpret in a valid way.
 
 Todo: Accept a list of SafeVoteExpt objects.
 
 Todo: Multiple counts with the same number of ballots could be summarised
 with a box-and-whisker graphic, rather than a set of jittered points.
 
-Todo: Consider developing a non-exponential scaling that is appropriate for
+Todo: Consider developing a linear scaling that is appropriate for
 plotting stochastic experimental data derived from Condorcet elections.
 }
