@@ -135,59 +135,40 @@ results.</p>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"condorcet"</span>,</span></span>
 <span class="r-in"><span>             countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>safety<span class="op">=</span><span class="fl">0.5</span>,complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting condorcet ballots:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%,TOT2 elected 0 candidates, but TOT0 elected 1 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  30%,TOT3 elected 0 candidates, but TOT0 elected 1 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-12-17 12:37:56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = condorcet, rankMethod = safeRank</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |          | safety| complete.ranking|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|------:|----------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |    0.5|             TRUE|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             | astart| ainc| arep|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|------:|----:|----:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |      2|    2|    1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = , countMethod = , rankMethod = </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT1   |        2|       3|     3|         1|            2|      3|          |        |           2|              6|         |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT2   |        4|       1|     3|         1|            3|      3|         1|        |           3|               |        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT3   |        6|       1|     4|         1|            1|      5|         5|       4|           1|              2|         |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT4   |        8|       3|     5|         1|            2|      3|         6|        |          12|              4|        2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT5   |       10|       2|     5|         1|            2|      2|         2|        |           7|              6|        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT6   |       12|       3|     3|         1|            2|      3|         3|        |          10|             12|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT7   |       14|       2|     5|         1|            2|      2|         3|        |           9|              9|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT8   |       16|       4|     5|         1|            2|      3|         7|        |          19|              9|        5|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT9   |       18|       3|     5|         1|            2|      3|        12|        |          19|              6|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TOT10  |       20|       3|     5|         1|            2|      4|         6|        |          20|              6|        8|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK1   |        2|       4|     4|         1|            2|      2|          |        |           5|              3|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK2   |        4|       3|     3|         1|            2|      3|          |       1|           6|              2|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK3   |        6|       3|     4|         1|            1|      5|         3|       4|           1|              5|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK4   |        8|       4|     5|         1|            2|      3|         4|        |           7|              3|        6|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK5   |       10|       2|     5|         1|            2|      2|         5|        |          16|              1|        2|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK6   |       12|       2|     5|         1|            2|      2|         2|        |          12|              3|        7|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK7   |       14|       2|     5|         1|            2|      2|        16|        |          16|             16|       16|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK8   |       16|       2|     4|         1|            2|      4|        12|       1|          18|              1|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK9   |       18|       2|     5|         1|            2|      4|         3|        |          15|              9|        5|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VNK10  |       20|       3|     5|         1|            2|      4|         6|        |          20|              6|        8|</span>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">dublin_west</span>, astart<span class="op">=</span><span class="fl">20</span>, ainc<span class="op">=</span><span class="fl">10</span>, arep<span class="op">=</span><span class="fl">2</span>, trep<span class="op">=</span><span class="fl">3</span>, </span></span>
 <span class="r-in"><span>             countMethod<span class="op">=</span><span class="st">"stv"</span>, rankMethod<span class="op">=</span><span class="st">"elected"</span>, quiet<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting stv ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  33.3%, 66.7%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-12-17 12:37:56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = dublin_west, countMethod = stv, rankMethod = elected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             | astart| ainc| arep|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|------:|----:|----:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |     20|   10|    2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = , countMethod = , rankMethod = </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry|  m.Bonnie|  m.Burton|    m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|  m.Terry|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|---------:|---------:|---------:|---------:|---------:|----------:|-----------:|-------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |XBI1   |       20|      1|      1|    2|       2|       2|        1|         1|     1|     2| 0.3331667| 0.5389802| 0.0783061| 1.0000000|  2.666333|  0.7696629|   0.6913568|        | 1.205814|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |XBI2   |       30|      1|      1|    2|       2|       2|        1|         2|     1|     1| 1.0000000| 0.0000000| 1.2654556| 0.4937757|  6.000000|  1.0000000|   1.4544545|        | 1.149678|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |XBI3   |       20|      1|      2|    2|       2|       1|        1|         1|     1|     2|          | 0.3996000| 0.6004000| 0.0000000|  0.000000|  2.0000000|   0.3996000|       0| 2.000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry|  m.Bonnie|  m.Burton|    m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|   m.Terry|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|---------:|---------:|---------:|---------:|---------:|----------:|-----------:|-------:|---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SOI1   |       20|      1|      2|    1|       2|       2|        2|         1|     1|     1| 0.5496750| 0.5496750| 1.4330167|  1.000000|  2.333667|  0.3331667|   0.0000000|        | 0.0173083|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SOI2   |       30|      1|      2|    1|       1|       2|        2|         2|     1|     1| 1.0000000| 1.0000000| 1.0000000|  0.000000|  0.000000|  1.0000000|   1.0000000|        | 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SOI3   |       20|      1|      1|    1|       2|       2|        1|         2|     1|     2| 0.6941806| 0.0412708| 0.6524097|  2.666833|  0.000000|  0.6534097|   0.2918958|        | 1.0000000|</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
