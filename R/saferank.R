@@ -189,12 +189,15 @@ testDeletions <- function(votes,
                         append(crRank,
                                crMargins))
     result <- rbind.SafeRankExpt(result, newResult)
+    stopifnot(data.table:::selfrefok(result)==1)
     
   }
   
   uF <- attr(result, "unitFactors")
   uF$removedBallots <- rBallots
   setattr(result, "unitFactors", uF)
+  stopifnot(data.table:::selfrefok(result)==1)
+  
   ## TODO: determine whether a deep-copy of `result` is necessary to assure
   ## that all of its attributes are reliably serialisable with `save()`
   ## result <- copy(result)
@@ -351,6 +354,7 @@ testAdditions <- function(votes,
   result <- rbind.SafeRankExpt(result, newResult)
   nseats <- length(cr$elected) ## nseats value is inferred from election results
   setattr(result, "nseats", nseats)
+  stopifnot(data.table:::selfrefok(result)==1)
   
   if (!quiet && verbose) {
     cat("Initial ranking by", countMethod, ":\n")
@@ -610,7 +614,7 @@ testFraction <- function(votes = NULL,
     
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
-     newResult <- append(list(exptID = exptID,
+    newResult <- append(list(exptID = exptID,
                              nBallots = nBallots),
                         append(crRank,
                                crMargins))
@@ -622,6 +626,7 @@ testFraction <- function(votes = NULL,
     print(summary(result))
   }
   
+  stopifnot(data.table:::selfrefok(result)==1)
   return(invisible(result))
 }
 
@@ -711,8 +716,10 @@ new_SafeRankExpt <-
       ranks    = matrix(integer(0),   ncol = length(rankNames)),
       margins  = matrix(double(0),    ncol = length(marginNames))
     )
+    stopifnot(data.table:::selfrefok(dt)==1)
     setnames(dt, c("exptID", "nBallots", rankNames, marginNames))
-    
+    stopifnot(data.table:::selfrefok(dt)==1)
+
     setattr(dt, "countMethod",        countMethod)
     setattr(dt, "rankMethod",         rankMethod)
     setattr(dt, "datasetName",        datasetName)
@@ -723,17 +730,26 @@ new_SafeRankExpt <-
     setattr(dt, "otherFactors",       otherFactors)
     setattr(dt, "unitFactors",        unitFactors)
     
-    class(dt) <- append("SafeRankExpt", class(dt))
+    setattr(dt, "class", append("SafeRankExpt", class(dt)))
+    stopifnot(data.table:::selfrefok(dt)==1)
     return(dt)
   }
 
 #' is.SafeRankExpt()
 #'
+#' Throws an error if the `.internal.selfref` sentinel indicates that
+#' the underlying `data.table` has been corrupted by copying.
+#'
 #' @param x object of unknown class
 #' @return TRUE if x is a SafeRankExpt object
 #' @export
 is.SafeRankExpt <- function(x) {
-  return(inherits(x, "SafeRankExpt"))
+  if (inherits(x, "data.table")) {
+    stopifnot(data.table:::selfrefok(x)==1)
+    return(inherits(x, "SafeRankExpt")) 
+  } else {
+    return( FALSE )
+  }
 }
 
 #' add a row to a SafeRankExpt object
@@ -741,15 +757,15 @@ is.SafeRankExpt <- function(x) {
 #' @param object prior results of experimentation
 #' @param row    new observations
 #'
-#' @return updated SafeRankExpt object
+#' @return SafeRankExpt object with an additional row
 #' 
-#' @importFrom dplyr bind_rows
 rbind.SafeRankExpt <- function(object, row) {
   stopifnot(is.SafeRankExpt(object))
-  ##TODO: optimise this code, if level 2 of the R Inferno is ever painfully hot
-  object = dplyr::bind_rows(object, row)
-  stopifnot(is.SafeRankExpt(object))
-  return(object)
+  ##TODO: optimise, if level 2 of the R Inferno is ever painfully hot
+  result <- rbindlist(list(object, row))
+  setattr(result, "class", append("SafeRankExpt", class(result)))
+  stopifnot(is.SafeRankExpt(result))
+  return(result)
 }
 
 #' summary method for SafeRankExpt
@@ -761,7 +777,8 @@ rbind.SafeRankExpt <- function(object, row) {
 #' @export
 summary.SafeRankExpt <- function(object, ...) {
   stopifnot(is.SafeRankExpt(object))
-  class(object) <- append("summary.SafeRankExpt", class(object))
+  setattr(object, "class", append("summary.SafeRankExpt", class(object)))
+  stopifnot(data.table:::selfrefok(object)==1)
   return(object)
 }
 
@@ -774,6 +791,7 @@ summary.SafeRankExpt <- function(object, ...) {
 #' @importFrom knitr kable
 #' @export
 print.summary.SafeRankExpt <- function(x, ...) {
+  stopifnot(data.table:::selfrefok(x)==1)
   cat(
     paste0(
       "\nResults of ",
@@ -825,6 +843,7 @@ print.summary.SafeRankExpt <- function(x, ...) {
   } else {
     print(knitr::kable(x))
   }
+  stopifnot(data.table:::selfrefok(x)==1)
 }
 
 #' plot() method for the result of an experiment with varying numbers of ballots
@@ -900,6 +919,8 @@ plot.SafeRankExpt <-
            pointSize = 1,
            ...) {
     stopifnot(requireNamespace("stringr", quietly = TRUE))
+    
+    stopifnot(is.SafeRankExpt(x))
     
     ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
     integer_breaks <- function(n = 5, ...) {
@@ -1010,6 +1031,8 @@ plot.SafeRankExpt <-
     ## include descriptive cols in `scores`
     desc <- x[, .SD, .SDcols = c("exptID", "nBallots")]
     scores <- cbind(desc, scores)
+
+    stopifnot(data.table:::selfrefok(x)==1)
     
     mscores <-
       melt(

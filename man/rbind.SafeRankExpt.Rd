@@ -12,7 +12,7 @@
 \item{row}{new observations}
 }
 \value{
-updated SafeRankExpt object
+SafeRankExpt object with an additional row
 }
 \description{
 add a row to a SafeRankExpt object
