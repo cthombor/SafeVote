@@ -5,14 +5,14 @@
 \title{Constructor for the results of a SafeRank experiment}
 \usage{
 new_SafeRankExpt(
-  rankNames = NULL,
-  marginNames = NULL,
-  countMethod = NULL,
-  rankMethod = NULL,
-  datasetName = NULL,
-  experimentalMethod = NULL,
+  rankNames = list(),
+  marginNames = list(),
+  countMethod = character(0),
+  rankMethod = character(0),
+  datasetName = character(0),
+  experimentalMethod = character(0),
   countArgs = list(),
-  nseats = NULL,
+  nseats = integer(0),
   otherFactors = list(),
   unitFactors = list()
 )
@@ -45,5 +45,10 @@ harness, e.g describing the ballots randomly deleted during testDeletions}
 object of class SafeRankExpt
 }
 \description{
-Constructor for the results of a SafeRank experiment
+Warning: do not pass NULL for the value of an attribute, as this
+will prevent data.table::setattr() from creating this attribute.
+}
+\details{
+TODO Urgent. Use \code{data.frame}, rather than \code{data.table}, to collect
+experimental data.  \code{data.table} is suitable only for data analysis.
 }
