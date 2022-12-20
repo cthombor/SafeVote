@@ -56,7 +56,7 @@ example:
     data(dublin_west)
     plot(testFraction(dublin_west))
 
-![Sample run of testFraction().](man/figures/Rplot%20testFraction.png)
+![](man/figures/Rplot%20testFraction.png)
 
 ```
     data(food_election)
@@ -73,7 +73,7 @@ example:
     # are counted in a randomised order.
     xr <- testDeletions(dublin_west,dinc=25,dstart=29988,quiet=FALSE,
       countArgs=list(safety=0.0,complete.ranking=TRUE,nseats=3))
-    plot(xr)
+    save(xr,file="../s0di25ns3.rdata")
+    plot(xr,title="testDeletions", file="s0di25ns3")
 ```
-
-![Sample run of testDeletions().](man/figures/Rplot%20s0di25ns3.png)
+![](man/figures/Rplot%20s0di25ns3.png)
