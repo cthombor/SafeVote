@@ -74,9 +74,7 @@
 <p>A few safety-testing routines are supplied, to support experimental study of the statistical behaviour of ballot counting methods. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(dublin_west)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">testFraction</span>(dublin_west))</span></code></pre></div>
-<div class="figure">
-<img src="reference/figures/Rplot%20testFraction.png" alt=""><p class="caption">Sample run of testFraction().</p>
-</div>
+<p><img src="reference/figures/Rplot%20testFraction.png"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data</span>(food_election)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">testAdditions</span>(food_election)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#&gt; </span></span>
@@ -91,10 +89,9 @@
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># are counted in a randomised order.</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    xr <span class="ot">&lt;-</span> <span class="fu">testDeletions</span>(dublin_west,<span class="at">dinc=</span><span class="dv">25</span>,<span class="at">dstart=</span><span class="dv">29988</span>,<span class="at">quiet=</span><span class="cn">FALSE</span>,</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">countArgs=</span><span class="fu">list</span>(<span class="at">safety=</span><span class="fl">0.0</span>,<span class="at">complete.ranking=</span><span class="cn">TRUE</span>,<span class="at">nseats=</span><span class="dv">3</span>))</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(xr)</span></code></pre></div>
-<div class="figure">
-<img src="reference/figures/Rplot%20s0di25ns3.png" alt=""><p class="caption">Sample run of testDeletions().</p>
-</div>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">save</span>(xr,<span class="at">file=</span><span class="st">"../s0di25ns3.rdata"</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(xr,<span class="at">title=</span><span class="st">"testDeletions"</span>, <span class="at">file=</span><span class="st">"s0di25ns3"</span>)</span></code></pre></div>
+<p><img src="reference/figures/Rplot%20s0di25ns3.png"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
