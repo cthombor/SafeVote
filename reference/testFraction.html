@@ -135,25 +135,7 @@ results.</p>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"condorcet"</span>,</span></span>
 <span class="r-in"><span>             countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>safety<span class="op">=</span><span class="fl">0.5</span>,complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting condorcet ballots:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%,WIG2 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  30%,WIG3 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  40%,WIG4 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  50%,WIG5 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  60%,WIG6 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  70%,WIG7 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  80%,WIG8 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  90%,WIG9 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  100%WIG10 elected 1 candidates, but WIG0 elected 0 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -162,16 +144,16 @@ results.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG1   |        2|       1|     4|         1|            4|      1|         3|        |           1|               |        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG2   |        4|       4|     4|         1|            2|      3|          |        |           2|              7|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG3   |        6|       1|     3|         3|            2|      5|         8|       4|           4|              3|         |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG4   |        8|       3|     5|         1|            2|      3|         7|        |           8|              4|        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG5   |       10|       3|     5|         1|            2|      3|         7|        |           5|             11|        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG6   |       12|       3|     3|         1|            2|      3|         1|        |          18|              8|        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG7   |       14|       2|     5|         1|            2|      2|         5|        |          14|              2|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG8   |       16|       3|     5|         1|            2|      4|         5|        |          14|              4|        5|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG9   |       18|       2|     5|         1|            2|      4|         2|        |          20|              9|        5|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |WIG10  |       20|       3|     5|         1|            2|      4|         6|        |          20|              6|        8|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO1   |        2|       4|     4|         1|            2|      2|          |        |           5|              3|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO2   |        4|       3|     3|         1|            1|      3|          |       1|           3|              1|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO3   |        6|       2|     5|         1|            2|      4|         1|        |           7|              5|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO4   |        8|       3|     5|         1|            2|      3|         7|        |           3|              5|        1|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO5   |       10|       3|     5|         1|            2|      3|         7|        |          10|             10|        1|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO6   |       12|       3|     3|         1|            2|      3|          |       2|          10|             12|        2|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO7   |       14|       2|     4|         1|            2|      4|         1|       2|           9|              8|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO8   |       16|       2|     4|         1|            2|      4|        12|       1|          18|              1|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO9   |       18|       3|     5|         1|            2|      3|         8|        |          19|              7|        2|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NQO10  |       20|       3|     5|         1|            2|      4|         6|        |          20|              6|        8|</span>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">dublin_west</span>, astart<span class="op">=</span><span class="fl">20</span>, ainc<span class="op">=</span><span class="fl">10</span>, arep<span class="op">=</span><span class="fl">2</span>, trep<span class="op">=</span><span class="fl">3</span>, </span></span>
 <span class="r-in"><span>             countMethod<span class="op">=</span><span class="st">"stv"</span>, rankMethod<span class="op">=</span><span class="st">"elected"</span>, quiet<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting stv ballots:</span>
@@ -184,9 +166,9 @@ results.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry|  m.Bonnie|  m.Burton|    m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|   m.Terry|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|---------:|---------:|---------:|---------:|---------:|----------:|-----------:|-------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DSE1   |       20|      1|      1|    1|       1|       2|        2|         2|     1|     2|          | 0.3336667| 1.3331667|  0.000000|         2|  0.3336667|   0.6663333|       0| 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DSE2   |       30|      1|      2|    1|       2|       2|        1|         1|     1|     2| 0.4430666| 0.8129361| 0.7211851|  5.000000|         2|  1.9437013|   0.0131830|        | 2.1793036|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DSE3   |       20|      1|      2|    2|       1|       2|        2|         1|     1|     1| 0.5431245| 0.0663983| 1.2852857|  1.428429|         4|  0.4767262|   0.4568755|        | 0.0284469|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IDN1   |       20|      1|      2|    2|       2|       2|        1|         1|     1|     1| 0.1338167| 2.3336667| 0.2666333|  0.000000|         1|  0.8001500|   1.0660333|        | 0.3997000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IDN2   |       30|      1|      2|    2|       2|       2|        1|         1|     1|     1| 0.1478920| 0.9085398| 0.8181875|  1.727727|         5|  2.2285739|   0.9193182|        | 0.1586704|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IDN3   |       20|      1|      1|    1|       1|       2|        2|         2|     1|     2|          | 0.0000000| 0.2586964|  2.026589|         3|  0.4018393|   0.1697321|       0| 1.1431429|</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

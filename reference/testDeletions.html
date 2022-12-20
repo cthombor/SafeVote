@@ -146,24 +146,24 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|   8.0000000|               | 1.2225556|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX1   |       18|       2|     2|         1|            2|      2|          | 0.1811818|   7.0000000|      0.1821818| 2.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX2   |       16|       2|     2|         1|            2|      2| 0.0602424| 2.5451818|   9.0000000|      0.0000000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX3   |       14|       2|     2|         1|            2|      2|          | 1.4068519|   7.0000000|      0.0000000| 0.0745185|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX4   |       12|       2|     2|         1|            2|      2| 0.2217778| 1.5554444|   7.0000000|      2.0000000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX5   |       10|       2|     2|         1|            2|      2| 1.3328333| 1.0000000|   7.0000000|      1.0000000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX6   |        8|       2|     2|         1|            2|      2| 0.8567143| 0.6189048|   6.0000000|      1.0000000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX7   |        6|       2|     2|         1|            2|      2| 0.5998000| 1.3992000|   4.0000000|      0.4002000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX8   |        4|       2|     2|         1|            2|      2| 0.0000000| 0.6656667|   2.0000000|      1.0000000|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |MNX9   |        2|       1|     1|         1|            1|      1| 0.0000000|          |   0.6676667|      0.0000000| 0.3323333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE1   |       18|       2|     2|         1|            2|      2| 0.8178182| 1.1811818|           8|               | 0.1821818|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE2   |       16|       2|     2|         1|            2|      2| 0.0668667| 0.7994000|           7|               | 0.1337333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE3   |       14|       2|     2|         1|            2|      2| 0.1329333| 1.0664667|           8|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE4   |       12|       2|     2|         1|            2|      2| 1.3996000| 1.1998000|           9|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE5   |       10|       2|     2|         1|            2|      2| 1.3328333| 0.0000000|           7|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE6   |        8|       2|     2|         1|            2|      2| 0.0000000| 2.6661667|           8|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE7   |        6|       2|     2|         1|            2|      2| 0.0000000| 1.9995000|           6|              0|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE8   |        4|       2|     2|         1|            2|      2| 0.0000000| 1.3328333|           4|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XKE9   |        2|       2|     2|         1|            2|      2|          | 1.3323333|           2|              0| 0.0000000|</span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>  countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6BKR7 elected 3 candidates, but BKR1 elected 5 candidates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NA margin at rank 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NHL8 elected 4 candidates, but NHL1 elected 5 candidates</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , 4BKR8 elected 3 candidates, but BKR1 elected 5 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , 2BKR9 elected 2 candidates, but BKR1 elected 5 candidates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> , 2NHL9 elected 3 candidates, but NHL1 elected 5 candidates</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -176,16 +176,16 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR1   |       18|       2|     2|         1|            2|      2| 0.1815455| 3.6359091|           8|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR2   |       16|       2|     2|         1|            2|      2| 0.2724545| 2.7874242|           8|               | 2.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR3   |       14|       2|     2|         1|            2|      2| 1.2997000| 2.0662667|           8|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR4   |       12|       2|     2|         1|            2|      2| 2.3330000| 1.3330000|           8|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR5   |       10|       2|     2|         1|            2|      2| 1.5235238| 1.2852857|           6|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR6   |        8|       2|     2|         1|            2|      2| 1.5552222| 0.5552222|           5|              1|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR7   |        6|       2|     2|         1|            2|      2| 1.7998000| 1.3994000|           4|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR8   |        4|       2|     2|         1|            2|      2| 0.8330833| 1.6661667|           4|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BKR9   |        2|       2|     3|         1|            2|      3| 1.6656667| 0.0000000|           2|              0|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL1   |       18|       2|     2|         1|            2|      2| 1.7996000| 1.1994000|           6|               | 0.2004000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL2   |       16|       2|     2|         1|            2|      2| 0.8143704| 0.7035926|           6|               | 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL3   |       14|       2|     2|         1|            2|      2| 1.1246250| 1.4164167|           6|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL4   |       12|       2|     2|         1|            2|      2| 0.9995000| 0.0000000|           4|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL5   |       10|       2|     2|         1|            2|      2| 0.1661667| 1.0000000|           4|               | 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL6   |        8|       1|     1|         1|            1|      1| 0.3328333| 0.3328333|           2|               | 0.6671667|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL7   |        6|       1|     1|         1|            1|      1| 0.3326667| 0.3336667|           2|               | 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL8   |        4|       1|     1|         1|            1|      1| 0.6661667| 0.6661667|           1|               | 0.3338333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NHL9   |        2|       2|     2|         1|            2|      2| 0.8328333| 0.0000000|           2|              0|          |</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
