@@ -38,5 +38,24 @@ study of the statistical behaviour of ballot counting methods. For
 example:
 
     data(dublin_west)
-    testDeletions(dublin_west, countMethod="stv", rankMethod="elected",
-                  countArgs=list(nseats=3))
+    plot(testFraction(dublin_west))
+
+![Sample run of testFraction().](man/figures/Rplot%20testFraction.png)
+
+        data(food_election)
+        testAdditions(food_election)
+        #> 
+        #> Adding up to 1 stv ballots = ( 2 5 3 4 1 )
+        #> Testing progress:  1
+        #> Experimental results:
+        #>      nBallots Oranges Pears Chocolate Strawberries Sweets
+        #> [1,]       20       2     2         1            2      2
+        #> [2,]       21       2     2         1            2      2
+
+        # Display a possible evolution of the election results, when ballots
+        # are counted in a randomised order.
+        xr <- testDeletions(dublin_west,dinc=25,dstart=29988,quiet=FALSE,
+          countArgs=list(safety=0.0,complete.ranking=TRUE,nseats=3))
+        plot(xr)
+
+![Sample run of testDeletions().](man/figures/Rplot%20s0di25ns3.png)

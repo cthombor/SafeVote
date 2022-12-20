@@ -66,12 +66,12 @@ testDeletions <- function(votes,
   ballots <- votes[sv,]
   
   cr <- do.call(countMethod, append(cArgs, list(votes = ballots)))
-  nseats <- length(cr$elected)
-  
   if (!rankMethod %in% attributes(cr)$names) {
     stop(paste("countMethod", countMethod, "does not produce a",
                rankMethod))
   }
+  
+  nseats <- length(cr$elected)
   
   nib <- nrow(cr$data) - dstart
   if (nib > 0) {
@@ -317,7 +317,7 @@ testAdditions <- function(votes,
     datasetName = deparse1(substitute(votes)),
     experimentalMethod = "testAdditions",
     countArgs = countArgs,
-    nseats = NULL,
+    nseats = integer(0),
     ## the value of this factor has not yet been determined
     otherFactors = list(
       ainc = ainc,
@@ -559,8 +559,7 @@ testFraction <- function(votes = NULL,
     datasetName = deparse1(substitute(votes)),
     experimentalMethod = "testFraction",
     countArgs = countArgs,
-    nseats = NULL,
-    ## value is not yet known
+    nseats = integer(0),
     otherFactors = list(
       astart = astart,
       ainc = ainc,
@@ -681,6 +680,12 @@ extractMargins <- function(marginNames, rankMethod, cr) {
 }
 
 #' Constructor for the results of a SafeRank experiment
+#' 
+#' Warning: do not pass NULL for the value of an attribute, as this
+#' will prevent data.table::setattr() from creating this attribute.
+#' 
+#' TODO Urgent. Use `data.frame`, rather than `data.table`, to collect
+#' experimental data.  `data.table` is suitable only for data analysis.
 #'
 #' @param rankNames colnames for per-candidate ranks
 #' @param marginNames colnames for per-candidate margins
@@ -699,14 +704,14 @@ extractMargins <- function(marginNames, rankMethod, cr) {
 #' 
 #' @export
 new_SafeRankExpt <-
-  function(rankNames = NULL,
-           marginNames = NULL,
-           countMethod = NULL,
-           rankMethod = NULL,
-           datasetName = NULL,
-           experimentalMethod = NULL,
+  function(rankNames = list(),
+           marginNames = list(),
+           countMethod = character(0),
+           rankMethod = character(0),
+           datasetName = character(0),
+           experimentalMethod = character(0),
            countArgs = list(),
-           nseats = NULL,
+           nseats = integer(0),
            otherFactors = list(),
            unitFactors = list()) {
     
@@ -761,9 +766,20 @@ is.SafeRankExpt <- function(x) {
 #' 
 rbind.SafeRankExpt <- function(object, row) {
   stopifnot(is.SafeRankExpt(object))
+  stopifnot("nseats" %in% names(attributes(object)))
   ##TODO: optimise, if level 2 of the R Inferno is ever painfully hot
   result <- rbindlist(list(object, row))
   setattr(result, "class", append("SafeRankExpt", class(result)))
+
+  #TODO: Urgent.  Abandon `data.table`.  Use `data.frame`, so that
+  #  attributes are reliably stored in a `SafeRankExpt` object.
+  # https://github.com/Rdatatable/data.table/issues/5569, MRE derived
+  # from the failure of
+  #  stopifnot("nseats" %in% names(attributes(result)))
+  if (! "nseats" %in% names(attributes(result))) {
+    setattr(result,"nseats",attr(object,"nseats"))
+  }
+  
   stopifnot(is.SafeRankExpt(result))
   return(result)
 }
@@ -970,47 +986,6 @@ plot.SafeRankExpt <-
       set(scores, which(is.na(scores[[j]])), j, 0.0)
     }
     
-# The following warnings were received during my code development. I'm unable to
-# reproduce them reliably -- which suggests that the root cause is some subtle
-# corruption of the experimental record which (may) occur during its creation.
-# To reduce the scope of this incompletely-diagnosed hazard, I have resolved to
-# avoid making any changes to `x` in this `plot()` method.  After all, any
-# modification of `x` is hazardous to its integrity as an experimental record.
-# Ideally a SafeVoteExpt object would be locked against writing; but that's
-# inconceivable as long as `x` is-a highly fungible `data.table`.  
-
-# x[, scale := cscale / (1 + anBallots * sqrt(nBallots))]
-# Warning message: In `[.data.table`(x, , `:=`(scale, cscale/(1 + anBallots *
-# sqrt(nBallots)))) : Invalid .internal.selfref detected and fixed by taking a
-# (shallow) copy of the data.table so that := can add this new column by
-# reference. At an earlier point, this data.table has been copied by R (or was
-# created manually using structure() or similar). Avoid names<- and attr<- which
-# in R currently (and oddly) may copy the whole data.table. Use set* syntax
-# instead to avoid copying: ?set, ?setnames and ?setattr. If this message
-# doesn't help, please report your use case to the data.table issue tracker so
-# the root cause can be fixed or this message improved.
-
-# x[, scale := cscale / (1 + anBallots * sqrt(.SD)), .SDcols = "nBallots"]
-# Warning message: In `[.data.table`(x, , `:=`(scale, cscale/(1 + anBallots *
-# sqrt(.SD))),  : Invalid .internal.selfref detected and fixed by taking a
-# (shallow) copy of the data.table so that := can add this new column by
-# reference. At an earlier point, this data.table has been copied by R (or was
-# created manually using structure() or similar). Avoid names<- and attr<- which
-# in R currently (and oddly) may copy the whole data.table. Use set* syntax
-# instead to avoid copying: ?set, ?setnames and ?setattr. If this message
-# doesn't help, please report your use case to the data.table issue tracker so
-# the root cause can be fixed or this message improved.
-    
-# https://stackoverflow.com/questions/20687235/ explains this warning message.
-# I must be doing something to cause the experimental record to be copied before
-# it reaches `plot()`
-    
-    ## TODO: consider developing a simple and reproducible way to trigger the
-    ## "Invalid .internal.selfref" warning message.  This (probably rather
-    ## time-consuming) exercise should shed light on whether `SafeRankExpt`
-    ## objects created by the test routines of this package have a subtle
-    ## corruption which will impede data analysis.
-    
     ## TODO: consider amending the class of `SafeRankExpt` so that it does not
     ## expose any methods for modifying its contents, but there are intuitive
     ## and convenient ways to copy its contents into a `data.table`, e.g. by
@@ -1044,12 +1019,13 @@ plot.SafeRankExpt <-
       )
     mscores <-
       dplyr::mutate(
-        mscores,
+        as.data.table(mscores),
         Candidate = forcats::fct_reorder2(mscores$Candidate,
                                           mscores$nBallots,
                                           mscores$Score,
                                           .desc = FALSE)
       )
+
     g <-
       ggplot(mscores,
              aes(
