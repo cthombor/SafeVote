@@ -13,6 +13,5 @@ is.SafeRankExpt(x)
 TRUE if x is a SafeRankExpt object
 }
 \description{
-Throws an error if the \code{.internal.selfref} sentinel indicates that
-the underlying \code{data.table} has been corrupted by copying.
+is.SafeRankExpt()
 }

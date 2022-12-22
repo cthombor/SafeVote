@@ -40,7 +40,7 @@ example:
     data(dublin_west)
     plot(testFraction(dublin_west))
 
-![](man/figures/Rplot%20testFraction.png)
+![](man/figures/testFraction.png)
 
         data(food_election)
         testAdditions(food_election)
@@ -59,4 +59,4 @@ example:
         save(xr,file="../s0di25ns3.rdata")
         plot(xr,title="testDeletions", file="s0di25ns3")
 
-![](man/figures/Rplot%20s0di25ns3.png)
+![](man/figures/s0di25ns3.png)

@@ -153,11 +153,11 @@ testDeletions <- function(votes,
   
   nrep <- 0
   rBallots <- list()
-  for (nBallots in nbv) {
+  for (nb in nbv) {
     nrep <- nrep + 1
     exptID <- paste0(exptName, nrep)
     if (!quiet) {
-      cat(ifelse((nrep %% 10) == 0, ",\n", ","), nBallots)
+      cat(ifelse((nrep %% 10) == 0, ",\n", ","), nb)
     }
     
     rbn <- sample(nrow(ballots), dinc)
@@ -185,38 +185,22 @@ testDeletions <- function(votes,
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID,
-                             nBallots = nBallots),
+                             nBallots = nb),
                         append(crRank,
                                crMargins))
     result <- rbind.SafeRankExpt(result, newResult)
-    stopifnot(data.table:::selfrefok(result)==1)
-    
+    stopifnot(is.SafeRankExpt(result))
   }
   
   uF <- attr(result, "unitFactors")
   uF$removedBallots <- rBallots
-  setattr(result, "unitFactors", uF)
-  stopifnot(data.table:::selfrefok(result)==1)
-  
-  ## TODO: determine whether a deep-copy of `result` is necessary to assure
-  ## that all of its attributes are reliably serialisable with `save()`
-  ## result <- copy(result)
-  
-  ## TODO: consider using `data.frame` rather than `data.table` internally,
-  ## converting to a `data.table` only after all experimental data has been
-  ## collected.  Alternatively we might collect experimental results in
-  ## transposed form: with one column per experimental unit, transposing into
-  ## "tidy" form for analysis at the end of the experiment. The issue is that
-  ## R's "exact-sized" struct for storing a `vector`, and its column-major
-  ## storage for an `array`, causes its `append()` and `rbind()` to take
-  ## \eqn{O(n)} amortised time in a loop.  This is an increasingly-surprising
-  ## performance issue, given that \eqn{O(1)} amortised-time appends are the
-  ## default behaviour for vectors in more recently-designed languages.
-  
+  attr(result, "unitFactors") <- uF
+
   if (!quiet) {
     cat("\n")
     print(summary(result))
   }
+  stopifnot(is.SafeRankExpt(result))
   return(invisible(result))
 }
 
@@ -317,14 +301,13 @@ testAdditions <- function(votes,
     datasetName = deparse1(substitute(votes)),
     experimentalMethod = "testAdditions",
     countArgs = countArgs,
-    nseats = integer(0),
-    ## the value of this factor has not yet been determined
+    nseats = integer(0),  # not yet known. NULL is hazardous in a DF or DT
     otherFactors = list(
       ainc = ainc,
       arep = arep,
       tacticalBallot = tacticalBallot
     ),
-    unitFactors = NULL
+    unitFactors = list()
   )
   
   if (is.null(exptName)) {
@@ -353,9 +336,8 @@ testAdditions <- function(votes,
                              crMargins))
   result <- rbind.SafeRankExpt(result, newResult)
   nseats <- length(cr$elected) ## nseats value is inferred from election results
-  setattr(result, "nseats", nseats)
-  stopifnot(data.table:::selfrefok(result)==1)
-  
+  attr(result, "nseats") <- nseats
+
   if (!quiet && verbose) {
     cat("Initial ranking by", countMethod, ":\n")
     print(crRank)
@@ -559,17 +541,17 @@ testFraction <- function(votes = NULL,
     datasetName = deparse1(substitute(votes)),
     experimentalMethod = "testFraction",
     countArgs = countArgs,
-    nseats = integer(0),
+    nseats = integer(0),  # not yet known.  NULL is hazardous in a DF
     otherFactors = list(
       astart = astart,
       ainc = ainc,
       arep = arep
     ),
-    unitFactors = NULL
+    unitFactors = list()
   )
   
   for (i in (1:trep)) {
-    nBallots <- nbb[i]
+    nb <- nbb[i]
     if (!quiet) {
       cat(paste0(" ", format(round(i / trep * 100, 1), digits = 4), "%"))
       cat(ifelse(i < trep,
@@ -577,7 +559,7 @@ testFraction <- function(votes = NULL,
                  ""))
     }
     
-    selBallots <- sample(nv, nBallots)
+    selBallots <- sample(nv, nb)
     cr <- do.call(countMethod,
                   append(cArgs, list(votes = votes[selBallots,])))
     
@@ -592,8 +574,7 @@ testFraction <- function(votes = NULL,
     ##explicitly specified in `countArgs`).
     if (i == 1) {
       nseats <- length(cr$elected)
-      setattr(result, "nseats", nseats)
-      # attr(result,"nseats") <- nseats
+      attr(result, "nseats") <- nseats
     } else {
       if (length(cr$elected) != nseats) {
         warning(
@@ -614,7 +595,7 @@ testFraction <- function(votes = NULL,
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID,
-                             nBallots = nBallots),
+                             nBallots = nb),
                         append(crRank,
                                crMargins))
     result <- rbind.SafeRankExpt(result, newResult)
@@ -625,7 +606,6 @@ testFraction <- function(votes = NULL,
     print(summary(result))
   }
   
-  stopifnot(data.table:::selfrefok(result)==1)
   return(invisible(result))
 }
 
@@ -681,12 +661,6 @@ extractMargins <- function(marginNames, rankMethod, cr) {
 
 #' Constructor for the results of a SafeRank experiment
 #' 
-#' Warning: do not pass NULL for the value of an attribute, as this
-#' will prevent data.table::setattr() from creating this attribute.
-#' 
-#' TODO Urgent. Use `data.frame`, rather than `data.table`, to collect
-#' experimental data.  `data.table` is suitable only for data analysis.
-#'
 #' @param rankNames colnames for per-candidate ranks
 #' @param marginNames colnames for per-candidate margins
 #' @param countMethod secondary factor: counting method e.g. "stv"
@@ -703,58 +677,78 @@ extractMargins <- function(marginNames, rankMethod, cr) {
 #' @return object of class SafeRankExpt
 #' 
 #' @export
-new_SafeRankExpt <-
-  function(rankNames = list(),
-           marginNames = list(),
-           countMethod = character(0),
-           rankMethod = character(0),
-           datasetName = character(0),
-           experimentalMethod = character(0),
-           countArgs = list(),
-           nseats = integer(0),
-           otherFactors = list(),
-           unitFactors = list()) {
-    
-    dt <- data.table(
-      exptID   = matrix(character(0), ncol = 1),
-      nBallots = matrix(integer(0),   ncol = 1),
-      ranks    = matrix(integer(0),   ncol = length(rankNames)),
-      margins  = matrix(double(0),    ncol = length(marginNames))
-    )
-    stopifnot(data.table:::selfrefok(dt)==1)
-    setnames(dt, c("exptID", "nBallots", rankNames, marginNames))
-    stopifnot(data.table:::selfrefok(dt)==1)
+new_SafeRankExpt <- function(rankNames =          list(),
+                             marginNames =        list(),
+                             countMethod =        character(0),
+                             rankMethod =         character(0),
+                             datasetName =        character(0),
+                             experimentalMethod = character(0),
+                             countArgs =          list(),
+                             nseats =             integer(0),
+                             otherFactors =       list(),
+                             unitFactors =        list()) {
+  df <- data.frame(
+    exptID   = matrix(character(0), ncol = 1),
+    nBallots = matrix(integer(0),   ncol = 1),
+    ranks    = matrix(integer(0),   ncol = length(rankNames)),
+    margins  = matrix(double(0),    ncol = length(marginNames))
+  )
+  colnames(df) <- c("exptID", "nBallots", rankNames, marginNames)
+  
+  attr(df, "countMethod")        <- countMethod
+  attr(df, "rankMethod")         <- rankMethod
+  attr(df, "datasetName")        <- datasetName
+  attr(df, "experimentalMethod") <- experimentalMethod
+  attr(df, "countArgs")          <- countArgs
+  attr(df, "startTime")          <- format(as.POSIXlt(Sys.time()))
+  attr(df, "nseats")             <- nseats
+  attr(df, "otherFactors")       <- otherFactors
+  attr(df, "unitFactors")        <- unitFactors
+  
+  return(as.SafeRankExpt(df))
+}
 
-    setattr(dt, "countMethod",        countMethod)
-    setattr(dt, "rankMethod",         rankMethod)
-    setattr(dt, "datasetName",        datasetName)
-    setattr(dt, "experimentalMethod", experimentalMethod)
-    setattr(dt, "countArgs",          countArgs)
-    setattr(dt, "startTime",          format(as.POSIXlt(Sys.time())))
-    setattr(dt, "nseats",             nseats)
-    setattr(dt, "otherFactors",       otherFactors)
-    setattr(dt, "unitFactors",        unitFactors)
-    
-    setattr(dt, "class", append("SafeRankExpt", class(dt)))
-    stopifnot(data.table:::selfrefok(dt)==1)
-    return(dt)
-  }
+#' as.SafeRankExpt()
+#' 
+#' @param df data.frame object with all required attributes of a SafeRankExpt
+#' @return SafeRankExpt object
+as.SafeRankExpt <- function(df) {
+  stopifnot(inherits(df, "data.frame"))
+  attr(df, "class") <- c("SafeRankExpt", "data.frame")
+  stopifnot(is.SafeRankExpt(df))
+  return(df)
+}
 
 #' is.SafeRankExpt()
-#'
-#' Throws an error if the `.internal.selfref` sentinel indicates that
-#' the underlying `data.table` has been corrupted by copying.
 #'
 #' @param x object of unknown class
 #' @return TRUE if x is a SafeRankExpt object
 #' @export
 is.SafeRankExpt <- function(x) {
-  if (inherits(x, "data.table")) {
-    stopifnot(data.table:::selfrefok(x)==1)
-    return(inherits(x, "SafeRankExpt")) 
-  } else {
-    return( FALSE )
+  stopifnot(inherits(x, "data.frame"))
+  subclassAttrs <- c(
+    "countMethod",
+    "rankMethod",
+    "datasetName",
+    "experimentalMethod",
+    "countArgs",
+    "startTime",
+    "nseats",
+    "otherFactors",
+    "unitFactors"
+  )
+  expectedAttrs <- append( names(attributes(data.frame(0))), subclassAttrs)
+  missingAttrs <- setdiff(expectedAttrs, names(attributes(x)))
+  extraAttrs <- setdiff(names(attributes(x)), expectedAttrs)
+  if (length(missingAttrs) > 0) {
+    warning(cat("\nMissing attributes:", missingAttrs))
   }
+  if (length(extraAttrs) > 0) {
+    warning(cat("\nAdditional attributes:", extraAttrs))
+  }
+  return((length(missingAttrs) == 0) &&
+           inherits(x, "data.frame") &&
+           inherits(x, "SafeRankExpt"))
 }
 
 #' add a row to a SafeRankExpt object
@@ -766,21 +760,12 @@ is.SafeRankExpt <- function(x) {
 #' 
 rbind.SafeRankExpt <- function(object, row) {
   stopifnot(is.SafeRankExpt(object))
-  stopifnot("nseats" %in% names(attributes(object)))
   ##TODO: optimise, if level 2 of the R Inferno is ever painfully hot
-  result <- rbindlist(list(object, row))
-  setattr(result, "class", append("SafeRankExpt", class(result)))
-
-  #TODO: Urgent.  Abandon `data.table`.  Use `data.frame`, so that
-  #  attributes are reliably stored in a `SafeRankExpt` object.
-  # https://github.com/Rdatatable/data.table/issues/5569, MRE derived
-  # from the failure of
-  #  stopifnot("nseats" %in% names(attributes(result)))
-  if (! "nseats" %in% names(attributes(result))) {
-    setattr(result,"nseats",attr(object,"nseats"))
-  }
-  
-  stopifnot(is.SafeRankExpt(result))
+  result <- dplyr::bind_rows(object, row)
+  stopifnot(identical(colnames(object), colnames(result)))
+  ## rbind returns a base-class data.frame
+  ## attr(result, "class") <- c("SafeRankExpt", "data.frame")
+  stopifnot(is.SafeRankExpt(result)) 
   return(result)
 }
 
@@ -792,9 +777,12 @@ rbind.SafeRankExpt <- function(object, row) {
 #' @return summary.SafeRankExpt object
 #' @export
 summary.SafeRankExpt <- function(object, ...) {
+  if (inherits(object, "data.table")) {
+    x <- as.data.frame(object)
+    warning("Since v0.99, SafeRankExpt is a data.frame")
+  }
   stopifnot(is.SafeRankExpt(object))
-  setattr(object, "class", append("summary.SafeRankExpt", class(object)))
-  stopifnot(data.table:::selfrefok(object)==1)
+  attr(object, "class") <- c("summary.SafeRankExpt", "data.frame")
   return(object)
 }
 
@@ -807,7 +795,7 @@ summary.SafeRankExpt <- function(object, ...) {
 #' @importFrom knitr kable
 #' @export
 print.summary.SafeRankExpt <- function(x, ...) {
-  stopifnot(data.table:::selfrefok(x)==1)
+  stopifnot(inherits(x, "data.frame") && inherits(x, "summary.SafeRankExpt"))
   cat(
     paste0(
       "\nResults of ",
@@ -859,7 +847,6 @@ print.summary.SafeRankExpt <- function(x, ...) {
   } else {
     print(knitr::kable(x))
   }
-  stopifnot(data.table:::selfrefok(x)==1)
 }
 
 #' plot() method for the result of an experiment with varying numbers of ballots
@@ -936,6 +923,10 @@ plot.SafeRankExpt <-
            ...) {
     stopifnot(requireNamespace("stringr", quietly = TRUE))
     
+    if (inherits(x, "data.table")) {
+      x <- as.data.frame(x)
+      warning("Since v0.99, SafeRankExpt is a data.frame")
+    }
     stopifnot(is.SafeRankExpt(x))
     
     ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
@@ -968,70 +959,59 @@ plot.SafeRankExpt <-
     cnames <- unlist(lapply(lmnames, function(x)
       stringr::str_sub(x, 3, stringr::str_length(x))))
     mnames <- unlist(lmnames)
+    snames <- unlist(lapply(cnames, function(x) paste0("s.", x)))
     
-    ## scores <- margins from x (but with candidate names)
-    scores <- x[, .SD, .SDcols = mnames]
-    setnames(scores, cnames)
+    ## scores <- exp(-cMargin * margins / sqrt{nBallots}
+    ##
+    ## Note that a small winning margin adds almost a full point of rank when
+    ## `cMargin>0`, and any margin is a full point of rank when `cMargin==0`.
+    scores <- as.data.table(x)
+    scores[, (snames) := exp(-cMargin * .SD / sqrt(scores$nBallots)), 
+           .SDcols = mnames]
     
-    ## scale `margins` by \eqn{1/sqrt{n}}
-    scores <- scores / sqrt(x[, x$nBallots])
-    
-    ## transform scores, so that a small winning margin adds almost a full point
-    ## of rank when `cMargin>0`, and any margin is a full point of rank when
-    ## `c=0`.
-    scores <- exp(-cMargin * scores)
-
     ## transformed scores of NA are interpreted as a rank-adjustment of 0.0
-    for (j in cnames) {
-      set(scores, which(is.na(scores[[j]])), j, 0.0)
+    for (j in snames) {
+      data.table::set(scores, which(is.na(scores[[j]])), j, 0.0)
     }
-    
-    ## TODO: consider amending the class of `SafeRankExpt` so that it does not
-    ## expose any methods for modifying its contents, but there are intuitive
-    ## and convenient ways to copy its contents into a `data.table`, e.g. by
-    ## overloading `setDT()` and `data.table()`.
-    
-    ## scale margins by \eqn{as/n}    
-    margins <- x[, .SD, .SDcols = mnames]
-    setnames(margins, cnames)
+
     ## margins of NA are treated as 0.0 for linear scaling
-    for (j in cnames) {
-      set(margins, which(is.na(margins[[j]])), j, 0.0)
+    for (j in mnames) {
+      data.table::set(scores, which(is.na(scores[[j]])), j, 0.0)
     }
-    margins <- margins * (anBallots * nseats / x[["nBallots"]])
-
-    ## subtract linearly-scaled margins from scores, and add ranks
-    scores <- scores - margins + x[, .SD, .SDcols=cnames] 
-
-    ## include descriptive cols in `scores`
-    desc <- x[, .SD, .SDcols = c("exptID", "nBallots")]
-    scores <- cbind(desc, scores)
-
-    stopifnot(data.table:::selfrefok(x)==1)
+    scores[, (mnames) := .SD * (anBallots * nseats / scores$nBallots), 
+           .SDcols = mnames]
     
-    mscores <-
-      melt(
+    ## subtract linearly-scaled margins from scores, and add ranks
+    for (j in (1:length(snames))) {
+      scores[, (snames[j]) := .SD - scores[[mnames[j]]] + scores[[cnames[[j]]]],
+             .SDcols = snames[j]]
+    }
+
+    mscores <- 
+      data.table::melt(
         scores,
         id.vars = c("exptID", "nBallots"),
-        measure.vars = unlist(cnames),
+        measure.vars = unlist(snames),
         variable.name = "Candidate",
         value.name = "Score"
       )
-    mscores <-
-      dplyr::mutate(
-        as.data.table(mscores),
-        Candidate = forcats::fct_reorder2(mscores$Candidate,
-                                          mscores$nBallots,
-                                          mscores$Score,
-                                          .desc = FALSE)
-      )
-
+    
+# https://github.com/STAT545-UBC/Discussion/issues/451#issuecomment-385731301
+# https://stackoverflow.com/questions/9439256/
+    mscores <- dplyr::mutate(
+      mscores,
+      Candidate = forcats::fct_reorder2(.data$Candidate,
+                                        .data$nBallots,
+                                        .data$Score,
+                                        .desc = FALSE),
+    )
+    
     g <-
       ggplot(mscores,
              aes(
-               x = mscores$nBallots,
-               y = mscores$Score,
-               colour = mscores$Candidate
+               x = .data$nBallots,
+               y = .data$Score,
+               colour = .data$Candidate
              )) +
       geom_point(position = ifelse(line, "identity", "jitter"),
                  size = pointSize) +
@@ -1041,11 +1021,14 @@ plot.SafeRankExpt <-
            title = title,
            subtitle = subtitle) +
       scale_y_reverse(breaks = integer_breaks())
+    
     if (line) {
       g <- g + geom_line()
     }
+    
     if (facetWrap) {
-      g <- g + facet_wrap( ~ mscores$Candidate)
+      g <- g + facet_wrap( ~ .data$Candidate)
     }
+    
     return(g)
   }

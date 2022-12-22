@@ -20,7 +20,7 @@ favoured one."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
     
     <a class="navbar-brand me-2" href="../index.html">SafeVote</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.98</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,30 +146,45 @@ next-lower-ranked candidate.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Adding up to 1 stv ballots = ( 1 5 4 3 2 )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Testing progress:  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testAdditions at 2022-12-23 05:03:07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = , countMethod = , rankMethod = </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |          | complete.ranking|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|----------------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |             TRUE|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | ainc| arep|                                                         tacticalBallot|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|----:|----------------------------------------------------------------------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |    1|    1| c(Oranges = 1, Pears = 5, Chocolate = 4, Strawberries = 3, Sweets = 2)|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|  m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|--------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GPO0   |       20|       2|     2|         1|            2|      2|  1.888556| 2.777111|           8|               | 0.1114444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GPO1   |       21|       2|     2|         1|            2|      2|  2.291150| 1.666000|           7|               | 1.1670000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VVM0   |       20|       2|     2|         1|            2|      2|  1.888556| 2.777111|           8|               | 0.1114444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VVM1   |       21|       2|     2|         1|            2|      2|  2.291150| 1.666000|           7|               | 1.1670000|</span>
 <span class="r-in"><span><span class="fu">testAdditions</span><span class="op">(</span><span class="va">food_election</span>, tacticalBallot<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, arep<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Adding up to 2 stv ballots = ( 1 2 3 4 5 )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Testing progress:  1, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testAdditions at 2022-12-23 05:03:07</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = , countMethod = , rankMethod = </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | ainc| arep|                                                         tacticalBallot|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|----:|----------------------------------------------------------------------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |    1|    2| c(Oranges = 1, Pears = 2, Chocolate = 3, Strawberries = 4, Sweets = 5)|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BOO0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BOO1   |       21|       2|     2|         1|            2|      2| 0.6663333| 1.6663333|           7|               | 0.6673333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |BOO2   |       22|       2|     2|         1|            2|      2| 0.5552222| 1.5552222|           6|               | 1.8895556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |MCH0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |MCH1   |       21|       2|     2|         1|            2|      2| 0.6663333| 1.6663333|           7|               | 0.6673333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |MCH2   |       22|       2|     2|         1|            2|      2| 0.5552222| 1.5552222|           6|               | 1.8895556|</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

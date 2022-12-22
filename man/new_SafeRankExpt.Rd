@@ -45,10 +45,5 @@ harness, e.g describing the ballots randomly deleted during testDeletions}
 object of class SafeRankExpt
 }
 \description{
-Warning: do not pass NULL for the value of an attribute, as this
-will prevent data.table::setattr() from creating this attribute.
-}
-\details{
-TODO Urgent. Use \code{data.frame}, rather than \code{data.table}, to collect
-experimental data.  \code{data.table} is suitable only for data analysis.
+Constructor for the results of a SafeRank experiment
 }
