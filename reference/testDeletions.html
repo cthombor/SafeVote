@@ -20,7 +20,7 @@ ballot-box."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
     
     <a class="navbar-brand me-2" href="../index.html">SafeVote</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.98</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,51 +137,66 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-22 16:09:04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = , countMethod = , rankMethod = </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Unit factors: removedBallots</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | dstart| dinc| dlimit| drep|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|------:|----:|------:|----:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |     20|    2|      2|   10|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Unit factors: initSample, removedBallots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB1   |       18|       2|     2|         1|            2|      2| 1.3633636| 0.6356364|           7|               | 1.6366364|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB2   |       16|       2|     2|         1|            2|      2| 1.3997000| 1.2659667|           7|               | 0.6003000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB3   |       14|       2|     2|         1|            2|      2| 2.4441111| 0.8882222|           6|               | 0.5558889|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB4   |       12|       2|     2|         1|            2|      2| 1.8568571| 0.1421429|           4|               | 1.1431429|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB5   |       10|       2|     2|         1|            2|      2| 1.0473333| 1.6183333|           5|               | 0.9526667|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB6   |        8|       2|     2|         1|            2|      2| 1.1107778| 0.2215556|           4|               | 0.8892222|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB7   |        6|       1|     1|         1|            1|      1| 0.9995000| 0.0000000|           2|               | 1.0005000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB8   |        4|       2|     2|         1|            2|      2| 0.1104444| 0.5552222|           2|               | 0.4447778|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DUB9   |        2|       2|     2|         1|            2|      2| 1.3323333| 0.0000000|           2|              0|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO0   |       20|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           8|               | 1.2225556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO1   |       18|       2|     2|         1|            2|      2| 0.3633636| 1.2722727|           7|               | 0.3643636|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO2   |       16|       2|     2|         1|            2|      2| 0.3997000| 0.2659667|           7|               | 0.6003000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO3   |       14|       2|     2|         1|            2|      2|          | 0.8882222|           6|      0.5558889| 0.1117778|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO4   |       12|       2|     2|         1|            2|      2|          | 0.4284286|           4|      0.2862857| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO5   |       10|       2|     2|         1|            2|      2| 0.0000000|          |           4|      0.6671667| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO6   |        8|       2|     2|         1|            2|      2|          | 0.3994000|           3|      0.0670667| 0.6006000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO7   |        6|       2|     2|         1|            2|      2|          | 0.0000000|           3|      0.0005000| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO8   |        4|       1|     1|         1|            1|      1| 0.6656667|          |           1|      0.3343333| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |CPO9   |        2|       1|     1|         1|            1|      1| 0.0000000|          |           1|      0.0000000| 0.0000000|</span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>  countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2TAN9 elected 3 candidates, but TAN1 elected 5 candidates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2SFK9 elected 3 candidates, but SFK1 elected 5 candidates</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of  at </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-22 16:09:04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = , countMethod = , rankMethod = </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Unit factors: removedBallots</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |          | complete.ranking|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|----------------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |             TRUE|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             | dstart| dinc| dlimit| drep|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|------:|----:|------:|----:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |     20|    2|      2|   10|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Unit factors: initSample, removedBallots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN1   |       18|       2|     2|         1|            2|      2| 0.1815455| 2.8174545|           7|               | 1.8184545|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN2   |       16|       2|     2|         1|            2|      2| 0.1997000| 3.1326333|           7|               | 0.8003000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN3   |       14|       2|     2|         1|            2|      2| 1.2218889| 2.4437778|           6|               | 0.7781111|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN4   |       12|       2|     2|         1|            2|      2| 0.3330000| 2.3330000|           7|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN5   |       10|       2|     2|         1|            2|      2| 0.2852857| 0.7617619|           5|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN6   |        8|       2|     2|         1|            2|      2| 0.5552222| 1.5552222|           5|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN7   |        6|       2|     2|         1|            2|      2| 0.0000000| 0.4995000|           3|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN8   |        4|       1|     1|         1|            1|      1|          | 0.0000000|           1|      0.3338333| 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |TAN9   |        2|       1|     1|         1|            1|      1|          | 0.6656667|           0|      0.0000000| 0.3343333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK1   |       18|       2|     2|         1|            2|      2| 0.3998000| 2.5992000|           6|               | 1.6002000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK2   |       16|       2|     2|         1|            2|      2| 0.4071852| 2.9251481|           6|               | 0.5928148|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK3   |       14|       3|     3|         1|            2|      3|          | 0.5187407|           7|      4.1844074| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK4   |       12|       3|     3|         1|            2|      3|          | 0.2501250|           6|      4.2491250| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK5   |       10|       2|     2|         1|            2|      2|          | 2.5705714|           5|      0.2382381| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK6   |        8|       2|     2|         1|            2|      2|          | 0.9325333|           3|      0.2668667| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK7   |        6|       2|     2|         1|            2|      2|          | 1.2492500|           3|      0.2502500| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK8   |        4|       2|     2|         1|            2|      2| 0.2228056| 0.5548889|           2|      0.2225556|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |SFK9   |        2|       2|     2|         1|            2|      2| 0.0000000| 0.8328333|           2|               | 0.0000000|</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
