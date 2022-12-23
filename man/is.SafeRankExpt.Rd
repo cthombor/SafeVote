@@ -10,7 +10,7 @@ is.SafeRankExpt(x)
 \item{x}{object of unknown class}
 }
 \value{
-TRUE if x is a SafeRankExpt object
+TRUE if x is a valid SafeRankExpt object
 }
 \description{
 is.SafeRankExpt()

@@ -74,6 +74,6 @@ example:
     xr <- testDeletions(dublin_west,dinc=25,dstart=29988,quiet=FALSE,
       countArgs=list(safety=0.0,complete.ranking=TRUE,nseats=3))
     save(xr,file="../s0di25ns3.rdata")
-    plot(xr,title="testDeletions", file="s0di25ns3")
+    plot(xr,title="testDeletions, file = s0di25ns3")
 ```
 ![](man/figures/s0di25ns3.png)

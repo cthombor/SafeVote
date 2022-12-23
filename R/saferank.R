@@ -709,20 +709,33 @@ new_SafeRankExpt <- function(rankNames =          list(),
 }
 
 #' as.SafeRankExpt()
-#' 
-#' @param df data.frame object with all required attributes of a SafeRankExpt
-#' @return SafeRankExpt object
+#'
+#' @param df data.frame object 
+#' @return a SafeRankExpt object, or stop() if df fails some sanity checks
 as.SafeRankExpt <- function(df) {
   stopifnot(inherits(df, "data.frame"))
-  attr(df, "class") <- c("SafeRankExpt", "data.frame")
-  stopifnot(is.SafeRankExpt(df))
+  if (inherits(df, "data.table")) {
+    warning("Since v0.99, SafeRankExpt is not a data.table")
+    df <- as.data.frame(df)
+    if (is.null(attr(df, "nseats"))) {
+      ns <- attr(df,"countArgs")$nseats
+      if (is.null(ns)) {
+        stop(paste("No automagic translation to a SafeRankExpt object is",
+                   "possible, because the value of nseats is unknown"))
+      } else {
+        attr(df, "nseats") <- ns
+      }
+    }
+  }
+  attr(df, "class") <- append("SafeRankExpt", class(df))
+  stopifnot(is.SafeRankExpt(df))  # confirm presence of other attributes
   return(df)
 }
 
 #' is.SafeRankExpt()
 #'
 #' @param x object of unknown class
-#' @return TRUE if x is a SafeRankExpt object
+#' @return TRUE if x is a valid SafeRankExpt object
 #' @export
 is.SafeRankExpt <- function(x) {
   stopifnot(inherits(x, "data.frame"))
@@ -737,18 +750,27 @@ is.SafeRankExpt <- function(x) {
     "otherFactors",
     "unitFactors"
   )
-  expectedAttrs <- append( names(attributes(data.frame(0))), subclassAttrs)
-  missingAttrs <- setdiff(expectedAttrs, names(attributes(x)))
-  extraAttrs <- setdiff(names(attributes(x)), expectedAttrs)
+  expectedAttrs <-
+    append(names(attributes(data.frame(0))), subclassAttrs)
+  missingAttrs <-
+    setdiff(expectedAttrs,        names(attributes(x)))
+  extraAttrs   <- setdiff(names(attributes(x)), expectedAttrs)
   if (length(missingAttrs) > 0) {
-    warning(cat("\nMissing attributes:", missingAttrs))
+    warning(paste("\nMissing attributes:", missingAttrs))
   }
   if (length(extraAttrs) > 0) {
-    warning(cat("\nAdditional attributes:", extraAttrs))
+    warning(paste("\nAdditional attributes:", extraAttrs))
   }
-  return((length(missingAttrs) == 0) &&
+  expectedNames <- c("exptID", "nBallots")
+  missingNames <- setdiff(expectedNames, names(x))
+  if (length(missingNames) > 0) {
+    warning(paste("\nMissing names:", missingNames))
+  }
+  return((length(missingNames) == 0) &&
+           (length(missingAttrs) == 0) &&
            inherits(x, "data.frame") &&
-           inherits(x, "SafeRankExpt"))
+           inherits(x, "SafeRankExpt")
+  )
 }
 
 #' add a row to a SafeRankExpt object
@@ -777,13 +799,10 @@ rbind.SafeRankExpt <- function(object, row) {
 #' @return summary.SafeRankExpt object
 #' @export
 summary.SafeRankExpt <- function(object, ...) {
-  if (inherits(object, "data.table")) {
-    x <- as.data.frame(object)
-    warning("Since v0.99, SafeRankExpt is a data.frame")
-  }
-  stopifnot(is.SafeRankExpt(object))
-  attr(object, "class") <- c("summary.SafeRankExpt", "data.frame")
-  return(object)
+  result <- as.SafeRankExpt(object)
+  # Note that the summary is not a valid SafeRankExpt object
+  attr(result, "class") <- c("summary.SafeRankExpt", "data.frame")
+  return(result)
 }
 
 #' Print method for summary.SafeRankExpt
@@ -795,7 +814,8 @@ summary.SafeRankExpt <- function(object, ...) {
 #' @importFrom knitr kable
 #' @export
 print.summary.SafeRankExpt <- function(x, ...) {
-  stopifnot(inherits(x, "data.frame") && inherits(x, "summary.SafeRankExpt"))
+  stopifnot(inherits(x, "data.frame") &&
+              inherits(x, "summary.SafeRankExpt"))
   cat(
     paste0(
       "\nResults of ",
@@ -812,38 +832,42 @@ print.summary.SafeRankExpt <- function(x, ...) {
   )
   cA <- attr(x, "countArgs")
   if (length(cA) > 0) {
-    print(knitr::kable(matrix(
-      cA,
-      ncol = length(cA),
-      byrow = TRUE,
-      dimnames = list(c("countArgs"), names(cA))
-    ),
-    align = "r"))
+    print(knitr::kable(
+      matrix(
+        cA,
+        ncol = length(cA),
+        byrow = TRUE,
+        dimnames = list(c("countArgs"), names(cA))
+      ),
+      align = "r"
+    ))
   }
   oF <- attr(x, "otherFactors")
   if (length(oF) > 0) {
-    print(knitr::kable(matrix(
-      oF,
-      ncol = length(oF),
-      byrow = TRUE,
-      dimnames = list(c("otherFactors"), names(oF))
-    ),
-    align = "r"))
+    print(knitr::kable(
+      matrix(
+        oF,
+        ncol = length(oF),
+        byrow = TRUE,
+        dimnames = list(c("otherFactors"), names(oF))
+      ),
+      align = "r"
+    ))
   }
   uF <- attr(x, "unitFactors")
   if (length(uF) > 0) {
     cat("\nUnit factors: ")
-    cat(names(uF), sep=", ")
+    cat(names(uF), sep = ", ")
     cat("\n")
   }
   cat("\nExperiment ID, number of ballots in simulated election,",
       "ranks, winning margins:")
   options(knitr.kable.NA = '')
   if (nrow(x) > 20) {
-    print(knitr::kable(x[1:10,]))
+    print(knitr::kable(x[1:10, ]))
     cat("...\n")
     nr <- nrow(x)
-    print(knitr::kable(x[(nrow(x)-9):nrow(x),]))
+    print(knitr::kable(x[(nrow(x) - 9):nrow(x), ]))
   } else {
     print(knitr::kable(x))
   }
@@ -909,126 +933,126 @@ print.summary.SafeRankExpt <- function(x, ...) {
 #' @importFrom dplyr mutate
 #' @import ggplot2
 #'   
-plot.SafeRankExpt <-
-  function(x,
-           facetWrap = FALSE,
-           anBallots = 0.0,
-           cMargin = 1.0,
-           xlab = "Ballots",
-           ylab = "Adjusted Rank",
-           title = NULL,
-           subtitle = "(default)",
-           line = TRUE,
-           pointSize = 1,
-           ...) {
-    stopifnot(requireNamespace("stringr", quietly = TRUE))
-    
-    if (inherits(x, "data.table")) {
-      x <- as.data.frame(x)
-      warning("Since v0.99, SafeRankExpt is a data.frame")
+plot.SafeRankExpt <- function(x,
+                              facetWrap = FALSE,
+                              anBallots = 0.0,
+                              cMargin = 1.0,
+                              xlab = "Ballots",
+                              ylab = "Adjusted Rank",
+                              title = NULL,
+                              subtitle = "(default)",
+                              line = TRUE,
+                              pointSize = 1,
+                              ...) {
+  stopifnot(requireNamespace("stringr", quietly = TRUE))
+  
+  x <- as.SafeRankExpt(x)
+  
+  ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
+  integer_breaks <- function(n = 5, ...) {
+    fxn <- function(x) {
+      ## amended 10 Dec 2022 to use round() rather than floor()
+      breaks <- round(pretty(x, n, ...))
+      names(breaks) <- attr(breaks, "labels")
+      breaks
     }
-    stopifnot(is.SafeRankExpt(x))
-    
-    ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
-    integer_breaks <- function(n = 5, ...) {
-      fxn <- function(x) {
-        ## amended 10 Dec 2022 to use round() rather than floor()
-        breaks <- round(pretty(x, n, ...))
-        names(breaks) <- attr(breaks, "labels")
-        breaks
-      }
-      return(fxn)
-    }
-    
-    nseats <- attr(x,"nseats")
-    stopifnot( !is.null(nseats) && (nseats > 0))
-    
-    if (subtitle == "(default)") {
-      subtitle <- ""
-      if (anBallots != 0) {
-        subtitle <- paste(subtitle, "anBallots =", anBallots)
-      }
-      if (cMargin != 0) {
-        subtitle <- paste(subtitle, "cMargin =", cMargin)
-      }
-      subtitle <- paste(subtitle, "nSeats =", nseats)
-    }
-    
-    ## colnames of margins, ranks, and scores
-    lmnames <- colnames(x)[stringr::str_detect(colnames(x), "^m.")]
-    cnames <- unlist(lapply(lmnames, function(x)
-      stringr::str_sub(x, 3, stringr::str_length(x))))
-    mnames <- unlist(lmnames)
-    snames <- unlist(lapply(cnames, function(x) paste0("s.", x)))
-    
-    ## scores <- exp(-cMargin * margins / sqrt{nBallots}
-    ##
-    ## Note that a small winning margin adds almost a full point of rank when
-    ## `cMargin>0`, and any margin is a full point of rank when `cMargin==0`.
-    scores <- as.data.table(x)
-    scores[, (snames) := exp(-cMargin * .SD / sqrt(scores$nBallots)), 
-           .SDcols = mnames]
-    
-    ## transformed scores of NA are interpreted as a rank-adjustment of 0.0
-    for (j in snames) {
-      data.table::set(scores, which(is.na(scores[[j]])), j, 0.0)
-    }
-
-    ## margins of NA are treated as 0.0 for linear scaling
-    for (j in mnames) {
-      data.table::set(scores, which(is.na(scores[[j]])), j, 0.0)
-    }
-    scores[, (mnames) := .SD * (anBallots * nseats / scores$nBallots), 
-           .SDcols = mnames]
-    
-    ## subtract linearly-scaled margins from scores, and add ranks
-    for (j in (1:length(snames))) {
-      scores[, (snames[j]) := .SD - scores[[mnames[j]]] + scores[[cnames[[j]]]],
-             .SDcols = snames[j]]
-    }
-
-    mscores <- 
-      data.table::melt(
-        scores,
-        id.vars = c("exptID", "nBallots"),
-        measure.vars = unlist(snames),
-        variable.name = "Candidate",
-        value.name = "Score"
-      )
-    
-# https://github.com/STAT545-UBC/Discussion/issues/451#issuecomment-385731301
-# https://stackoverflow.com/questions/9439256/
-    mscores <- dplyr::mutate(
-      mscores,
-      Candidate = forcats::fct_reorder2(.data$Candidate,
-                                        .data$nBallots,
-                                        .data$Score,
-                                        .desc = FALSE),
-    )
-    
-    g <-
-      ggplot(mscores,
-             aes(
-               x = .data$nBallots,
-               y = .data$Score,
-               colour = .data$Candidate
-             )) +
-      geom_point(position = ifelse(line, "identity", "jitter"),
-                 size = pointSize) +
-      labs(x = xlab,
-           y = ylab,
-           colour = "Candidate",
-           title = title,
-           subtitle = subtitle) +
-      scale_y_reverse(breaks = integer_breaks())
-    
-    if (line) {
-      g <- g + geom_line()
-    }
-    
-    if (facetWrap) {
-      g <- g + facet_wrap( ~ .data$Candidate)
-    }
-    
-    return(g)
+    return(fxn)
   }
+  
+  nseats <- attr(x, "nseats")
+  stopifnot(!is.null(nseats) && (nseats > 0))
+  
+  if (subtitle == "(default)") {
+    subtitle <- ""
+    if (anBallots != 0) {
+      subtitle <- paste0(subtitle, 
+                        "Linear scaling (anBallots = ", anBallots, "); ")
+    }
+    if (cMargin != 0) {
+      subtitle <- paste0(subtitle, 
+                        "Exponential scaling (cMargin = ", cMargin, "); ")
+    }
+    subtitle <- paste0(subtitle, "nseats = ", nseats)
+  }
+  
+  ## colnames of margins, ranks, and scores
+  lmnames <- colnames(x)[stringr::str_detect(colnames(x), "^m.")]
+  cnames <- unlist(lapply(lmnames, function(x)
+    stringr::str_sub(x, 3, stringr::str_length(x))))
+  mnames <- unlist(lmnames)
+  snames <- unlist(lapply(cnames, function(x)
+    paste0("s.", x)))
+  
+  ## \eqn{s <- \exp(-cm / \sqrt{n}}
+  ##
+  ## Note that a small winning margin adds almost a full point of rank when
+  ## `cMargin>0`, and any margin is a full point of rank when `cMargin==0`.
+  scores <- as.data.table(x)
+  scores[, (snames) := exp(-cMargin * .SD / sqrt(scores$nBallots)),
+         .SDcols = mnames]
+  
+  ## transformed scores of NA are interpreted as a rank-adjustment of 0.0
+  for (j in snames) {
+    data.table::set(scores, which(is.na(scores[[j]])), j, 0.0)
+  }
+  
+  ## margins of NA are treated as 0.0 for linear scaling
+  for (j in mnames) {
+    data.table::set(scores, which(is.na(scores[[j]])), j, 0.0)
+  }
+  scores[, (mnames) := .SD * (anBallots * nseats / scores$nBallots),
+         .SDcols = mnames]
+  
+  ## adjust ranks
+  for (j in (1:length(cnames))) {
+    scores[, (cnames[j]) := .SD - scores[[mnames[j]]] + scores[[snames[j]]],
+           .SDcols = cnames[j]]
+  }
+  
+  mscores <-
+    data.table::melt(
+      scores,
+      id.vars = c("exptID", "nBallots"),
+      measure.vars = unlist(cnames),
+      variable.name = "Candidate",
+      value.name = "Score"
+    )
+  
+  # https://github.com/STAT545-UBC/Discussion/issues/451#issuecomment-385731301
+  # https://stackoverflow.com/questions/9439256/
+  mscores <- dplyr::mutate(
+    mscores,
+    Candidate = forcats::fct_reorder2(.data$Candidate,
+                                      .data$nBallots,
+                                      .data$Score,
+                                      .desc = FALSE),
+  )
+  
+  g <-
+    ggplot(mscores,
+           aes(
+             x = .data$nBallots,
+             y = .data$Score,
+             colour = .data$Candidate
+           )) +
+    geom_point(position = ifelse(line, "identity", "jitter"),
+               size = pointSize) +
+    labs(
+      x = xlab,
+      y = ylab,
+      colour = "Candidate",
+      title = title,
+      subtitle = subtitle
+    ) +
+    scale_y_reverse(breaks = integer_breaks())
+  
+  if (line) {
+    g <- g + geom_line()
+  }
+  
+  if (facetWrap) {
+    g <- g + facet_wrap( ~ .data$Candidate)
+  }
+  
+  return(g)
+}

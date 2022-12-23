@@ -7,10 +7,10 @@
 as.SafeRankExpt(df)
 }
 \arguments{
-\item{df}{data.frame object with all required attributes of a SafeRankExpt}
+\item{df}{data.frame object}
 }
 \value{
-SafeRankExpt object
+a SafeRankExpt object, or stop() if df fails some sanity checks
 }
 \description{
 as.SafeRankExpt()
