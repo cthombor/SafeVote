@@ -74,6 +74,7 @@ and the ballots</p>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  backwards.compatible <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  safety <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -161,6 +162,11 @@ stochastic experiment.</p></dd>
 <dd><p>number of significant digits in the output table</p></dd>
 
 
+<dt>backwards.compatible</dt>
+<dd><p><code>TRUE</code> to regress against vote2_3.2 by
+disabling $margins, $fuzz, $rankingTable, $safeRank</p></dd>
+
+
 <dt>safety</dt>
 <dd><p>number of standard deviations on vote-counts, when producing a
 safeRank by clustering near-ties in a complete ranking</p></dd>
@@ -197,26 +203,26 @@ partial) safeRank.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |             | Rank|SafeRank |  Margin   |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|:--------|:---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    3|3        | 1.2225556 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    5|5        |    NA     |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    2|2        | 1.4451111 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    4|4        |    NA     |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    1|1        | 8.0000000 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    2|2        | 0.5548889 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    4|4        | 0.7774444 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    3|3        | 1.7774444 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    3|3        | 0.7774444 |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Vote transfers:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             |         1| 2-trans|            2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|---------:|-------:|------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |     4.000|   0.000|        4.000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |     2.000|   0.000|        2.000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    12.000|  -5.332|             |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |     1.000|   3.555|        4.555|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |     1.000|   1.777|        2.777|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Tie-breaks   |          |        |             |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Elected      | Chocolate|        | Strawberries|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Eliminated   |          |        |             |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             |         1| 2-trans|     2| 3-trans|      3| 4-trans|       4|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|---------:|-------:|-----:|-------:|------:|-------:|-------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |     4.000|   0.000| 4.000|       2|  6.000|   0.000|   6.000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |     2.000|   0.000| 2.000|      -2|       |        |        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    12.000|  -5.332|      |        |       |        |        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |     1.000|   3.555| 4.555|       0|  4.555|   0.000|   4.555|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |     1.000|   1.777| 2.777|       0|  2.777|  -2.777|        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Tie-breaks   |          |        |      |        |       |        |        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Elected      | Chocolate|        |      |        |       |        | Oranges|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Eliminated   |          |        | Pears|        | Sweets|        |        |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elected: Chocolate, Strawberries </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Elected: Chocolate, Oranges </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">stv</span><span class="op">(</span><span class="va">food_election</span>, nseats <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -232,26 +238,26 @@ partial) safeRank.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |             | Rank|SafeRank |  Margin   |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|:--------|:---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    3|2        | 1.2225556 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    5|2        |    NA     |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    2|2        | 1.4451111 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    4|2        |    NA     |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    1|1        | 8.0000000 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    2|2        | 0.5548889 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    4|2        | 0.7774444 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    3|2        | 1.7774444 |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    3|2        | 0.7774444 |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Vote transfers:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             |         1| 2-trans|            2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|---------:|-------:|------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |     4.000|   0.000|        4.000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |     2.000|   0.000|        2.000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    12.000|  -5.332|             |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |     1.000|   3.555|        4.555|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |     1.000|   1.777|        2.777|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Tie-breaks   |          |        |             |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Elected      | Chocolate|        | Strawberries|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Eliminated   |          |        |             |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |             |         1| 2-trans|     2| 3-trans|      3| 4-trans|       4|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|---------:|-------:|-----:|-------:|------:|-------:|-------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |     4.000|   0.000| 4.000|       2|  6.000|   0.000|   6.000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |     2.000|   0.000| 2.000|      -2|       |        |        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    12.000|  -5.332|      |        |       |        |        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |     1.000|   3.555| 4.555|       0|  4.555|   0.000|   4.555|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |     1.000|   1.777| 2.777|       0|  2.777|  -2.777|        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Tie-breaks   |          |        |      |        |       |        |        |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Elected      | Chocolate|        |      |        |       |        | Oranges|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |Eliminated   |          |        | Pears|        | Sweets|        |        |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elected: Chocolate, Strawberries </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Elected: Chocolate, Oranges </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
