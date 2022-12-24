@@ -40,6 +40,8 @@
 #'   stochastic experiment.
 #' @param quiet `TRUE` to suppress console output
 #' @param digits number of significant digits in the output table
+#' @param backwards.compatible `TRUE` to regress against vote2_3.2 by
+#'   disabling $margins, $fuzz, $rankingTable, $safeRank
 #' @param safety number of standard deviations on vote-counts, when producing a
 #'   safeRank by clustering near-ties in a complete ranking
 #' @param ... undocumented intent (preserved from legacy code)
@@ -71,6 +73,7 @@ stv <-
            seed = NULL,
            quiet = FALSE,
            digits = 3,
+           backwards.compatible = FALSE,
            safety = 1.0,
            ...) {
     if (verbose && !quiet) {
@@ -94,7 +97,8 @@ stv <-
     nseats <- check.nseats(
       nseats,
       ncandidates = nc,
-      default = ifelse(complete.ranking, nc, floor(nc / 2)),
+      default = ifelse(complete.ranking && !backwards.compatible,
+                       nc, floor(nc / 2)),
       complete.ranking = complete.ranking
     )
     
@@ -230,8 +234,10 @@ stv <-
       c()
     result.ranks <- rep(NA, nc)
     names(result.ranks) <- cnames
-    result.margins <- rep(NA, nc)
-    names(result.margins) <- cnames
+    if (!backwards.compatible) {
+      result.margins <- rep(NA, nc)
+      names(result.margins) <- cnames
+    }
     orig.x <- x
     
     ##
@@ -305,8 +311,19 @@ stv <-
       ## recoded Nov 2022 to avoid throwing an error when group.members is NULL
       ## and ic is not a singleton.
       ##
-      ## TODO: review for correctness against a specification of how the corner
+      ## The clause "((vmax > 0) && ((nc - length(elected) - length(eliminated))
+      ## <= nseats))" was added to ensure that all seats are filled even if the
+      ## quota isn't met for the last-elected candidates, so long as there are
+      ## at least as many candidates as seats.  This is a corner case which will
+      ## rarely (if ever) arise in practice, but which arises occasionally when
+      ## there are very few ballots.
+      ## 
+      ## TODO: review for correctness, against a specification of how the corner
       ## cases should be handled.
+      ##
+      ## TODO: regress against the results of actual elections, in cases where
+      ## stv() is capable of implementing the method actually used to count the
+      ## ballots.
       
       if ((vmax >= quota &&
            !(!any(ic %in% group.members) && (nseats == group.nseats))) ||
@@ -316,7 +333,7 @@ stv <-
            any(ic %in% group.members) &&
            (sum(Dm) <= group.nseats || sum(D) - sum(Dm) == 0)) ||
           ((vmax > 0) &&
-           ((nc - length(elected) - length(eliminated)) >= nseats)) 
+           ((nc - length(elected) - length(eliminated)) <= nseats)) 
           ) {
         
         if (use.marking && length(ic) > 1 && sum(Dm) <= group.nseats) {
@@ -355,17 +372,19 @@ stv <-
         result.elect[count, ic] <- 1
         
         result.ranks[ic] <- length(elected)
-        wm <- winnerMargin(vcast[inPlay])
-        stopifnot(## regression test on tie-breaking method: ic
-          ## must have maximal votes
-          vcast[ic] == vcast[names(wm[1])])
-        result.margins[ic] <- wm[2] ## note: margin may be NA
+        if (!backwards.compatible) {
+          wm <- winnerMargin(vcast[inPlay])
+          stopifnot(## regression test on tie-breaking method: ic
+            ## must have maximal votes
+            vcast[ic] == vcast[names(wm[1])])
+          result.margins[ic] <- wm[2] ## note: margin may be NA
+        }
         inPlay[ic] <- FALSE
         if (verbose && !quiet) {
-          cat("Candidate",
-              cnames[ic],
-              "elected with margin",
-              result.margins[ic])
+          cat("Candidate", cnames[ic], "elected")
+          if (!backwards.compatible) {
+            cat(" with margin", result.margins[ic])
+          }
           if (tie > 0) {
             cat(" using", tie.method.name[tie.method])
             if (tie == 2)
@@ -408,14 +427,18 @@ stv <-
         lm <- loserMargin(vcast[inPlay])
         ## regression test on tie-breaking method: ic must have minimal votes
         stopifnot(vcast[ic] == vcast[names(lm[1])])
-        result.margins[ic] <- lm[2] ## note: margin may be NA
+        if (!backwards.compatible) {
+          result.margins[ic] <- lm[2] ## note: margin may be NA
+        }
         inPlay[ic] <- FALSE
         
         if (verbose && !quiet) {
           cat("Candidate",
               cnames[ic],
-              "eliminated with margin",
-              result.margins[ic])
+              "eliminated")
+          if (!backwards.compatible) {
+            cat(" with margin", result.margins[ic])
+          }
           if (tie > 0) {
             cat("using", tie.method.name[tie.method])
             if (tie == 2)
@@ -448,10 +471,6 @@ stv <-
         preferences = result.pref,
         quotas = result.quota,
         elect.elim = result.elect,
-        ranking = result.ranks,
-        margins = result.margins,
-        fuzz = safety * sqrt(nrow(orig.x)),
-        ## for safeRank
         equal.pref.allowed = equal.ranking,
         ties = translate.ties(result.ties, tie.method),
         data = orig.x,
@@ -468,18 +487,26 @@ stv <-
           NULL
       )
     )
-    
-    crt <- completeRankingTable(partialResult, quiet=quiet, verbose=verbose)
-    partialResult$ranking <- crt$ranking
-    partialResult$margins <- crt$Margin
-    sr <- crt$SafeRank
-    names(sr) <- row.names(sr)
-    result <- structure(append(partialResult,
-                               list(
-                                 rankingTable = crt, safeRank = sr
-                               )),
-                        class = "SafeVote.stv")
-    ##TODO: define and use an explicit constructor for SafeVote objects
+    if (!backwards.compatible) {
+      partialResult$ranking = result.ranks
+      partialResult$margins = result.margins
+      partialResult$fuzz = safety * sqrt(nrow(orig.x))
+      crt <- completeRankingTable(partialResult,
+                                  quiet = quiet,
+                                  verbose = verbose)
+      result <- partialResult
+      result$ranking <- crt$ranking
+      result$margins <- crt$Margin
+      result$rankingTable = crt
+      sr <-
+        crt$SafeRank  ## extracted from rankingTable for convenience
+      names(sr) <- row.names(sr)
+      result$safeRank = sr
+      attr(result, "class") <- append("SafeVote.stv", class(result))
+    } else {
+      result <- partialResult
+      attr(result, "class") <- "vote.stv"
+    }
     
     if (!quiet) {
       print(summary(result, digits = digits))
@@ -850,6 +877,19 @@ print.summary.SafeVote.stv <- function(x, ...) {
   cat("\nElected:",
       paste(x['Elected', x['Elected', ] != ""], collapse = ", "),
       "\n\n")
+}
+
+#' summary() method for a backwards-compatible result
+#'
+#' @param object undocumented
+#' @param ... undocumented
+#' @param digits undocumented
+#'
+#' @export
+#'
+summary.vote.stv <- function(object, ..., digits = 3) {
+  attr(object, "class") <- append("SafeVote.stv", "list")  ## hack
+  summary(object)
 }
 
 #' generic view() for classes defined in this package

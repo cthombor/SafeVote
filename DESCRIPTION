@@ -16,3 +16,6 @@ RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 LazyData: true
 URL: https://cthombor.github.io/SafeVote/
+Suggests: 
+    testthat (>= 3.0.0), vote
+Config/testthat/edition: 3

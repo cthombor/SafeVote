@@ -21,6 +21,7 @@ stv(
   seed = NULL,
   quiet = FALSE,
   digits = 3,
+  backwards.compatible = FALSE,
   safety = 1,
   ...
 )
@@ -73,6 +74,9 @@ stochastic experiment.}
 \item{quiet}{\code{TRUE} to suppress console output}
 
 \item{digits}{number of significant digits in the output table}
+
+\item{backwards.compatible}{\code{TRUE} to regress against vote2_3.2 by
+disabling $margins, $fuzz, $rankingTable, $safeRank}
 
 \item{safety}{number of standard deviations on vote-counts, when producing a
 safeRank by clustering near-ties in a complete ranking}
