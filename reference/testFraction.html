@@ -135,11 +135,9 @@ results.</p>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"condorcet"</span>,</span></span>
 <span class="r-in"><span>             countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>safety<span class="op">=</span><span class="fl">0.5</span>,complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting condorcet ballots:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%,DZQ2 elected 0 candidates, but DZQ0 elected 1 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-12-24 07:04:45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-12-27 04:46:39</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = condorcet, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -156,22 +154,22 @@ results.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ1   |        2|       4|     4|         1|            2|      2|          |        |           5|              3|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ2   |        4|       1|     5|         1|            3|      3|         5|        |           5|              3|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ3   |        6|       2|     2|         1|            2|      2|         1|       2|           5|               |        1|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ4   |        8|       2|     5|         1|            2|      2|         1|        |          10|              1|        8|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ5   |       10|       1|     4|         1|            1|      5|         5|       5|           3|              2|         |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ6   |       12|       3|     3|         1|            2|      3|         2|       2|          10|             12|         |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ7   |       14|       3|     5|         1|            2|      3|         9|        |          13|              4|        2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ8   |       16|       2|     5|         1|            3|      3|         6|        |          10|              8|        8|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ9   |       18|       3|     5|         1|            2|      3|        12|        |          19|              6|        3|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |DZQ10  |       20|       3|     5|         1|            2|      4|         6|        |          20|              6|        8|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB1   |        2|       1|     3|         3|            1|      3|         4|        |            |              4|         |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB2   |        4|       4|     4|         1|            2|      3|          |        |           7|              6|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB3   |        6|       3|     5|         1|            2|      3|         3|        |           8|              8|        1|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB4   |        8|       2|     5|         1|            2|      4|         9|        |           8|              9|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB5   |       10|       3|     3|         1|            2|      3|         3|        |           5|             12|        3|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB6   |       12|       2|     5|         1|            3|      3|         7|        |           5|              6|        2|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB7   |       14|       3|     5|         1|            2|      3|         1|        |          19|              8|       12|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB8   |       16|       2|     5|         1|            3|      4|         4|        |          14|              5|        5|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB9   |       18|       2|     5|         1|            2|      4|         3|        |          15|              9|        5|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VSB10  |       20|       3|     5|         1|            2|      4|         6|        |          20|              6|        8|</span>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">dublin_west</span>, astart<span class="op">=</span><span class="fl">20</span>, ainc<span class="op">=</span><span class="fl">10</span>, arep<span class="op">=</span><span class="fl">2</span>, trep<span class="op">=</span><span class="fl">3</span>, </span></span>
 <span class="r-in"><span>             countMethod<span class="op">=</span><span class="st">"stv"</span>, rankMethod<span class="op">=</span><span class="st">"elected"</span>, quiet<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting stv ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  33.3%, 66.7%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-12-24 07:04:45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2022-12-27 04:46:39</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = dublin_west, countMethod = stv, rankMethod = elected</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -183,9 +181,9 @@ results.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry|  m.Bonnie|  m.Burton|    m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|   m.Terry|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|---------:|---------:|---------:|---------:|---------:|----------:|-----------:|-------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |YAP1   |       20|      1|      2|    1|       2|       2|        1|         1|     1|     2| 0.1998000| 0.1390943| 0.4001000|  7.000000|    0.6004|  1.7997000|   1.0000000|        | 0.0719063|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |YAP2   |       30|      1|      2|    2|       2|       2|        1|         1|     1|     1| 1.1462020| 3.5481869| 1.0628742|  5.545546|    2.0000|  0.6917475|   1.3082525|        | 0.4397078|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |YAP3   |       20|      1|      2|    1|       2|       2|        1|         1|     1|     2| 0.0699532| 0.8568571| 0.8568571|  1.722983|    3.0000|  0.9300468|   0.5634231|        | 0.7451357|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |JNN1   |       20|      1|      1|    2|       2|       2|        1|         1|     1|     2| 0.0534130| 0.0000000| 0.1421429|  2.948417|  3.000000|  2.1246718|   0.2448849|       0| 1.3750156|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |JNN2   |       30|      1|      1|    1|       2|       2|        2|         2|     1|     1| 0.6664444| 0.7269921| 1.8786661|  2.000000|  3.333222|  1.2978878|   0.6972959|       0| 0.0611196|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |JNN3   |       20|      1|      2|    1|       2|       2|        1|         1|     1|     2| 0.0000000| 2.2766018| 0.3644035|  2.000000|  1.856857|  0.7212898|   0.7071388|       0| 0.4674234|</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
