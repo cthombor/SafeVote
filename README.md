@@ -35,11 +35,13 @@ vote-differentials in a safeRank clustering of the candidates is
 $z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
 is the number of ballots.
 
-        library(SafeVote)
-        data(food_election)
-        stv(food_election)
-        stv(food_election, safety=0.25)
-        stv(food_election, safety=0)
+``` r
+    library(SafeVote)
+    data(food_election)
+    stv(food_election)
+    stv(food_election, safety=0.25)
+    stv(food_election, safety=0)
+```
 
 A few safety-testing routines are supplied, to support experimental
 study of the statistical behaviour of ballot counting methods. For
@@ -52,8 +54,10 @@ Burton). By contrast, the relative ranking of Ryan and Morrissey is
 still somewhat unstable when the last few thousands of ballots are being
 counted.
 
-    data(dublin_west)
-    plot(testFraction(dublin_west,astart=34,ainc=881,countArgs=list(nseats=3)))
+``` r
+data(dublin_west)
+plot(testFraction(dublin_west,astart=8,ainc=20,countArgs=list(nseats=3)))
+```
 
 ![](man/figures/testFraction.png)
 
@@ -64,35 +68,37 @@ ballots to shift “Strawberries” from third place to second place in the
 [food_election](food_election) dataset. Note that in this test we have
 set the `safety` parameter of the [stv](stv) ballot-counting method to
 zero, so that the output of [testAdditions](testAdditions) reveals a
-minimally-safe ranking of the candidates.
+complete ranking of the candidates unless there is an exact tie.
 
-    data(food_election) 
-    testAdditions(food_election, arep = 2, favoured = "Strawberries", 
-      countArgs = list(safety = 0))
-    #> 
-    #> Adding up to 2 stv ballots = ( 3 5 4 1 2 )
-    #> Testing progress:  1, 2
-    #> 
-    #> Results of testAdditions at 2022-12-26 08:25:22
-    #> 
-    #> Dataset = food_election, countMethod = stv, rankMethod = safeRank
-    #> 
-    #> |          | safety|
-    #> |:---------|------:|
-    #> |countArgs |      0|
-    #> 
-    #> 
-    #> |             | ainc| arep|                                                         tacticalBallot|
-    #> |:------------|----:|----:|----------------------------------------------------------------------:|
-    #> |otherFactors |    1|    2| c(Oranges = 3, Pears = 5, Chocolate = 4, Strawberries = 1, Sweets = 2)|
-    #> 
-    #> Experiment ID, number of ballots in simulated election, ranks, winning margins:
-    #> 
-    #> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|
-    #> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|
-    #> |SBK0   |       20|       2|     5|         1|            3|      4| 1.4451111|       2|           8|      1.7774444| 0.7774444|
-    #> |SBK1   |       21|       2|     5|         1|            3|      4| 0.6673333|       2|           8|      2.6663333| 0.6663333|
-    #> |SBK2   |       22|       3|     5|         1|            2|      4| 3.4447778|       2|           8|      0.1104444| 0.5552222|
+``` r
+data(food_election) 
+testAdditions(food_election, arep = 2, favoured = "Strawberries", 
+  countArgs = list(safety = 0))
+#> 
+#> Adding up to 2 stv ballots = ( 3 5 4 1 2 )
+#> Testing progress:  1, 2
+#> 
+#> Results of testAdditions at 2022-12-26 08:25:22
+#> 
+#> Dataset = food_election, countMethod = stv, rankMethod = safeRank
+#> 
+#> |          | safety|
+#> |:---------|------:|
+#> |countArgs |      0|
+#> 
+#> 
+#> |             | ainc| arep|                                                         tacticalBallot|
+#> |:------------|----:|----:|----------------------------------------------------------------------:|
+#> |otherFactors |    1|    2| c(Oranges = 3, Pears = 5, Chocolate = 4, Strawberries = 1, Sweets = 2)|
+#> 
+#> Experiment ID, number of ballots in simulated election, ranks, winning margins:
+#> 
+#> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|
+#> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|
+#> |SBK0   |       20|       2|     5|         1|            3|      4| 1.4451111|       2|           8|      1.7774444| 0.7774444|
+#> |SBK1   |       21|       2|     5|         1|            3|      4| 0.6673333|       2|           8|      2.6663333| 0.6663333|
+#> |SBK2   |       22|       3|     5|         1|            2|      4| 3.4447778|       2|           8|      0.1104444| 0.5552222|
+```
 
 [testDeletions](testDeletions) deletes ballots sequentially from the
 ballot box, counting after each deletion. When its results are plotted
@@ -106,10 +112,11 @@ sampled (“bootstrapped”) from the full dataset of ballots. By contrast,
 [testDeletions](testDeletions) samples without replacement from the
 original ballot box, when constructing its next experimental unit.
 
-        
-        xr <- testDeletions(dublin_west,dinc=25,dstart=29988,quiet=FALSE,
-          countArgs=list(safety=0.0,complete.ranking=TRUE,nseats=3))
-        save(xr,file="../s0di25ns3.rdata")
-        plot(xr,title="testDeletions, file = s0di25ns3")
+``` r
+    xr <- testDeletions(dublin_west,dinc=25,dstart=29988,quiet=FALSE,
+      countArgs=list(safety=0.0,complete.ranking=TRUE,nseats=3))
+    save(xr,file="../s0di25ns3.rdata")
+    plot(xr,title="testDeletions, file = s0di25ns3")
+```
 
 ![](man/figures/s0di25ns3.png)
