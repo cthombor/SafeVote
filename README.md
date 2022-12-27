@@ -46,25 +46,25 @@ study of the statistical behaviour of ballot counting methods. For
 example, `testFraction` draws a series of independent samples from a
 ballot box, which we expect to be helpful in estimating the number of
 ballots required to form a stable result. As seen below, in the case of
-the `dublin_west` dataset, only a few thousand ballots are sufficient to
-reliably determine the three winners (Lenihan, Higgins, Burton); but the
-relative ranking of Ryan and Morrissey is unstable until about 20000
-ballots have been counted.
+the [dublin_west](dublin_west) dataset, only a few thousand ballots are
+sufficient to reliably determine the three winners (Lenihan, Higgins,
+Burton). By contrast, the relative ranking of Ryan and Morrissey is
+still somewhat unstable when the last few thousands of ballots are being
+counted.
 
     data(dublin_west)
     plot(testFraction(dublin_west,astart=34,ainc=881,countArgs=list(nseats=3)))
 
 ![](man/figures/testFraction.png)
 
-[testAdditions](%60testAdditions%60) can be used to assess the
-sensitivity of an STV election to a tactical-voting strategy of
-“plumping” for a favoured candidate. For example, we find it takes only
-two “plumping” ballots to shift “Strawberries” from third place to
-second place in the `food_election` dataset. Note that in this test we
-have set the `safety` parameter of the [stv](%60stv%60) ballot-counting
-method to zero, so that the output of
-[testAdditions](%60testAdditions%60) reveals a minimally-safe ranking of
-the candidates.
+[testAdditions](testAdditions) can be used to assess the sensitivity of
+an STV election to a tactical-voting strategy of “plumping” for a
+favoured candidate. For example, we find it takes only two “plumping”
+ballots to shift “Strawberries” from third place to second place in the
+[food_election](food_election) dataset. Note that in this test we have
+set the `safety` parameter of the [stv](stv) ballot-counting method to
+zero, so that the output of [testAdditions](testAdditions) reveals a
+minimally-safe ranking of the candidates.
 
     data(food_election) 
     testAdditions(food_election, arep = 2, favoured = "Strawberries", 
@@ -94,18 +94,17 @@ the candidates.
     #> |SBK1   |       21|       2|     5|         1|            3|      4| 0.6673333|       2|           8|      2.6663333| 0.6663333|
     #> |SBK2   |       22|       3|     5|         1|            2|      4| 3.4447778|       2|           8|      0.1104444| 0.5552222|
 
-[testDeletions](%60testDeletions%60) deletes ballots sequentially from
-the ballot box, counting after each deletion. When its results are
-plotted in inverse order of collection (i.e. in *increasing* order of
-the number of ballots $n$) we see a possible evolution of the
-preliminary results from an election in which the initial order of
-ballots in the ballot box had been randomised. Note that a plot of the
-results of [testFraction](%60testFraction%60) has quite a similar
-appearance, however the ballot boxes counted in
-[testFraction](%60testFraction%60) are independently sampled
-(“bootstrapped”) from the full dataset of ballots. By contrast,
-[testDeletions](%60testDeletions%60) samples without replacement from
-the original ballot box, when constructing its next experimental unit.
+[testDeletions](testDeletions) deletes ballots sequentially from the
+ballot box, counting after each deletion. When its results are plotted
+in inverse order of collection (i.e. in *increasing* order of the number
+of ballots $n$) we see a possible evolution of the preliminary results
+from an election in which the initial order of ballots in the ballot box
+had been randomised. Note that a plot of the results of
+[testFraction](testFraction) has quite a similar appearance, however the
+ballot boxes counted in [testFraction](testFraction) are independently
+sampled (“bootstrapped”) from the full dataset of ballots. By contrast,
+[testDeletions](testDeletions) samples without replacement from the
+original ballot box, when constructing its next experimental unit.
 
         
         xr <- testDeletions(dublin_west,dinc=25,dstart=29988,quiet=FALSE,
