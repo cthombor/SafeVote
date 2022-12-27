@@ -66,8 +66,8 @@ Alternatively, a \code{tacticalBallot} may be specified.  If both \code{favoured
 favoured one.
 }
 \examples{
-data(food_election)
-testAdditions(food_election, countArgs=list(complete.ranking=TRUE))
-testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), arep=2)
+data(food_election) 
+testAdditions(food_election, arep = 2, favoured = "Strawberries", 
+  countArgs = list(safety = 0))
 
 }

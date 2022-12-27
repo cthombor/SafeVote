@@ -257,6 +257,7 @@ condorcet <-
         data = x,
         invalid.votes = votes[setdiff(rownames(votes), rownames(x)),
                               , drop = FALSE],
+        nseats = nseats,
         corrected.votes = corrected.votes,
         loser = if (sum(cdc.loser) > 0)
           cnames[cdc.loser]
@@ -317,7 +318,7 @@ summary.SafeVote.condorcet <- function(object, ...) {
     attr(df, "number.of.votes") <- nrow(object$data)
     attr(df, "number.of.invalid.votes") <- nrow(object$invalid.votes)
     attr(df, "number.of.candidates") <- nrow(object$totals)
-    attr(df, "number.of.seats") <- length(object$elected)
+    attr(df, "number.of.seats") <- object$nseats
     attr(df, "condorcet.winner") <- object$elected
     attr(df, "condorcet.loser") <- object$loser
     attr(df, "runoff.winner") <- object$runoff.winner
@@ -337,7 +338,9 @@ summary.SafeVote.condorcet <- function(object, ...) {
 print.summary.SafeVote.condorcet <- function(x, ...) {
   cat("\nResults of Condorcet voting")
   cat("\n===========================")
-  election.info(x)
+  
+  election.info(x)  # prints x in a human-readable format
+  
   print(knitr::kable(x, align = attr(x, "align"), ...))
   
   sortedBordaScore <- sort(x$Score, decreasing = TRUE)

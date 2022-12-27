@@ -2,15 +2,15 @@
 % Please edit documentation in R/vote_by_sum.R
 \name{sumOfVotes}
 \alias{sumOfVotes}
-\title{undocumented internal method,}
+\title{internal method, computes column-sums}
 \usage{
 sumOfVotes(votes)
 }
 \arguments{
-\item{votes}{undocumented}
+\item{votes}{ballots are rows, candidates are columns}
 }
 \value{
-undocumented
+vector of votes for each candidate
 }
 \description{
 Renamed from 'sum.votes' to avoid confusion with the generic sum()

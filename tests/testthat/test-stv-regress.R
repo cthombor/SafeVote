@@ -38,17 +38,17 @@ test_that("stv on dublin_west with three seats", {
   )
 })
 
-test_that("stv on dublin_west with three seats and seed=1234", {
+test_that("stv on food_election with three seats and seed=1234", {
   skip_if_not_installed("vote")
   expect_equal(
     SafeVote::stv(
-      dublin_west,
+      food_election,
       nseats = 3,
       seed = 1234,
       backwards.compatible = TRUE
     ),
     vote::stv(
-      dublin_west,
+      food_election,
       nseats = 3,
       seed = 1234,
       complete.ranking = TRUE

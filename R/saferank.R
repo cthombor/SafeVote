@@ -71,7 +71,7 @@ testDeletions <- function(votes,
                rankMethod))
   }
   
-  nseats <- length(cr$elected)
+  nseats <- cr$nseats
   
   nib <- nrow(cr$data) - dstart
   if (nib > 0) {
@@ -166,22 +166,6 @@ testDeletions <- function(votes,
     cr <-
       do.call(countMethod, append(cArgs, list(votes = ballots)))
     
-    ##TODO: consider adding cr$elected to the experimental record, to allow
-    ##warning-free testing of elections which do not fill all available seats
-    if (length(cr$elected) != nseats) {
-      warning(
-        cat(
-          exptID,
-          "elected",
-          length(cr$elected),
-          "candidates, but",
-          paste0(exptName, 1),
-          "elected",
-          nseats,
-          "candidates"
-        )
-      )
-    }
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID,
@@ -241,9 +225,9 @@ testDeletions <- function(votes,
 #'   next-lower-ranked candidate.
 #' @export
 #' @examples
-#' data(food_election)
-#' testAdditions(food_election, countArgs=list(complete.ranking=TRUE))
-#' testAdditions(food_election, tacticalBallot=c(1,2,3,4,5), arep=2)
+#' data(food_election) 
+#' testAdditions(food_election, arep = 2, favoured = "Strawberries", 
+#'   countArgs = list(safety = 0))
 #'
 testAdditions <- function(votes,
                           ainc = 1,
@@ -271,10 +255,10 @@ testAdditions <- function(votes,
   if (is.null(tacticalBallot)) {
     if (!is.null(favoured)) {
       fc <- ifelse(is.character(favoured),
-                   which(names(crRank) == favoured),
+                   which(names(votes) == favoured),
                    favoured)
       stopifnot((fc >= 1) || (fc <= nc))
-      favoured <- colnames(cr$data)[fc]
+      favoured <- colnames(votes)[fc]
     } else {
       cl <- colnames(votes) ## choose a random candidate to favour
       favoured <- cl[sample(length(cl), size = 1)]
@@ -335,7 +319,7 @@ testAdditions <- function(votes,
                       append(crRank,
                              crMargins))
   result <- rbind.SafeRankExpt(result, newResult)
-  nseats <- length(cr$elected) ## nseats value is inferred from election results
+  nseats <- cr$nseats
   attr(result, "nseats") <- nseats
 
   if (!quiet && verbose) {
@@ -378,22 +362,6 @@ testAdditions <- function(votes,
                   append(cArgs, list(votes = svotes)))
     
     exptID = paste0(exptName, repct)
-    ##TODO: consider adding cr$elected to the experimental record, to allow
-    ##warning-free testing of elections which do not fill all available seats
-    if (length(cr$elected) != nseats) {
-      warning(
-        cat(
-          exptID,
-          "elected",
-          length(cr$elected),
-          "candidates, but",
-          paste0(exptName, 0),
-          "elected",
-          nseats,
-          "candidates"
-        )
-      )
-    }
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID,
@@ -564,34 +532,10 @@ testFraction <- function(votes = NULL,
                   append(cArgs, list(votes = votes[selBallots,])))
     
     exptID = paste0(exptName, i)
-    
-    ##TODO: consider adding `cr$elected` to the experimental record, to allow
-    ##warning-free testing of elections which are counted by methods which do
-    ##not always fill all available seats.  Alternatively, revise
-    ##`check.nseats()` so that its dependence on the counting method is
-    ##explicit, rather than implicit in its parameter values (which introduces a
-    ##hazard in the stochastic-experimentation harness, whenever `nseats` is not
-    ##explicitly specified in `countArgs`).
     if (i == 1) {
-      nseats <- length(cr$elected)
+      nseats <- cr$nseats
       attr(result, "nseats") <- nseats
-    } else {
-      if (length(cr$elected) != nseats) {
-        warning(
-          cat(
-            exptID,
-            "elected",
-            length(cr$elected),
-            "candidates, but",
-            paste0(exptName, 0),
-            "elected",
-            nseats,
-            "candidates"
-          )
-        )
-      }
     }
-    
     crRank <- extractRank(rankMethod, countMethod, cr)
     crMargins <- extractMargins(marginNames, rankMethod, cr)
     newResult <- append(list(exptID = exptID,

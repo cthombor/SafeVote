@@ -140,51 +140,33 @@ next-lower-ranked candidate.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">testAdditions</span><span class="op">(</span><span class="va">food_election</span>, countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="fu">testAdditions</span><span class="op">(</span><span class="va">food_election</span>, arep <span class="op">=</span> <span class="fl">2</span>, favoured <span class="op">=</span> <span class="st">"Strawberries"</span>, </span></span>
+<span class="r-in"><span>  countArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>safety <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding up to 1 stv ballots = ( 5 3 4 1 2 )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Testing progress:  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testAdditions at 2022-12-24 19:50:42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |          | complete.ranking|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|----------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |             TRUE|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             | ainc| arep|                                                         tacticalBallot|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|----:|----------------------------------------------------------------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |    1|    1| c(Oranges = 5, Pears = 3, Chocolate = 4, Strawberries = 1, Sweets = 2)|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|  m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|--------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UGP0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.777111|           8|               | 0.1114444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |UGP1   |       21|       2|     2|         1|            2|      2| 0.3763342| 3.666000|           8|               | 1.7788527|</span>
-<span class="r-in"><span><span class="fu">testAdditions</span><span class="op">(</span><span class="va">food_election</span>, tacticalBallot<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, arep<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding up to 2 stv ballots = ( 1 2 3 4 5 )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Adding up to 2 stv ballots = ( 3 2 5 1 4 )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Testing progress:  1, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testAdditions at 2022-12-24 19:50:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testAdditions at 2022-12-27 17:36:30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |          | safety|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |      0|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |             | ainc| arep|                                                         tacticalBallot|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|----:|----------------------------------------------------------------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |    1|    2| c(Oranges = 1, Pears = 2, Chocolate = 3, Strawberries = 4, Sweets = 5)|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |    1|    2| c(Oranges = 3, Pears = 2, Chocolate = 5, Strawberries = 1, Sweets = 4)|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|  m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|--------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |NGP0   |       20|       2|     2|         1|            2|      2| 0.7774444| 1.777444|           8|               | 1.445111|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |NGP1   |       21|       2|     2|         1|            2|      2| 0.6663333| 1.666333|           7|               | 2.667333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |NGP2   |       22|       2|     2|         1|            2|      2| 0.5552222| 1.555222|           6|      0.5552222| 3.889556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |EZC0   |       20|       2|     5|         1|            3|      4| 1.4451111|       2|           8|      1.7774444| 0.7774444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |EZC1   |       21|       2|     5|         1|            3|      4| 0.6673333|       2|           8|      2.6663333| 0.6663333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |EZC2   |       22|       3|     5|         1|            2|      4| 3.4447778|       2|           8|      0.1104444| 0.5552222|</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

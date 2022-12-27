@@ -2,16 +2,20 @@
 % Please edit documentation in R/vote_by_sum.R
 \name{election.info}
 \alias{election.info}
-\title{undocumented internal method}
+\title{prints the basic results of an election}
 \usage{
 election.info(x)
 }
 \arguments{
-\item{x}{undocumented}
+\item{x}{basic election results, as named attributes of an R structure or
+object}
 }
 \value{
-undocumented
+data.frame : an invisible copy of the printed results
+
+TODO: refactor into a modern dialect of R, e.g. defining a constructor for an
+election_info S3 object with a print method
 }
 \description{
-undocumented internal method
+prints the basic results of an election
 }

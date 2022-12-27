@@ -135,13 +135,9 @@ and its results</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NA margin at rank 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , 8, 6, 4</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NA margin at rank 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-24 19:50:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-27 17:36:30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -155,30 +151,22 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF0   |       20|       2|     2|         1|            2|      2| 0.7774444| 1.7774444|           8|               | 1.4451111|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF1   |       18|       2|     2|         1|            2|      2| 0.1997000| 1.5996000|           6|               | 2.2007000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF2   |       16|       2|     2|         1|            2|      2| 0.3997000| 0.8662667|           7|               | 1.7340333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF3   |       14|       2|     2|         1|            2|      2|          | 0.4992500|           5|      0.1669167| 2.5007500|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF4   |       12|       2|     2|         1|            2|      2|          | 0.1421429|           4|      1.1431429| 2.8578571|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF5   |       10|       2|     2|         1|            2|      2|          | 0.8885556|           4|      0.2228889|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF6   |        8|       2|     2|         1|            2|      2|          | 0.3994000|           3|      0.6006000| 0.0670667|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF7   |        6|       2|     2|         1|            2|      2|          | 0.0000000|           3|      0.5002500| 0.5007500|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF8   |        4|       1|     1|         1|            1|      1|          | 0.0000000|           1|      0.6671667|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |VBF9   |        2|       1|     1|         1|            1|      1| 0.3323333| 0.0000000|           0|      0.6676667|          |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS0   |       20|       2|     2|         1|            2|      2| 0.7774444| 1.7774444|           8|              2| 1.4451111|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS1   |       18|       2|     2|         1|            2|      2| 0.8178182| 1.3633636|           8|              2| 0.8188182|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS2   |       16|       2|     2|         1|            2|      2| 0.0000000| 0.2659667|           8|              2| 1.6003000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS3   |       14|       2|     2|         1|            2|      2| 0.0000000| 0.8330833|           6|              2| 0.9172917|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS4   |       12|       2|     2|         1|            2|      2| 1.0000000| 0.4284286|           5|              1| 0.2862857|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS5   |       10|       2|     2|         1|            2|      2| 0.4763333| 0.0946667|           6|              1| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS6   |        8|       2|     2|         1|            2|      2| 0.5335333| 0.0000000|           4|              1| 0.0670667|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS7   |        6|       1|     1|         1|            1|      1| 0.0010000| 0.9990000|           2|              0| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS8   |        4|       1|     1|         1|            1|      1| 0.3343333| 0.6656667|           1|              0| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |ZYS9   |        2|       1|     1|         1|            1|      1| 0.0000000| 0.0000000|           1|              0| 0.0000000|</span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>  countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6ZWN7 elected 4 candidates, but ZWN1 elected 5 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , 4</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NA margin at rank 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ZWN8 elected 4 candidates, but ZWN1 elected 5 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , 2ZWN9 elected 3 candidates, but ZWN1 elected 5 candidates</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-24 19:50:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2022-12-27 17:36:30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -197,16 +185,16 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges|   m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|---------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|               | 0.1114444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN1   |       18|       2|     2|         1|            2|      2| 0.9087273| 2.1815455|           8|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN2   |       16|       2|     2|         1|            2|      2| 1.9329333| 1.4664667|           8|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN3   |       14|       2|     2|         1|            2|      2| 1.2218889| 2.2218889|           7|              1|          |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN4   |       12|       2|     2|         1|            2|      2| 2.2496250| 1.4997500|           7|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN5   |       10|       2|     2|         1|            2|      2| 2.1661667| 0.0000000|           5|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN6   |        8|       2|     2|         1|            2|      2| 0.2668667| 1.1994000|           4|               | 0.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN7   |        6|       2|     2|         1|            2|      2| 1.0000000| 0.4995000|           3|               | 1.0000000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN8   |        4|       2|     2|         1|            2|      2| 0.7774444| 0.5548889|           2|               | 0.2225556|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ZWN9   |        2|       1|     1|         1|            1|      1| 0.6656667| 0.0000000|           0|               | 0.3343333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW0   |       20|       2|     2|         1|            2|      2| 1.8885556| 2.7771111|           8|      2.0000000| 0.1114444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW1   |       18|       2|     2|         1|            2|      2| 2.9087273| 2.0902727|           7|      1.0000000| 0.0912727|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW2   |       16|       2|     2|         1|            2|      2| 2.8143704| 0.5179630|           5|      1.0000000| 0.1856296|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW3   |       14|       2|     2|         1|            2|      2| 1.0000000| 1.8328333|           4|      1.0000000| 0.1671667|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW4   |       12|       2|     2|         1|            2|      2| 0.1424286| 1.8565714|           4|      1.0000000| 0.1434286|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW5   |       10|       1|     1|         1|            1|      1| 0.6664667| 0.9994000|           2|      1.0000000| 0.3341333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW6   |        8|       1|     1|         1|            1|      1| 0.6664167| 0.9992500|           1|      0.3335833| 1.0007500|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW7   |        6|       1|     1|         1|            1|      1| 0.6663333| 0.3326667|           1|      0.3336667| 0.6673333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW8   |        4|       1|     1|         1|            1|      1| 0.0000000| 0.7490000|           1|      0.0000000| 1.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |XNW9   |        2|       1|     1|         1|            1|      1| 0.0000000| 0.7990000|           1|      0.0000000| 0.0000000|</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
