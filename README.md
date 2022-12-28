@@ -32,7 +32,7 @@ safeRank ordering of the candidates. Setting `safety = 0` will cause
 safeRank to be a total ranking of the candidates, except in the rare
 case that there is an exact tie. The “fuzz” $z$ on the
 vote-differentials in a safeRank clustering of the candidates is
-$z = sn^{1/2}$, where $s$ is the value of the safety parameter and $n$
+$z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
 is the number of ballots.
 
 ``` r
@@ -121,14 +121,22 @@ original ballot box, when constructing its next experimental unit.
 
 ![](man/figures/s0di25ns3.png)
 
-In the plots above, the “adjusted rank” of a candidate is their ranking
-$r$ plus their scaled “winning margin”. The scaled margin is
-$e^{-cx/n^{1/2}}$, where $x$ is the adjusted margin (i.e. the number of
-votes by which this candidate is ahead of the next-weaker candidate,
-adjusted for the number of ballots $n$ and the number of seats $s$), and
-$c>0$ is the margin-scaling parameter `cMargin`.
+In the plots above, the “adjusted rank” of a candidate is their ranking $r$ plus
+their scaled margin of victory.  Because the most-popular candidate is at rank
+1, we invert the usual convention for the x-axis on Cartesian plots so that the
+first-elected candidate appears first in the legend and their scaled margin is
+the uppermost.  Because margin of victory $m$ must be non-negative but it may be
+quite a large number; and because it is only the small margins of victory which
+affect the safety of an election result: we compute a scaled margin as
+$e^{-cm/\sqrt{n}}$.  This exponential adjustment hugely accentuates the visual
+importance of the margins that are comparable in magnitude to the square root of
+the number of ballots $n$ multiplied by the number of seats $s$) -- which is a
+rough proxy for the standard deviation of a candidate's margin of victory  in an
+election where at least some voters are marking their ballots essentially at
+random.  The margin-scaling parameter $c$ may be adjusted using the parameter
+`cMargin` of [plot.SafeVote](plot.SafeVote).  Note that Morrissey's adjusted
+rank is visually very close to McDonald's adjusted rank when most of the ballots
+have been counted in the sample testDeletions plot above, suggesting
+(correctly!) that relatively small variations in voter behaviour could affect
+their relative ranking.
 
-The default value of `cMargin=1.0` draws visual attention to candidates
-with a very small winning margin, as their adjusted rank is very near to
-$r+1$. Candidates with anything more than a small winning margin have
-only a small rank adjustment, due to the exponential scaling.
