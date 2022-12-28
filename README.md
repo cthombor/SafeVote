@@ -24,7 +24,7 @@ devtools::install_github("cthombor/SafeVote")
 ## Examples
 
 This mod of
-[vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
+[vote.2.3-2](https://cran.r-project.org/web/packages/vote/index.html)
 reports the margins of victory in an election.
 
 The value of the `safety` parameter will affect the completeness of the
@@ -32,7 +32,7 @@ safeRank ordering of the candidates. Setting `safety = 0` will cause
 safeRank to be a total ranking of the candidates, except in the rare
 case that there is an exact tie. The “fuzz” $z$ on the
 vote-differentials in a safeRank clustering of the candidates is
-$z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
+$z = sn^{1/2}$, where $s$ is the value of the safety parameter and $n$
 is the number of ballots.
 
 ``` r
@@ -120,3 +120,15 @@ original ballot box, when constructing its next experimental unit.
 ```
 
 ![](man/figures/s0di25ns3.png)
+
+In the plots above, the “adjusted rank” of a candidate is their ranking
+$r$ plus their scaled “winning margin”. The scaled margin is
+$e^{-cx/n^{1/2}}$, where $x$ is the adjusted margin (i.e. the number of
+votes by which this candidate is ahead of the next-weaker candidate,
+adjusted for the number of ballots $n$ and the number of seats $s$), and
+$c>0$ is the margin-scaling parameter `cMargin`.
+
+The default value of `cMargin=1.0` draws visual attention to candidates
+with a very small winning margin, as their adjusted rank is very near to
+$r+1$. Candidates with anything more than a small winning margin have
+only a small rank adjustment, due to the exponential scaling.
