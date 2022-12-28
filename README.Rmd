@@ -1,8 +1,5 @@
 ---
 output: github_document
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -19,7 +16,6 @@ knitr::opts_chunk$set(
 # SafeVote
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goals of SafeVote are to investigate the safety of announcing
@@ -29,15 +25,14 @@ that is derived from a small-scale election with preferential ballots.
 
 ## Installation
 
-You can install the development version of SafeVote from
-[GitHub](https://github.com/) with:
+You can install the development version of SafeVote from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("cthombor/SafeVote")
 ```
 
-## Examples
+## Example
 
 This mod of
 [vote.2.3-2](https://cran.r-project.org/web/packages/vote/index.html)
@@ -46,7 +41,7 @@ reports the margins of victory in an election.
 The value of the `safety` parameter will affect the completeness of the
 safeRank ordering of the candidates. Setting `safety = 0` will cause
 safeRank to be a total ranking of the candidates, except in the rare
-case that there is an exact tie. The "fuzz" $z$ on the
+case that there is an exact tie. The “fuzz” $z$ on the
 vote-differentials in a safeRank clustering of the candidates is
 $z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
 is the number of ballots.
@@ -78,9 +73,9 @@ plot(testFraction(dublin_west,astart=8,ainc=20,countArgs=list(nseats=3)))
 ![](man/figures/testFraction.png)
 
 [testAdditions](testAdditions) can be used to assess the sensitivity of
-an STV election to a tactical-voting strategy of "plumping" for a
-favoured candidate. For example, we find it takes only two "plumping"
-ballots to shift "Strawberries" from third place to second place in the
+an STV election to a tactical-voting strategy of “plumping” for a
+favoured candidate. For example, we find it takes only two “plumping”
+ballots to shift “Strawberries” from third place to second place in the
 [food_election](food_election) dataset. Note that in this test we have
 set the `safety` parameter of the [stv](stv) ballot-counting method to
 zero, so that the output of [testAdditions](testAdditions) reveals a
@@ -118,7 +113,7 @@ testAdditions(food_election, arep = 2, favoured = "Strawberries",
 
 [testDeletions](testDeletions) deletes ballots sequentially from the
 ballot box, counting after each deletion. When its results are plotted
-in inverse order of collection (i.e. in *increasing* order of the number
+in inverse order of collection (i.e. in *increasing* order of the number
 of ballots $n$) we see a possible evolution of the preliminary results
 from an election in which the initial order of ballots in the ballot box
 had been randomised. Note that a plot of the results of
@@ -137,21 +132,23 @@ original ballot box, when constructing its next experimental unit.
 
 ![](man/figures/s0di25ns3.png)
 
-In the plots above, the “adjusted rank” of a candidate is their ranking $r$ plus
-their scaled margin of victory.  Because the most-popular candidate is at rank
-1, we invert the usual convention for the x-axis on Cartesian plots so that the
-first-elected candidate appears first in the legend and their scaled margin is
-the uppermost.  Because margin of victory $m$ must be non-negative but it may be
-quite a large number; and because it is only the small margins of victory which
-affect the safety of an election result: we compute a scaled margin as
-$e^{-cm/\sqrt{n}}$.  This exponential adjustment hugely accentuates the visual
-importance of the margins that are comparable in magnitude to the square root of
-the number of ballots $n$ multiplied by the number of seats $s$) -- which is a
-rough proxy for the standard deviation of a candidate's margin of victory  in an
-election where at least some voters are marking their ballots essentially at
-random.  The margin-scaling parameter $c$ may be adjusted using the parameter
-`cMargin` of [plot.SafeVote](plot.SafeVote).  Note that Morrissey's adjusted
-rank is visually very close to McDonald's adjusted rank when most of the ballots
+In the plots above, the “adjusted rank” of a candidate is their ranking
+$r$ plus their scaled margin of victory. Because the most-popular
+candidate is at rank 1, we invert the usual convention for the x-axis on
+Cartesian plots so that the first-elected candidate appears first in the
+legend and their scaled margin is the uppermost. Because margin of
+victory $m$ must be non-negative but it may be quite a large number; and
+because it is only the small margins of victory which affect the safety
+of an election result: we compute a scaled margin as $e^{-cm/\sqrt{n}}$.
+This exponential adjustment hugely accentuates the visual importance of
+the margins that are comparable in magnitude to the square root of the
+number of ballots $n$ multiplied by the number of seats $s$) – which is
+a rough proxy for the standard deviation of a candidate’s margin of
+victory in an election where at least some voters are marking their
+ballots essentially at random. The margin-scaling parameter $c$ may be
+adjusted using the parameter `cMargin` of
+[plot.SafeVote](plot.SafeVote). Note that Morrissey’s adjusted rank is
+visually very close to McDonald’s adjusted rank when most of the ballots
 have been counted in the sample testDeletions plot above, suggesting
-(correctly!) that relatively small variations in voter behaviour could affect
-their relative ranking.
+(correctly!) that relatively small variations in voter behaviour could
+affect their relative ranking.

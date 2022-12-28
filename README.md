@@ -21,7 +21,7 @@ You can install the development version of SafeVote from
 devtools::install_github("cthombor/SafeVote")
 ```
 
-## Examples
+## Example
 
 This mod of
 [vote.2.3-2](https://cran.r-project.org/web/packages/vote/index.html)
