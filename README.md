@@ -32,7 +32,7 @@ safeRank ordering of the candidates. Setting `safety = 0` will cause
 safeRank to be a total ranking of the candidates, except in the rare
 case that there is an exact tie. The “fuzz” $z$ on the
 vote-differentials in a safeRank clustering of the candidates is
-$z = sn^{1/2}$, where $s$ is the value of the safety parameter and $n$
+$z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
 is the number of ballots.
 
 ``` r
