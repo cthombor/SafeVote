@@ -1,234 +1,234 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://cthombor.github.io/SafeVote/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/authors.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/index.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/SafeVote-package.html</loc>
+    <loc>/reference/SafeVote-package.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/approval.html</loc>
+    <loc>/reference/approval.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/as.SafeRankExpt.html</loc>
+    <loc>/reference/as.SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/assemble.args.for.check.score.html</loc>
+    <loc>/reference/assemble.args.for.check.score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/assemble.args.for.check.stv.html</loc>
+    <loc>/reference/assemble.args.for.check.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/backwards.tiebreak.html</loc>
+    <loc>/reference/backwards.tiebreak.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.nseats.html</loc>
+    <loc>/reference/check.nseats.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.ranking.html</loc>
+    <loc>/reference/check.ranking.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.approval.html</loc>
+    <loc>/reference/check.votes.approval.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.condorcet.html</loc>
+    <loc>/reference/check.votes.condorcet.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.html</loc>
+    <loc>/reference/check.votes.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.plurality.html</loc>
+    <loc>/reference/check.votes.plurality.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.score.html</loc>
+    <loc>/reference/check.votes.score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.stv.html</loc>
+    <loc>/reference/check.votes.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/check.votes.tworound.runoff.html</loc>
+    <loc>/reference/check.votes.tworound.runoff.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/combineRankings.html</loc>
+    <loc>/reference/combineRankings.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/completeRankingTable.html</loc>
+    <loc>/reference/completeRankingTable.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/condorcet.html</loc>
+    <loc>/reference/condorcet.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/correct.ranking.html</loc>
+    <loc>/reference/correct.ranking.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/dot-print.summary.SafeVote.html</loc>
+    <loc>/reference/dot-print.summary.SafeVote.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/dot-summary.SafeVote.html</loc>
+    <loc>/reference/dot-summary.SafeVote.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/dublin_west.html</loc>
+    <loc>/reference/dublin_west.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/election.info.html</loc>
+    <loc>/reference/election.info.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/extractMargins.html</loc>
+    <loc>/reference/extractMargins.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/extractRank.html</loc>
+    <loc>/reference/extractRank.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/food_election.html</loc>
+    <loc>/reference/food_election.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/forwards.tiebreak.html</loc>
+    <loc>/reference/forwards.tiebreak.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/image.SafeVote.condorcet.html</loc>
+    <loc>/reference/image.SafeVote.condorcet.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/image.SafeVote.stv.html</loc>
+    <loc>/reference/image.SafeVote.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ims_approval.html</loc>
+    <loc>/reference/ims_approval.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ims_election.html</loc>
+    <loc>/reference/ims_election.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ims_plurality.html</loc>
+    <loc>/reference/ims_plurality.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ims_score.html</loc>
+    <loc>/reference/ims_score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ims_stv.html</loc>
+    <loc>/reference/ims_stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/index.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/is.SafeRankExpt.html</loc>
+    <loc>/reference/is.SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/is.valid.vote.html</loc>
+    <loc>/reference/is.valid.vote.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/loserMargin.html</loc>
+    <loc>/reference/loserMargin.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt.html</loc>
+    <loc>/reference/new_SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ordered.preferences.html</loc>
+    <loc>/reference/ordered.preferences.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/ordered.tiebreak.html</loc>
+    <loc>/reference/ordered.tiebreak.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/plot.SafeRankExpt.html</loc>
+    <loc>/reference/plot.SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/plot.SafeVote.stv.html</loc>
+    <loc>/reference/plot.SafeVote.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/plurality.html</loc>
+    <loc>/reference/plurality.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/prepare.votes.html</loc>
+    <loc>/reference/prepare.votes.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeRankExpt.html</loc>
+    <loc>/reference/print.summary.SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.approval.html</loc>
+    <loc>/reference/print.summary.SafeVote.approval.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.condorcet.html</loc>
+    <loc>/reference/print.summary.SafeVote.condorcet.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.plurality.html</loc>
+    <loc>/reference/print.summary.SafeVote.plurality.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.score.html</loc>
+    <loc>/reference/print.summary.SafeVote.score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/print.summary.SafeVote.stv.html</loc>
+    <loc>/reference/print.summary.SafeVote.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/rbind.SafeRankExpt.html</loc>
+    <loc>/reference/rbind.SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/remove.candidate.html</loc>
+    <loc>/reference/remove.candidate.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/score.html</loc>
+    <loc>/reference/score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/solveTiebreak.html</loc>
+    <loc>/reference/solveTiebreak.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/stv.html</loc>
+    <loc>/reference/stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/sumOfVotes.html</loc>
+    <loc>/reference/sumOfVotes.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeRankExpt.html</loc>
+    <loc>/reference/summary.SafeRankExpt.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeVote.approval.html</loc>
+    <loc>/reference/summary.SafeVote.approval.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeVote.condorcet.html</loc>
+    <loc>/reference/summary.SafeVote.condorcet.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeVote.plurality.html</loc>
+    <loc>/reference/summary.SafeVote.plurality.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeVote.score.html</loc>
+    <loc>/reference/summary.SafeVote.score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/summary.SafeVote.stv.html</loc>
+    <loc>/reference/summary.SafeVote.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/testAdditions.html</loc>
+    <loc>/reference/testAdditions.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/testDeletions.html</loc>
+    <loc>/reference/testDeletions.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/testFraction.html</loc>
+    <loc>/reference/testFraction.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/translate.ties.html</loc>
+    <loc>/reference/translate.ties.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/view.SafeVote.approval.html</loc>
+    <loc>/reference/view.SafeVote.approval.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/view.SafeVote.condorcet.html</loc>
+    <loc>/reference/view.SafeVote.condorcet.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/view.SafeVote.plurality.html</loc>
+    <loc>/reference/view.SafeVote.plurality.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/view.SafeVote.score.html</loc>
+    <loc>/reference/view.SafeVote.score.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/view.SafeVote.stv.html</loc>
+    <loc>/reference/view.SafeVote.stv.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/view.html</loc>
+    <loc>/reference/view.html</loc>
   </url>
   <url>
-    <loc>https://cthombor.github.io/SafeVote/reference/winnerMargin.html</loc>
+    <loc>/reference/winnerMargin.html</loc>
   </url>
 </urlset>
