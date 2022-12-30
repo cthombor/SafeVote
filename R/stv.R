@@ -34,7 +34,7 @@
 #'   for R is reseeded prior to *every* random tie-break among the
 #'   possibly-elected candidates.  We have preserved this functionality in this
 #'   branch to allow regression against the legacy codebase of
-#'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html). In
+#'   [vote_2.3-2](https://cran.r-project.org/web/packages/vote/index.html). In
 #'   [SafeVote] the default value for seed is `NULL` rather than the legacy
 #'   value of 1234, to mitigate the validity hazard of PRNG reseedings during a
 #'   stochastic experiment.
@@ -1162,7 +1162,7 @@ completeRankingTable <- function(object, quiet, verbose) {
     ranking[cand.in.play] <-
       length(object$elected) + rank(-lastRound, ties.method = "random")
     if (verbose && !quiet) {
-      cat("\nRanking of unelected uneliminated candidates in a final round:")
+      cat("\nRanking of unelected uneliminated candidates in a final round:\n")
       print(ranking[cand.in.play])
     }
     lastRound <- lastRound[order(ranking[cand.in.play])]

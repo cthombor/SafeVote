@@ -66,7 +66,7 @@ ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored
 for R is reseeded prior to \emph{every} random tie-break among the
 possibly-elected candidates.  We have preserved this functionality in this
 branch to allow regression against the legacy codebase of
-\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}. In
+\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3-2}. In
 \link{SafeVote} the default value for seed is \code{NULL} rather than the legacy
 value of 1234, to mitigate the validity hazard of PRNG reseedings during a
 stochastic experiment.}

@@ -12,7 +12,7 @@ Imports: formattable, knitr, fields, grDevices, graphics, utils, ggplot2,
 Encoding: UTF-8
 License: GPL (>= 2)
 NeedsCompilation: no
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 LazyData: true
 URL: https://cthombor.github.io/SafeVote/
