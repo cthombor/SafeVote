@@ -1,3 +1,8 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

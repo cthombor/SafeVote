@@ -151,4 +151,4 @@ adjusted using the parameter `cMargin` of
 visually very close to McDonald’s adjusted rank when most of the ballots
 have been counted in the sample testDeletions plot above, suggesting
 (correctly!) that relatively small variations in voter behaviour could
-affect their relative ranking.
+affect their relative ranking. 
