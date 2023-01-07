@@ -20,8 +20,8 @@
 #' @param drep Maximum number of elections (required if `dinc=0`)
 #' @param exptName stem-name of experimental units *e.g.* "E".  If `NULL`, then
 #'   a 3-character string of capital letters is chosen at random.
-#' @param quiet TRUE to suppress all output
-#' @param verbose TRUE to produce diagnostic output
+#' @param equiet TRUE to suppress all experimental output
+#' @param everbose TRUE to produce diagnostic output from the experiment
 #' @return [SafeRankExpt](new_SafeRankExpt.html) object, describing this experiment
 #'   and its results
 #' @export
@@ -42,8 +42,8 @@ testDeletions <- function(votes,
                           drep = NULL,
                           rankMethod = "safeRank",
                           exptName = NULL,
-                          quiet = FALSE,
-                          verbose = FALSE) {
+                          equiet = FALSE,
+                          everbose = FALSE) {
   ## stv() throws an error if there are fewer than two ballots
   stopifnot(nrow(votes) > 1)
   
@@ -57,9 +57,9 @@ testDeletions <- function(votes,
   stopifnot((dstart <= nrow(votes)) && (dstart > 1)) 
 
   stopifnot(is.list(countArgs))
-  ## suppress all output from counting unless verbose=TRUE
+  ## suppress all output from counting unless everbose=TRUE
   cArgs <-
-    append(countArgs, list(quiet = !verbose, verbose = verbose))
+    append(countArgs, list(quiet = !everbose, verbose = everbose))
   
   ## construct an initial ballot box by sampling from input 'votes'
   sv <- sample(nrow(votes), dstart)
@@ -139,9 +139,8 @@ testDeletions <- function(votes,
                              crMargins))
   result <- rbind.SafeRankExpt(result, newResult)
   
-  if (!quiet) {
-    cat(paste0("Number of ballots counted by ",
-               countMethod, ":\n  ", nb))
+  if (!equiet) {
+    cat(paste0("Number of ballots counted by ", countMethod, ": ", nb))
   }
   
   if (drep > 1) {
@@ -156,7 +155,7 @@ testDeletions <- function(votes,
   for (nb in nbv) {
     nrep <- nrep + 1
     exptID <- paste0(exptName, nrep)
-    if (!quiet) {
+    if (!equiet) {
       cat(ifelse((nrep %% 10) == 0, ",\n", ","), nb)
     }
     
@@ -180,7 +179,7 @@ testDeletions <- function(votes,
   uF$removedBallots <- rBallots
   attr(result, "unitFactors") <- uF
 
-  if (!quiet) {
+  if (!equiet) {
     cat("\n")
     print(summary(result))
   }
@@ -216,8 +215,8 @@ testDeletions <- function(votes,
 #' @param arep Maximum number of ballot-stuffed elections to run
 #' @param exptName stem-name of experimental units *e.g.* "E".  If `NULL`, then
 #'   a 3-character string of capital letters is chosen at random.
-#' @param quiet `TRUE` to suppress all output
-#' @param verbose `TRUE` to produce diagnostic output
+#' @param equiet `TRUE` to suppress all experimental output
+#' @param everbose `TRUE` to produce diagnostic output from the experiment
 #' @return A matrix of experimental results, of dimension \eqn{n} by \eqn{2m+1},
 #'   where \eqn{n} is the number of elections and \eqn{m} is the number of
 #'   candidates.  The first column is named "nBallots".  Other columns indicate
@@ -238,8 +237,8 @@ testAdditions <- function(votes,
                           countMethod = "stv",
                           countArgs = list(),
                           exptName = NULL,
-                          quiet = FALSE,
-                          verbose = FALSE) {
+                          equiet = FALSE,
+                          everbose = FALSE) {
   if (is.null(arep)) {
     arep <- 1
   }
@@ -300,9 +299,9 @@ testAdditions <- function(votes,
             collapse = "")
   }
   
-  ## Suppress all output from counting unless verbose=TRUE
+  ## Suppress all output from counting unless everbose=TRUE
   cArgs <-
-    append(countArgs, list(quiet = !verbose, verbose = verbose))
+    append(countArgs, list(quiet = !everbose, verbose = everbose))
   
   cr <- do.call(countMethod, append(cArgs, list(votes = votes)))
   if (!rankMethod %in% attributes(cr)$names) {
@@ -322,14 +321,14 @@ testAdditions <- function(votes,
   nseats <- cr$nseats
   attr(result, "nseats") <- nseats
 
-  if (!quiet && verbose) {
+  if (!equiet && everbose) {
     cat("Initial ranking by", countMethod, ":\n")
     print(crRank)
   }
   
   svotes <- votes ## simulated ballot box
   
-  if (!quiet) {
+  if (!equiet) {
     cat("\nAdding up to",
         arep * ainc,
         countMethod,
@@ -338,7 +337,7 @@ testAdditions <- function(votes,
         ")\n")
   }
   
-  if (!quiet) {
+  if (!equiet) {
     cat("Testing progress: ")
   }
   
@@ -354,7 +353,7 @@ testAdditions <- function(votes,
                       dimnames = dnames
                     )) ## stuffing the ballot box!
     nadd <- nadd + ainc
-    if (!quiet) {
+    if (!equiet) {
       cat(paste0(" ", repct))
       cat(ifelse(repct < arep, ifelse((repct %% 10) == 0, ",\n", ","), ""))
     }
@@ -372,7 +371,7 @@ testAdditions <- function(votes,
     
   }
   
-  if (!quiet) {
+  if (!equiet) {
     cat("\n")
     print(summary(result))
   }
@@ -403,8 +402,8 @@ testAdditions <- function(votes,
 #'   non-`NULL` if `ainc=0 && is.null(arep)`.
 #' @param exptName stem-name of experimental units *e.g.* "E".  If `NULL`, then
 #'   a 3-character string of capital letters is chosen at random.
-#' @param quiet `TRUE` to suppress all output
-#' @param verbose `TRUE` to produce diagnostic output
+#' @param equiet `TRUE` to suppress all experimental output
+#' @param everbose `TRUE` to produce diagnostic output from the experiment
 #' @return a [SafeRankExpt](new_SafeRankExpt.html) object of experimental
 #'   results.
 #' @export
@@ -413,7 +412,7 @@ testAdditions <- function(votes,
 #' testFraction(food_election, countMethod="condorcet",
 #'              countArgs=list(safety=0.5,complete.ranking=TRUE))
 #' testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3, 
-#'              countMethod="stv", rankMethod="elected", quiet=FALSE)
+#'              countMethod="stv", rankMethod="elected", equiet=FALSE)
 testFraction <- function(votes = NULL,
                          astart = NULL,
                          ainc = NULL,
@@ -423,8 +422,8 @@ testFraction <- function(votes = NULL,
                          countMethod = "stv",
                          countArgs = list(),
                          exptName = NULL,
-                         quiet = FALSE,
-                         verbose = FALSE)
+                         equiet = FALSE,
+                         everbose = FALSE)
 {
   stopifnot(!is.null(votes))
   nv <- nrow(votes)
@@ -484,11 +483,11 @@ testFraction <- function(votes = NULL,
     trep <- i  ## the total number of experiments we'll run
   }
   
-  ## Suppress all output from counting unless verbose=TRUE
+  ## Suppress all output from counting unless everbose=TRUE
   cArgs <-
-    append(countArgs, list(quiet = !verbose, verbose = verbose))
+    append(countArgs, list(quiet = !everbose, verbose = everbose))
   
-  if (!quiet) {
+  if (!equiet) {
     cat("Progress in counting", countMethod, "ballots:\n")
   }
   
@@ -520,7 +519,7 @@ testFraction <- function(votes = NULL,
   
   for (i in (1:trep)) {
     nb <- nbb[i]
-    if (!quiet) {
+    if (!equiet) {
       cat(paste0(" ", format(round(i / trep * 100, 1), digits = 4), "%"))
       cat(ifelse(i < trep,
                  ifelse((i %% 10) == 0, ",\n", ","),
@@ -545,7 +544,7 @@ testFraction <- function(votes = NULL,
     result <- rbind.SafeRankExpt(result, newResult)
   }
   
-  if (!quiet) {
+  if (!equiet) {
     cat("\n")
     print(summary(result))
   }
@@ -586,20 +585,33 @@ extractRank <- function(rankMethod, countMethod, cr) {
 #' @return named list of margins
 extractMargins <- function(marginNames, rankMethod, cr) {
   crMargins <- cr$margins
+  names(crMargins) <- marginNames
   if (rankMethod == "safeRank") {
-    sRank <- cr$safeRank
-    ## reverse the order of margins for tied candidates, so that candidates
-    ## within a safeRank tie group have margins indicative of their relative
-    ## strengths.  A margin of 0 is possible, and reveals a tied vote-count.
+    ## adjust the margins for tied candidates, so that candidates within a
+    ## safeRank tie group have margins indicative of their relative strengths.
     ## Extremely small margins are indicative of floating-point roundoff errors.
-    for (i in 1:length(sRank)) {
-      tieMask <- sRank == i
+    for (i in (1:length(cr$safeRank))) {
+      tieMask <- (cr$safeRank == i)
       if (sum(tieMask) > 1) {
-        crMargins[tieMask] <- rev(crMargins[tieMask])
+        ## more than one candidate in this tie-group
+        tieExactRankings <- cr$rankingTable$Rank[tieMask]
+        names(tieExactRankings) <- marginNames[tieMask]
+        
+        ## assert: cr$rankingTable$Rank is total
+        stopifnot(length(unique(tieExactRankings)) == length(tieExactRankings))
+        
+        ## Margins are summed from the least-favoured candidate in the tie-group,
+        ## so that the most-favoured candidate has the highest adjusted margin
+        tieExactRankings <- sort(tieExactRankings)
+        adjMargins <-
+          cumsum(rev(crMargins[names(tieExactRankings)]))
+        
+        ## adjust margins in this tie-group
+        crMargins[marginNames][tieMask] <-
+          adjMargins[marginNames][tieMask]
       }
     }
   }
-  names(crMargins) <- marginNames
   return(crMargins)
 }
 
@@ -861,6 +873,8 @@ print.summary.SafeRankExpt <- function(x, ...) {
 #'
 #' @param x object containing experimental results
 #' @param facetWrap TRUE provides per-candidate scatterplots
+#' @param nResults number of candidates whose results are plotted (omitting
+#'   the least-favoured candidates first)
 #' @param anBallots,cMargin parameters in the rank-adjustment formula
 #' @param xlab,ylab axis labels
 #' @param title overall title for the plot.  Default: NULL
@@ -879,6 +893,7 @@ print.summary.SafeRankExpt <- function(x, ...) {
 #'   
 plot.SafeRankExpt <- function(x,
                               facetWrap = FALSE,
+                              nResults = NA,
                               anBallots = 0.0,
                               cMargin = 1.0,
                               xlab = "Ballots",
@@ -890,6 +905,10 @@ plot.SafeRankExpt <- function(x,
                               ...) {
   stopifnot(requireNamespace("stringr", quietly = TRUE))
   
+  # declare local variables, for use by data.table::'['
+  # https://www.r-bloggers.com/2019/08/no-visible-binding-for-global-variable/
+  cnames <- pvars <- NULL
+    
   x <- as.SafeRankExpt(x)
   
   ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
@@ -927,6 +946,12 @@ plot.SafeRankExpt <- function(x,
   snames <- unlist(lapply(cnames, function(x)
     paste0("s.", x)))
   
+  if (is.na(nResults) || nResults > length(cnames)) {
+    nResults <- length(cnames)
+  } else if (nResults < 1) {
+    nResults <- 1
+  }
+
   ## \eqn{s <- \exp(-cm / \sqrt{n}}
   ##
   ## Note that a small winning margin adds almost a full point of rank when
@@ -947,17 +972,26 @@ plot.SafeRankExpt <- function(x,
   scores[, (mnames) := .SD * (anBallots * nseats / scores$nBallots),
          .SDcols = mnames]
   
-  ## adjust ranks
+  ## adjust ranks (overwriting original values in cnames[])
   for (j in (1:length(cnames))) {
     scores[, (cnames[j]) := .SD - scores[[mnames[j]]] + scores[[snames[j]]],
            .SDcols = cnames[j]]
   }
   
+  ## the first ballot-count had the most ballots, defining the plot-order
+  firstScores <- scores[1, ..cnames]
+  
+  ## plot only the most favoured candidates
+  dropMask <- rank(firstScores) > nResults
+  pnames <- cnames[-which(dropMask)]
+  pvars <- unlist(append(list("exptID", "nBallots"), pnames))
+  pscores <- scores[, ..pvars]
+  
   mscores <-
     data.table::melt(
-      scores,
+      pscores,
       id.vars = c("exptID", "nBallots"),
-      measure.vars = unlist(cnames),
+      measure.vars = unlist(pnames),
       variable.name = "Candidate",
       value.name = "Score"
     )

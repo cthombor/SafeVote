@@ -14,8 +14,8 @@ testAdditions(
   countMethod = "stv",
   countArgs = list(),
   exptName = NULL,
-  quiet = FALSE,
-  verbose = FALSE
+  equiet = FALSE,
+  everbose = FALSE
 )
 }
 \arguments{
@@ -46,9 +46,9 @@ votes)}
 \item{exptName}{stem-name of experimental units \emph{e.g.} "E".  If \code{NULL}, then
 a 3-character string of capital letters is chosen at random.}
 
-\item{quiet}{\code{TRUE} to suppress all output}
+\item{equiet}{\code{TRUE} to suppress all experimental output}
 
-\item{verbose}{\code{TRUE} to produce diagnostic output}
+\item{everbose}{\code{TRUE} to produce diagnostic output from the experiment}
 }
 \value{
 A matrix of experimental results, of dimension \eqn{n} by \eqn{2m+1},

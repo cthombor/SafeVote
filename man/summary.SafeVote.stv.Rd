@@ -7,7 +7,7 @@
 \method{summary}{SafeVote.stv}(object, ..., digits = 3)
 }
 \arguments{
-\item{object}{undocumented}
+\item{object}{undocumented, legacy code}
 
 \item{...}{undocumented}
 

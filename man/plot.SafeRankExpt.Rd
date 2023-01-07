@@ -7,6 +7,7 @@
 \method{plot}{SafeRankExpt}(
   x,
   facetWrap = FALSE,
+  nResults = NA,
   anBallots = 0,
   cMargin = 1,
   xlab = "Ballots",
@@ -22,6 +23,9 @@
 \item{x}{object containing experimental results}
 
 \item{facetWrap}{TRUE provides per-candidate scatterplots}
+
+\item{nResults}{number of candidates whose results are plotted (omitting
+the least-favoured candidates first)}
 
 \item{anBallots, cMargin}{parameters in the rank-adjustment formula}
 

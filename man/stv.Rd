@@ -11,8 +11,9 @@ stv(
   equal.ranking = FALSE,
   fsep = "\\t",
   ties = c("f", "b"),
-  constant.quota = FALSE,
   quota.hare = FALSE,
+  constant.quota = FALSE,
+  win.by.elim = TRUE,
   group.nseats = NULL,
   group.members = NULL,
   complete.ranking = FALSE,
@@ -41,15 +42,17 @@ as described in the \href{condorcet.html#details}{Details for condorcet()}}
 \item{ties}{vector of tie-breaking methods: \code{'f'} for forward, \code{'b'} for
 backward}
 
-\item{constant.quota}{\code{TRUE} if quota is held constant.  Over-rides
-quota.hare. Default is \code{FALSE}.}
-
 \item{quota.hare}{\code{TRUE} if Hare quota, \code{FALSE} if Droop quota (default)}
 
-\item{group.nseats}{number of seats reserved to members of a group, as in the
-Church of England's STV methodology.}
+\item{constant.quota}{\code{TRUE} if quota is held constant.  Over-rides
+\code{quota.hare}. Default is \code{FALSE}}
 
-\item{group.members}{vector of members of a group with reserved seats}
+\item{win.by.elim}{\code{TRUE} (default) if the quota is waived when there are no
+more candidates than vacant seats}
+
+\item{group.nseats}{number of seats reserved to members of a group}
+
+\item{group.members}{vector of members of the group with reserved seats}
 
 \item{complete.ranking}{\code{TRUE} (default) if a complete ranking of all
 candidates will be produced.  This parameter affects the value assigned to

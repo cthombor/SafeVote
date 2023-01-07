@@ -16,12 +16,13 @@
 #' @param fsep column-separator for output
 #' @param ties vector of tie-breaking methods: `'f'` for forward, `'b'` for
 #'   backward
-#' @param constant.quota `TRUE` if quota is held constant.  Over-rides
-#'   quota.hare. Default is `FALSE`.
 #' @param quota.hare `TRUE` if Hare quota, `FALSE` if Droop quota (default)
-#' @param group.nseats number of seats reserved to members of a group, as in the
-#'   Church of England's STV methodology.
-#' @param group.members vector of members of a group with reserved seats
+#' @param constant.quota `TRUE` if quota is held constant.  Over-rides
+#'   `quota.hare`. Default is `FALSE`
+#' @param win.by.elim `TRUE` (default) if the quota is waived when there are no
+#'   more candidates than vacant seats
+#' @param group.nseats number of seats reserved to members of a group
+#' @param group.members vector of members of the group with reserved seats
 #' @param complete.ranking `TRUE` (default) if a complete ranking of all
 #'   candidates will be produced.  This parameter affects the value assigned to
 #'   `nseats` when [stv()] is called with `nseats=NULL`, but has no effect on
@@ -63,8 +64,9 @@ stv <-
            equal.ranking = FALSE,
            fsep = "\t",
            ties = c("f", "b"),
-           constant.quota = FALSE,
            quota.hare = FALSE,
+           constant.quota = FALSE,
+           win.by.elim = TRUE,
            group.nseats = NULL,
            group.members = NULL,
            complete.ranking = FALSE,
@@ -93,7 +95,8 @@ stv <-
     votes <- prepare.votes(votes, fsep = fsep)
     nc <- ncol(votes)
     cnames <- colnames(votes)
-    ## a complete ranking in STV should (arguably) have no eliminations
+    ## a complete ranking in STV should (arguably) be "ranked from the top"
+    ## i.e. there should be no eliminations
     nseats <- check.nseats(
       nseats,
       ncandidates = nc,
@@ -253,7 +256,7 @@ stv <-
     ## the main loop
     ##
     if (verbose && !quiet) {
-      cat("\nList of 1st preferences in STV counts: \n")
+      cat("\nList of first preferences in STV counts: \n")
     }
     
     count <- 0
@@ -271,11 +274,51 @@ stv <-
       names(vcast) <- cnames
       if (!constant.quota || count == 1) {
         ## Quota calculation: either Hare (when quota.hare is TRUE) or Droop
+
+        ## This is legacy code, with undocumented intent.  *Possibly* the only
+        ## intent is to avoid a quota ever being recorded as a negative number
+        ## (due to floating point roundoff errors).  However if this is the
+        ## only intent, then it would be better to test for this case explicitly
+        ## and shift the quota up to 0.0 if it ever becomes negative.
+        
+        ## Another possible intent is to ensure that a candidate must be clearly above the quota
+        ## in order to be elected.  This seems unlikely, because I would expect a candidate
+        ## who has 100 first-preference votes in the first round with quota 100
+        ## to be elected in this round.
+        
+        ## Another possible intent is to ensure that, even in elections with
+        ## large numbers of voters and many rounds, candidates must meet the
+        ## quota to be electable -- despite the vagaries of floating-point
+        ## roundoff.  This seems a likely intent but would be exceedingly
+        ## difficult to achieve in R, in Python 3, or in any other language
+        ## which does not offer fixed-precision arithmetic. It would also be
+        ## very difficult to achieve in Java or C or Scheme, except when
+        ## implementing an stv specification which explicitly defines a fixed
+        ## precision (e.g. 3 decimal digits) and therefore allows the
+        ## implementer to avoid the performance-pitfalls and
+        ## implementation-difficulties of unbounded-precision arithmetic.
+        
+        ## As a "hack improvement" to this legacy code, it might be considered
+        ## appropriate to add eps/2 when computing the quotas, rather than full
+        ## eps.  This would reserve half of the roundoff "fuzz" budget for the
+        ## calculation of transfer votes.  The idea here is that a 
+        ## candidate on 2/3 votes may be computed as somewhat less than
+        ## 0.6666665, due to floating point roundoff; and such a candidate
+        ## would still be within eps of the quota if if were computed as
+        ## 2/3 + eps/2 rather than the approx 0.6676666 resulting from the
+        ## 2/3 + eps calculation in the legacy code below.
+        
+        ## I have left this legacy code unchanged, in part to preserve backwards
+        ## compatibility, but mostly because *all* implementations of stv are
+        ## sui generis -- they will almost surely fail some cross-validations
+        ## with other implementations of the same natural-language specification
+        ## of an "STV ballot-counting process".
+
         quota <- if (quota.hare)
           sum(vcast) / nseats + eps
         else
           sum(vcast) / (nseats + 1) + eps
-        stopifnot(quota > 0)  ## when sum(vcast) == 0, quota is eps
+        stopifnot(quota > 0)  ## note: when sum(vcast) == 0, quota is eps
       }
       result.quota <- c(result.quota, quota)
       result.pref <- rbind(result.pref, vcast)
@@ -289,8 +332,7 @@ stv <-
         print(df)
       }
       
-      ## if leading candidate exceeds quota, declare elected and
-      ## adjust weights
+      ## if leading candidate exceeds quota, declare elected and adjust weights
       ##
       ## mark candidate for elimination in subsequent counting
       ##
@@ -299,22 +341,25 @@ stv <-
       ## largest vcast, no matter if quota is exceeded
       ##
       vmax <- max(vcast)
-      ic <- (1:nc)[vcast == vmax]
+      
+      ## Restrict attention to in-play candidates (with max votes if they're
+      ## not group members).  Note that in a corner case, ic will include
+      ## candidates with zero votes.
+      ic <-
+        (1:5)[(inPlay & (vcast == vmax)) | ((1:5) %in% group.members)]
+      
       D <-
-        colSums(abs(result.elect)) == 0 ## set of hopeful candidates
+        colSums(abs(result.elect)) == 0  # set of hopeful candidates
       if (use.marking) {
         Dm <- D
         Dm[-group.members] <-
-          FALSE ## set of hopeful marked candidates
+          FALSE  # set of hopeful marked candidates
       }
       
-      ## with constant.quota, elected candidates may not need to reach quota
+      ## With win.by.elim, or with (backwards.compatible && constant.quota),
+      ## elected candidates need not reach quota when filling the last seats.
       ##
-      ## If there are at least as many candidates in play as there are seats
-      ## remaining to be filled, the quota is (arguably) irrelevant.
-      ##
-      ## If nobody has voted for a candidate, they (arguably) shouldn't be
-      ## elected -- even if they are a member of a group.
+      ## In a corner case: a candidate who receives no votes may be elected.
       ##
       ## The clause "!(! ic %in% group.members && nseats == group.nseats)" was
       ## recoded Nov 2022 to avoid throwing an error when group.members is NULL
@@ -343,13 +388,13 @@ stv <-
       ## at least as many candidates as seats.
       
       if ((vmax >= quota &&
-           !(!any(ic %in% group.members) && (nseats == group.nseats))) ||
-          ((vmax > 0) && (constant.quota && sum(D) <= nseats)) ||
-          ((vmax > 0) &&
-           use.marking &&
+           !(!any(ic %in% group.members) &&
+             (nseats == group.nseats))) ||
+          ((win.by.elim || (backwards.compatible && constant.quota))
+           && sum(D) <= nseats) ||
+          (use.marking &&
            any(ic %in% group.members) &&
-           (sum(Dm) <= group.nseats || sum(D) - sum(Dm) == 0))
-          ) {
+           (sum(Dm) <= group.nseats || sum(D) - sum(Dm) == 0))) {
         
         if (use.marking && length(ic) > 1 && sum(Dm) <= group.nseats) {
           ## if a tiebreak, choose marked candidates if needed
@@ -454,7 +499,7 @@ stv <-
             cat(" with margin", result.margins[ic])
           }
           if (tie > 0) {
-            cat("using", tie.method.name[tie.method])
+            cat(" using", tie.method.name[tie.method])
             if (tie == 2)
               cat(" & ordered")
             cat(" tie-breaking method ")
@@ -514,7 +559,7 @@ stv <-
       result$margins <- crt$Margin
       result$rankingTable = crt
       sr <- crt$SafeRank  ## extract from rankingTable for convenience
-      names(sr) <- row.names(sr)
+      names(sr) <- row.names(crt)
       result$safeRank = sr
       attr(result, "class") <- append("SafeVote.stv", class(result))
     } else {
@@ -741,7 +786,7 @@ backwards.tiebreak <- function(prefs, icans, elim = TRUE) {
 
 #' summary() method for a SafeVote result
 #'
-#' @param object undocumented
+#' @param object undocumented, legacy code
 #' @param ... undocumented
 #' @param digits undocumented
 #'
@@ -749,9 +794,11 @@ backwards.tiebreak <- function(prefs, icans, elim = TRUE) {
 #'
 summary.SafeVote.stv <- function(object, ..., digits = 3) {
   
-  ## The following function is of undocumented origin, and is of dubious
-  ## validity except on systems (if there are any!) which round all
-  ## floating-point intermediates to IEEE double-precision storage format.
+  ## The following function is of undocumented origin.  It is of dubious
+  ## validity, if only because floating-point intermediates will be rounded
+  ## reliably to IEEE double-precision storage format only when they are stored
+  ## in memory -- and that's under the control of the optimising compiler,
+  ## with variations for different CPUs and optimisation levels.
   
   ## TODO: consider using formattable::formattable(), which
   ## is imported by view.stv().  See
@@ -1184,24 +1231,24 @@ completeRankingTable <- function(object, quiet, verbose) {
       ## If a candidate had been elected unopposed, their winning margin is the
       ## losing margin of the first-eliminated candidate (if any).
       unopposed <- names(which(is.na(winMargins)))
-      ## sanity check: impossible to have multiple candidates elected unopposed!
+      ## Sanity check: impossible to have multiple candidates elected unopposed!
       stopifnot(length(unopposed) == 1)
       if (length(loseMargins) > 0) {
         winMargins[unopposed] <- loseMargins[1]
       } else {
-        ## if all candidates have been elected, the winning margin of the last
+        ## If all candidates have been elected, the winning margin of the last
         ## candidate to be elected is their number of votes in the last round
         winMargins[unopposed] <- 
           object$preferences[nrow(object$preferences), unopposed]
         if (winMargins[unopposed] == 0) {
-          ## I have found no discussion of this case in the literature on stv
-          ## but it can arise if quotas are ever waived (e.g. when there are
-          ## "reserved seats" in the sense of vote2.3-2) and in "corner cases"
-          ## with a very small number of ballots with partial preferences (e.g.
-          ## in a random selection of two ballots from food_election with
-          ## nseats=5)
-          warning(paste("\n", unopposed,
-                        "was elected despite having zero votes."))
+          ## I have found no discussion of this case in the literature on stv,
+          ## but a candidate might be elected on zero votes -- if quotas are
+          ## ever waived e.g. when there are "reserved seats" in the sense of
+          ## vote2.3-2 or (as in STV 1.0.3) there are no more candidates in play
+          ## than open seats to be filled.
+          if (!quiet) {
+            cat("\n", unopposed, "was elected despite having zero votes.")
+          }
         }
       }
     }
@@ -1217,17 +1264,26 @@ completeRankingTable <- function(object, quiet, verbose) {
   ## The winning margin of the first candidate (if any) to be eliminated is
   ## their number of votes in the round when they were eliminated
   if (length(eliminated) > 0) {
-    firstElim <- which(ranking == length(ranking))
+    firstElim <- eliminated[1]
     winMargins[firstElim] <-
       object$preferences[[which(object$elect.elim[, firstElim] == -1),
                           firstElim]]
   }
   
-  ## sanity checks: winMargins are non-negative and ranking is total
+  ## Corner case: a candidate may have been elected on NA votes in the final
+  ## round, after one or more eliminations of candidates on 0 votes.
+  if (any(is.na(winMargins))) {
+    stopifnot(sum(is.na(winMargins) == 1))
+    stopifnot((length(eliminated) > 0) &&
+                (winMargins[eliminated[length(eliminated)]] == 0))
+    winMargins[which(is.na(winMargins))] <- 0
+  }
+  
+  ## Sanity checks: winMargins are non-negative and ranking is total
   stopifnot(!any(is.na(winMargins)) || !any(winMargins < 0))
   stopifnot(!any(sort(ranking) != c(1:length(ranking))))
   
-  ## iterative 1-d clustering to produce a "safe" ranking
+  ## Iterative 1-d clustering to produce a "safe" ranking
   safeRank <- ranking[order(ranking)]
   rmargs <- winMargins[order(ranking)]
   for (i in 2:length(ranking)) {
@@ -1239,7 +1295,7 @@ completeRankingTable <- function(object, quiet, verbose) {
       }
     }
   }
-  ## rearrange safeRank into canonical order (as on ballots)
+  ## Rearrange safeRank into canonical order (as on ballots)
   safeRank <- safeRank[names(ranking)]
   
   result <-

@@ -14,8 +14,8 @@ testDeletions(
   drep = NULL,
   rankMethod = "safeRank",
   exptName = NULL,
-  quiet = FALSE,
-  verbose = FALSE
+  equiet = FALSE,
+  everbose = FALSE
 )
 }
 \arguments{
@@ -41,9 +41,9 @@ from \code{votes}, without replacement)}
 \item{exptName}{stem-name of experimental units \emph{e.g.} "E".  If \code{NULL}, then
 a 3-character string of capital letters is chosen at random.}
 
-\item{quiet}{TRUE to suppress all output}
+\item{equiet}{TRUE to suppress all experimental output}
 
-\item{verbose}{TRUE to produce diagnostic output}
+\item{everbose}{TRUE to produce diagnostic output from the experiment}
 }
 \value{
 \href{new_SafeRankExpt.html}{SafeRankExpt} object, describing this experiment

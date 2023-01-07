@@ -14,8 +14,8 @@ testFraction(
   countMethod = "stv",
   countArgs = list(),
   exptName = NULL,
-  quiet = FALSE,
-  verbose = FALSE
+  equiet = FALSE,
+  everbose = FALSE
 )
 }
 \arguments{
@@ -43,9 +43,9 @@ e.g. "elected", "ranking", "safeRank".}
 \item{exptName}{stem-name of experimental units \emph{e.g.} "E".  If \code{NULL}, then
 a 3-character string of capital letters is chosen at random.}
 
-\item{quiet}{\code{TRUE} to suppress all output}
+\item{equiet}{\code{TRUE} to suppress all experimental output}
 
-\item{verbose}{\code{TRUE} to produce diagnostic output}
+\item{everbose}{\code{TRUE} to produce diagnostic output from the experiment}
 }
 \value{
 a \href{new_SafeRankExpt.html}{SafeRankExpt} object of experimental
@@ -63,5 +63,5 @@ data(food_election)
 testFraction(food_election, countMethod="condorcet",
              countArgs=list(safety=0.5,complete.ranking=TRUE))
 testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3, 
-             countMethod="stv", rankMethod="elected", quiet=FALSE)
+             countMethod="stv", rankMethod="elected", equiet=FALSE)
 }
