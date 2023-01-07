@@ -64,8 +64,9 @@ and the ballots</p>
 <span>  equal.ranking <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  fsep <span class="op">=</span> <span class="st">"\t"</span>,</span>
 <span>  ties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"b"</span><span class="op">)</span>,</span>
-<span>  constant.quota <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quota.hare <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  constant.quota <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  win.by.elim <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  group.nseats <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group.members <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  complete.ranking <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -108,22 +109,26 @@ as described in the <a href="condorcet.html#details">Details for condorcet()</a>
 backward</p></dd>
 
 
-<dt>constant.quota</dt>
-<dd><p><code>TRUE</code> if quota is held constant.  Over-rides
-quota.hare. Default is <code>FALSE</code>.</p></dd>
-
-
 <dt>quota.hare</dt>
 <dd><p><code>TRUE</code> if Hare quota, <code>FALSE</code> if Droop quota (default)</p></dd>
 
 
+<dt>constant.quota</dt>
+<dd><p><code>TRUE</code> if quota is held constant.  Over-rides
+<code>quota.hare</code>. Default is <code>FALSE</code></p></dd>
+
+
+<dt>win.by.elim</dt>
+<dd><p><code>TRUE</code> (default) if the quota is waived when there are no
+more candidates than vacant seats</p></dd>
+
+
 <dt>group.nseats</dt>
-<dd><p>number of seats reserved to members of a group, as in the
-Church of England's STV methodology.</p></dd>
+<dd><p>number of seats reserved to members of a group</p></dd>
 
 
 <dt>group.members</dt>
-<dd><p>vector of members of a group with reserved seats</p></dd>
+<dd><p>vector of members of the group with reserved seats</p></dd>
 
 
 <dt>complete.ranking</dt>
@@ -190,77 +195,9 @@ partial) safeRank.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">stv</span><span class="op">(</span><span class="va">food_election</span>, safety <span class="op">=</span> <span class="fl">0.0</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of Single transferable vote</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ===================================                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of valid votes:   20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of invalid votes:  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of candidates:     5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of seats:          2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of unfilled seats: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fuzz on safeRank:	 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Complete ranking:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             | Rank|SafeRank |  Margin   |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|:--------|:---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    2|2        | 1.4451111 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    5|5        | 2.0000000 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    1|1        | 8.0000000 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    3|3        | 1.7774444 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    4|4        | 0.7774444 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vote transfers:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             |         1| 2-trans|     2| 3-trans|      3| 4-trans|       4|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|---------:|-------:|-----:|-------:|------:|-------:|-------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |     4.000|   0.000| 4.000|       2|  6.000|   0.000|   6.000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |     2.000|   0.000| 2.000|      -2|       |        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    12.000|  -5.332|      |        |       |        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |     1.000|   3.555| 4.555|       0|  4.555|   0.000|   4.555|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |     1.000|   1.777| 2.777|       0|  2.777|  -2.777|        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Tie-breaks   |          |        |      |        |       |        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Elected      | Chocolate|        |      |        |       |        | Oranges|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Eliminated   |          |        | Pears|        | Sweets|        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elected: Chocolate, Oranges </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in completeRankingTable(partialResult, quiet = quiet, verbose = verbose):</span> sum(is.na(winMargins) == 1) is not TRUE</span>
 <span class="r-in"><span><span class="fu">stv</span><span class="op">(</span><span class="va">food_election</span>, nseats <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of Single transferable vote</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ===================================                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of valid votes:   20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of invalid votes:  0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of candidates:     5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of seats:          2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of unfilled seats: 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fuzz on safeRank:	 4.472136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Complete ranking:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             | Rank|SafeRank |  Margin   |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|:--------|:---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |    2|2        | 1.4451111 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |    5|2        | 2.0000000 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    1|1        | 8.0000000 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |    3|2        | 1.7774444 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |    4|2        | 0.7774444 |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Vote transfers:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             |         1| 2-trans|     2| 3-trans|      3| 4-trans|       4|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|---------:|-------:|-----:|-------:|------:|-------:|-------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Oranges      |     4.000|   0.000| 4.000|       2|  6.000|   0.000|   6.000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Pears        |     2.000|   0.000| 2.000|      -2|       |        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Chocolate    |    12.000|  -5.332|      |        |       |        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Strawberries |     1.000|   3.555| 4.555|       0|  4.555|   0.000|   4.555|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Sweets       |     1.000|   1.777| 2.777|       0|  2.777|  -2.777|        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Tie-breaks   |          |        |      |        |       |        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Elected      | Chocolate|        |      |        |       |        | Oranges|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |Eliminated   |          |        | Pears|        | Sweets|        |        |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elected: Chocolate, Oranges </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in completeRankingTable(partialResult, quiet = quiet, verbose = verbose):</span> sum(is.na(winMargins) == 1) is not TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

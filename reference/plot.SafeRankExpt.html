@@ -61,6 +61,7 @@ and \(c&gt;0\) is the margin-scaling parameter <code>cMargin</code>.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  facetWrap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nResults <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  anBallots <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  cMargin <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Ballots"</span>,</span>
@@ -81,6 +82,11 @@ and \(c&gt;0\) is the margin-scaling parameter <code>cMargin</code>.</p>
 
 <dt>facetWrap</dt>
 <dd><p>TRUE provides per-candidate scatterplots</p></dd>
+
+
+<dt>nResults</dt>
+<dd><p>number of candidates whose results are plotted (omitting
+the least-favoured candidates first)</p></dd>
 
 
 <dt>anBallots, cMargin</dt>

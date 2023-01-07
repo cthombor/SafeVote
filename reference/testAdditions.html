@@ -67,8 +67,8 @@ favoured one.</p>
 <span>  countMethod <span class="op">=</span> <span class="st">"stv"</span>,</span>
 <span>  countArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  exptName <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  equiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  everbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,12 +119,12 @@ votes)</p></dd>
 a 3-character string of capital letters is chosen at random.</p></dd>
 
 
-<dt>quiet</dt>
-<dd><p><code>TRUE</code> to suppress all output</p></dd>
+<dt>equiet</dt>
+<dd><p><code>TRUE</code> to suppress all experimental output</p></dd>
 
 
-<dt>verbose</dt>
-<dd><p><code>TRUE</code> to produce diagnostic output</p></dd>
+<dt>everbose</dt>
+<dd><p><code>TRUE</code> to produce diagnostic output from the experiment</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -143,30 +143,7 @@ next-lower-ranked candidate.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="fu">testAdditions</span><span class="op">(</span><span class="va">food_election</span>, arep <span class="op">=</span> <span class="fl">2</span>, favoured <span class="op">=</span> <span class="st">"Strawberries"</span>, </span></span>
 <span class="r-in"><span>  countArgs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>safety <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding up to 2 stv ballots = ( 2 5 4 1 3 )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Testing progress:  1, 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testAdditions at 2022-12-30 01:09:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |          | safety|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:---------|------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |countArgs |      0|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |             | ainc| arep|                                                         tacticalBallot|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------|----:|----:|----------------------------------------------------------------------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |otherFactors |    1|    2| c(Oranges = 2, Pears = 5, Chocolate = 4, Strawberries = 1, Sweets = 3)|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |OHI0   |       20|       2|     5|         1|            3|      4| 1.4451111|       2|           8|      1.7774444| 0.7774444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |OHI1   |       21|       2|     5|         1|            3|      4| 0.6673333|       2|           8|      2.6663333| 0.6663333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |OHI2   |       22|       3|     5|         1|            2|      4| 3.4447778|       2|           8|      0.1104444| 0.5552222|</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in completeRankingTable(partialResult, quiet = quiet, verbose = verbose):</span> sum(is.na(winMargins) == 1) is not TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
