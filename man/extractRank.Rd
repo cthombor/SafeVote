@@ -4,12 +4,10 @@
 \alias{extractRank}
 \title{Extract a ranking vector by name from the results of a ballot count}
 \usage{
-extractRank(rankMethod, countMethod, cr)
+extractRank(rankMethod, cr)
 }
 \arguments{
-\item{rankMethod}{e.g. "elected"}
-
-\item{countMethod}{e.g. "stv"}
+\item{rankMethod}{"safeRank", "elected", or "rank"}
 
 \item{cr}{structure returned by a ballot-counting method}
 }

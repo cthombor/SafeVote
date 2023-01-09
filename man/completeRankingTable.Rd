@@ -2,9 +2,9 @@
 % Please edit documentation in R/stv.R
 \name{completeRankingTable}
 \alias{completeRankingTable}
-\title{internal method to analyse the partial results of an stv() ballot count,
-to discover a complete ranking of all candidates.  The ranking may depend
-on the value of nseats, because this affects how votes are transferred.}
+\title{internal method to analyse the partial results of an stv() ballot count, to
+discover a complete ranking of all candidates.  The ranking may depend on the
+value of nseats, because this affects how votes are transferred.}
 \usage{
 completeRankingTable(object, quiet, verbose)
 }
@@ -16,10 +16,11 @@ completeRankingTable(object, quiet, verbose)
 \item{verbose}{TRUE to produce diagnostic output}
 }
 \value{
-data.frame with columns Rank, Margin, Candidate, Elected, SafeRank
+data.frame with columns TotalRank, Margin, Candidate, Elected,
+SafeRank
 }
 \description{
-internal method to analyse the partial results of an stv() ballot count,
-to discover a complete ranking of all candidates.  The ranking may depend
-on the value of nseats, because this affects how votes are transferred.
+internal method to analyse the partial results of an stv() ballot count, to
+discover a complete ranking of all candidates.  The ranking may depend on the
+value of nseats, because this affects how votes are transferred.
 }

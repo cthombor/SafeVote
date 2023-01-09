@@ -116,11 +116,11 @@
 #' 
 #' @description This data follows the structure of a 2016 Yale
 #'   Faculty Senate election, with candidate names anonomyised and permuted.
-#'   Imported to SafeVote from [STV v1.0.2](https://github.com/jayemerson/STV)
+#'   Imported to SafeVote from [STV v1.0.2](https://github.com/jayemerson/STV),
+#'   after applying the `STV::cleanBallots` method to remove the ten empty
+#'   rows.
 #'   
-#' @format A data frame with 489 observations and 44 candidates. 10 rows are
-#'   blank, which will cause the ballot-counting methods to throw a warning
-#'   message.
+#' @format A data frame with 479 observations and 44 candidates. 
 #'   
 #' @keywords datasets
 "yale_ballots"

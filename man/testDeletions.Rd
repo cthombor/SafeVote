@@ -22,7 +22,7 @@ testDeletions(
 \item{votes}{A set of ballots, as in
 \href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}}
 
-\item{countMethod}{The name of a function which will count the ballots}
+\item{countMethod}{"stv" (default) or "condorcet"}
 
 \item{countArgs}{List of args to be passed to \code{countMethod} (in addition to
 \code{votes})}
@@ -36,7 +36,9 @@ from \code{votes}, without replacement)}
 
 \item{drep}{Maximum number of elections (required if \code{dinc=0})}
 
-\item{rankMethod}{Name of a ranking attribute in the output of countMethod}
+\item{rankMethod}{"safeRank" (default), "elected", or "rank".  "rank" is
+a total ranking of the candidates, with ties broken at random.  "elected"
+assigns rank=1 to elected candidates, rank=2 for eliminated candidates.}
 
 \item{exptName}{stem-name of experimental units \emph{e.g.} "E".  If \code{NULL}, then
 a 3-character string of capital letters is chosen at random.}

@@ -9,10 +9,12 @@
 #'
 #' @param votes A set of ballots, as in 
 #'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
-#' @param countMethod The name of a function which will count the ballots
+#' @param countMethod "stv" (default) or "condorcet"
 #' @param countArgs List of args to be passed to `countMethod` (in addition to
 #'   `votes`)
-#' @param rankMethod Name of a ranking attribute in the output of countMethod
+#' @param rankMethod "safeRank" (default), "elected", or "rank".  "rank" is
+#'   a total ranking of the candidates, with ties broken at random.  "elected"
+#'   assigns rank=1 to elected candidates, rank=2 for eliminated candidates.
 #' @param dstart Number of ballots in the first ballot-count (selected at random
 #'   from `votes`, without replacement)
 #' @param dinc Number of ballots to be deleted in subsequent steps
@@ -44,8 +46,13 @@ testDeletions <- function(votes,
                           exptName = NULL,
                           equiet = FALSE,
                           everbose = FALSE) {
+  
+  stopifnot(!is.null(votes))
   ## stv() throws an error if there are fewer than two ballots
   stopifnot(nrow(votes) > 1)
+  
+  stopifnot(countMethod %in% c("stv", "condorcet"))
+  stopifnot(rankMethod %in% c("safeRank", "elected", "rank"))
   
   marginNames <-
     sapply(colnames(votes), function(x)
@@ -66,10 +73,6 @@ testDeletions <- function(votes,
   ballots <- votes[sv,]
   
   cr <- do.call(countMethod, append(cArgs, list(votes = ballots)))
-  if (!rankMethod %in% attributes(cr)$names) {
-    stop(paste("countMethod", countMethod, "does not produce a",
-               rankMethod))
-  }
   
   nseats <- cr$nseats
   
@@ -131,11 +134,11 @@ testDeletions <- function(votes,
   }
   exptID = paste0(exptName, 0)
   
-  crRank <- extractRank(rankMethod, countMethod, cr)
-  crMargins <- extractMargins(marginNames, rankMethod, cr)
+  crRanks <- extractRank(rankMethod, cr)
+  crMargins <- extractMargins(marginNames, crRanks, cr)
   newResult <- append(list(exptID = exptID,
                            nBallots = nb),
-                      append(crRank,
+                      append(crRanks,
                              crMargins))
   result <- rbind.SafeRankExpt(result, newResult)
   
@@ -165,11 +168,11 @@ testDeletions <- function(votes,
     cr <-
       do.call(countMethod, append(cArgs, list(votes = ballots)))
     
-    crRank <- extractRank(rankMethod, countMethod, cr)
-    crMargins <- extractMargins(marginNames, rankMethod, cr)
+    crRanks <- extractRank(rankMethod, cr)
+    crMargins <- extractMargins(marginNames, crRanks, cr)
     newResult <- append(list(exptID = exptID,
                              nBallots = nb),
-                        append(crRank,
+                        append(crRanks,
                                crMargins))
     result <- rbind.SafeRankExpt(result, newResult)
     stopifnot(is.SafeRankExpt(result))
@@ -199,10 +202,12 @@ testDeletions <- function(votes,
 #'
 #' @param votes A set of ballots, as in
 #'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
-#' @param countMethod The name of a function which will count the ballots
+#' @param countMethod countMethod "stv" (default) or "condorcet"
 #' @param countArgs List of args to be passed to countMethod (in addition to
 #'   votes)
-#' @param rankMethod Name of a ranking attribute in the output of countMethod
+#' @param rankMethod "safeRank" (default), "elected", or "rank".  "rank" is
+#'   a total ranking of the candidates, with ties broken at random.  "elected"
+#'   assigns rank=1 to elected candidates, rank=2 for eliminated candidates.
 #' @param favoured Name of the candidate being "plumped".  If `NULL`, a random
 #'   candidate is selected from among the candidates not initially top-ranked.
 #'   All other candidates are fully-ranked at random, with an identical ballot
@@ -239,6 +244,11 @@ testAdditions <- function(votes,
                           exptName = NULL,
                           equiet = FALSE,
                           everbose = FALSE) {
+  
+  stopifnot(!is.null(votes))
+  stopifnot(countMethod %in% c("stv", "condorcet"))
+  stopifnot(rankMethod %in% c("safeRank", "elected", "rank"))
+  
   if (is.null(arep)) {
     arep <- 1
   }
@@ -304,18 +314,14 @@ testAdditions <- function(votes,
     append(countArgs, list(quiet = !everbose, verbose = everbose))
   
   cr <- do.call(countMethod, append(cArgs, list(votes = votes)))
-  if (!rankMethod %in% attributes(cr)$names) {
-    stop(paste("countMethod", countMethod, "does not produce a",
-               rankMethod))
-  }
   
   ## include the initial ballot count in the experimental record
   exptID = paste0(exptName, 0)
-  crRank <- extractRank(rankMethod, countMethod, cr)
-  crMargins <- extractMargins(marginNames, rankMethod, cr)
+  crRanks <- extractRank(rankMethod, cr)
+  crMargins <- extractMargins(marginNames, crRanks, cr)
   newResult <- append(list(exptID = exptID,
                            nBallots = nrow(votes)),
-                      append(crRank,
+                      append(crRanks,
                              crMargins))
   result <- rbind.SafeRankExpt(result, newResult)
   nseats <- cr$nseats
@@ -323,7 +329,7 @@ testAdditions <- function(votes,
 
   if (!equiet && everbose) {
     cat("Initial ranking by", countMethod, ":\n")
-    print(crRank)
+    print(crRanks)
   }
   
   svotes <- votes ## simulated ballot box
@@ -361,11 +367,11 @@ testAdditions <- function(votes,
                   append(cArgs, list(votes = svotes)))
     
     exptID = paste0(exptName, repct)
-    crRank <- extractRank(rankMethod, countMethod, cr)
-    crMargins <- extractMargins(marginNames, rankMethod, cr)
+    crRanks <- extractRank(rankMethod, cr)
+    crMargins <- extractMargins(marginNames, crRanks, cr)
     newResult <- append(list(exptID = exptID,
                              nBallots = nrow(svotes)),
-                        append(crRank,
+                        append(crRanks,
                                crMargins))
     result <- rbind.SafeRankExpt(result, newResult)
     
@@ -388,12 +394,12 @@ testAdditions <- function(votes,
 #' ballots, use [testDeletions()].
 #'
 #' @param votes A numeric matrix: one row per ballot, one column per candidate
-#' @param countMethod The name of a function which will count the ballots,
-#'   *e.g.* "stv", "condorcet"
+#' @param countMethod countMethod "stv" (default) or "condorcet"
 #' @param countArgs List of args to be passed to `countMethod` (in addition to
 #'   `votes`)
-#' @param rankMethod Name of a ranking attribute in the output of countMethod,
-#'   e.g. "elected", "ranking", "safeRank".
+#' @param rankMethod "safeRank" (default), "elected", or "rank".  "rank" is
+#'   a total ranking of the candidates, with ties broken at random.  "elected"
+#'   assigns rank=1 to elected candidates, rank=2 for eliminated candidates.
 #' @param astart Starting number of ballots (min 2)
 #' @param ainc Number of ballots to be added in each step. Must be non-negative.
 #' @param arep Number of repetitions of the test on each step. Required to be
@@ -425,7 +431,11 @@ testFraction <- function(votes = NULL,
                          equiet = FALSE,
                          everbose = FALSE)
 {
+  
   stopifnot(!is.null(votes))
+  stopifnot(countMethod %in% c("stv", "condorcet"))
+  stopifnot(rankMethod %in% c("safeRank", "elected", "rank"))
+
   nv <- nrow(votes)
   nc <- ncol(votes)
   
@@ -535,11 +545,11 @@ testFraction <- function(votes = NULL,
       nseats <- cr$nseats
       attr(result, "nseats") <- nseats
     }
-    crRank <- extractRank(rankMethod, countMethod, cr)
-    crMargins <- extractMargins(marginNames, rankMethod, cr)
+    crRanks <- extractRank(rankMethod, cr)
+    crMargins <- extractMargins(marginNames, crRanks, cr)
     newResult <- append(list(exptID = exptID,
                              nBallots = nb),
-                        append(crRank,
+                        append(crRanks,
                                crMargins))
     result <- rbind.SafeRankExpt(result, newResult)
   }
@@ -554,23 +564,21 @@ testFraction <- function(votes = NULL,
 
 #' Extract a ranking vector by name from the results of a ballot count
 #'
-#' @param rankMethod e.g. "elected"
-#' @param countMethod e.g. "stv"
+#' @param rankMethod "safeRank", "elected", or "rank"
 #' @param cr structure returned by a ballot-counting method
 #'
 #' @return a numeric ranking vector, in order of colnames(cr$data)
-extractRank <- function(rankMethod, countMethod, cr) {
-  if (!rankMethod %in% attributes(cr)$names) {
-    stop(paste("countMethod",
-               countMethod,
-               "does not produce a",
-               rankMethod))
-  }
+extractRank <- function(rankMethod, cr) {
+  stopifnot(rankMethod %in% c("safeRank", "elected", "rank"))
   if (rankMethod == "elected") {
-    ## convert a list of names to a 1-2 ranking vector
-    ranks <- c(ifelse(colnames(cr$data) %in% cr$elected, 2, 1))
-  } else {
-    ranks <- cr[[rankMethod]]
+    ## convert a list of elected candidates to a 1-2 ranking vector
+    ranks <- c(ifelse(colnames(cr$data) %in% cr$elected, 1, 2))
+  } else if (rankMethod == "safeRank") {
+    ranks <- cr$safeRank
+    ## sanity check: safeRank must be in canonical (ballot) order
+    stopifnot(identical(names(cr$safeRank), colnames(cr$data)))
+  } else if (rankMethod == "rank") {
+    ranks <- cr$ranking
   }
   names(ranks) <- colnames(cr$data)
   return(ranks)
@@ -579,37 +587,37 @@ extractRank <- function(rankMethod, countMethod, cr) {
 #' extract margins from the results of a ballot count
 #'
 #' @param marginNames list of colnames of the margins in our SafeRank result
-#' @param rankMethod if "safeRank", margins are adjusted appropriately
+#' @param crRanks ranks of candidates, not necessarily total
 #' @param cr structure returned by a ballot-counting method
+#' 
+#' Margins are adjusted for tied candidates, such that candidates within a tie
+#' group have margins indicative of their relative strengths. Extremely small
+#' margins are indicative of floating-point roundoff errors.
 #'
 #' @return named list of margins
-extractMargins <- function(marginNames, rankMethod, cr) {
+extractMargins <- function(marginNames, crRanks, cr) {
   crMargins <- cr$margins
   names(crMargins) <- marginNames
-  if (rankMethod == "safeRank") {
-    ## adjust the margins for tied candidates, so that candidates within a
-    ## safeRank tie group have margins indicative of their relative strengths.
-    ## Extremely small margins are indicative of floating-point roundoff errors.
-    for (i in (1:length(cr$safeRank))) {
-      tieMask <- (cr$safeRank == i)
-      if (sum(tieMask) > 1) {
-        ## more than one candidate in this tie-group
-        tieExactRankings <- cr$rankingTable$Rank[tieMask]
-        names(tieExactRankings) <- marginNames[tieMask]
-        
-        ## assert: cr$rankingTable$Rank is total
-        stopifnot(length(unique(tieExactRankings)) == length(tieExactRankings))
-        
-        ## Margins are summed from the least-favoured candidate in the tie-group,
-        ## so that the most-favoured candidate has the highest adjusted margin
-        tieExactRankings <- sort(tieExactRankings)
-        adjMargins <-
-          cumsum(rev(crMargins[names(tieExactRankings)]))
-        
-        ## adjust margins in this tie-group
-        crMargins[marginNames][tieMask] <-
-          adjMargins[marginNames][tieMask]
-      }
+  for (i in (1:length(crRanks))) {
+    tieMask <- (crRanks == i)
+    if (sum(tieMask) > 1) {
+      ## more than one candidate in this tie-group
+      tieExactRankings <- cr$rankingTable$TotalRank[tieMask]
+      names(tieExactRankings) <- marginNames[tieMask]
+      
+      ## assert: cr$rankingTable$TotalRank is total
+      stopifnot(length(unique(tieExactRankings)) == length(tieExactRankings))
+      
+      ## Margins are summed from the least-favoured candidate in the
+      ## tie-group, so that the most-favoured candidate has the highest
+      ## adjusted margin
+      tieExactRankings <- sort(tieExactRankings)
+      adjMargins <-
+        cumsum(rev(crMargins[names(tieExactRankings)]))
+      
+      ## adjust margins in this tie-group
+      crMargins[marginNames][tieMask] <-
+        adjMargins[marginNames][tieMask]
     }
   }
   return(crMargins)
@@ -881,6 +889,8 @@ print.summary.SafeRankExpt <- function(x, ...) {
 #' @param subtitle subtitle for the plot.  Default: value of nSeats and
 #'   any non-zero rank-adjustment parameters
 #' @param line TRUE will connect points with lines, and will disable jitter
+#' @param boxPlot TRUE for a boxplot, rather than the default xy-scatter
+#' @param boxPlotCutInterval parameter of boxplot, default 10 
 #' @param pointSize diameter of points
 #' @param ... params for generic plot()
 #' @return graphics object, with side-effect in RStudio Plots pane
@@ -901,14 +911,13 @@ plot.SafeRankExpt <- function(x,
                               title = NULL,
                               subtitle = "(default)",
                               line = TRUE,
+                              boxPlot = FALSE,
+                              boxPlotCutInterval = 10,
                               pointSize = 1,
                               ...) {
   stopifnot(requireNamespace("stringr", quietly = TRUE))
   
-  # declare local variables, for use by data.table::'['
-  # https://www.r-bloggers.com/2019/08/no-visible-binding-for-global-variable/
-  cnames <- pvars <- NULL
-    
+  # coerce x to a SafeRankExpt if possible, otherwise throw an error
   x <- as.SafeRankExpt(x)
   
   ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
@@ -978,14 +987,18 @@ plot.SafeRankExpt <- function(x,
            .SDcols = cnames[j]]
   }
   
-  ## the first ballot-count had the most ballots, defining the plot-order
-  firstScores <- scores[1, ..cnames]
+  ## define the plot order from the election(s) with the most ballots
+  nBallots <- NULL # to avoid R CMD warning on the next statement 
+  lastScores <- scores[nBallots == max(nBallots), .SD, .SDcols = cnames]
+  meanLastScores <- unlist(lapply(lastScores, mean))
   
   ## plot only the most favoured candidates
-  dropMask <- rank(firstScores) > nResults
-  pnames <- cnames[-which(dropMask)]
-  pvars <- unlist(append(list("exptID", "nBallots"), pnames))
-  pscores <- scores[, ..pvars]
+  keepMask <- rank(meanLastScores, ties.method = "random") <= nResults
+  pnames <- cnames[keepMask]
+  pvars <-
+    unlist(append(list("exptID", "nBallots"), pnames))
+  
+  pscores <- scores[, .SD, .SDcols = pvars]
   
   mscores <-
     data.table::melt(
@@ -998,6 +1011,7 @@ plot.SafeRankExpt <- function(x,
   
   # https://github.com/STAT545-UBC/Discussion/issues/451#issuecomment-385731301
   # https://stackoverflow.com/questions/9439256/
+  # using .data to access columns of mscores
   mscores <- dplyr::mutate(
     mscores,
     Candidate = forcats::fct_reorder2(.data$Candidate,
@@ -1013,8 +1027,7 @@ plot.SafeRankExpt <- function(x,
              y = .data$Score,
              colour = .data$Candidate
            )) +
-    geom_point(position = ifelse(line, "identity", "jitter"),
-               size = pointSize) +
+    
     labs(
       x = xlab,
       y = ylab,
@@ -1022,14 +1035,33 @@ plot.SafeRankExpt <- function(x,
       title = title,
       subtitle = subtitle
     ) +
+    
     scale_y_reverse(breaks = integer_breaks())
+  
+  
+  if (boxPlot) {
+    g <-
+      g + geom_boxplot(aes(
+        group = cut_interval(
+          nBallots,
+          boxPlotCutInterval,
+          width = 1,
+          center = 0,
+          boundary = 0.5
+        )
+      ))
+  } else {
+    g <-
+      g + geom_point(position = ifelse(line, "identity", "jitter"),
+                     size = pointSize)
+  }
   
   if (line) {
     g <- g + geom_line()
   }
-  
+   
   if (facetWrap) {
-    g <- g + facet_wrap( ~ .data$Candidate)
+    g <- g + facet_wrap(~ .data$Candidate)
   }
   
   return(g)

@@ -5,9 +5,7 @@
 \alias{yale_ballots}
 \title{Yale Faculty Senate 2016}
 \format{
-A data frame with 489 observations and 44 candidates. 10 rows are
-blank, which will cause the ballot-counting methods to throw a warning
-message.
+A data frame with 479 observations and 44 candidates.
 }
 \usage{
 data(yale_ballots)
@@ -15,6 +13,8 @@ data(yale_ballots)
 \description{
 This data follows the structure of a 2016 Yale
 Faculty Senate election, with candidate names anonomyised and permuted.
-Imported to SafeVote from \href{https://github.com/jayemerson/STV}{STV v1.0.2}
+Imported to SafeVote from \href{https://github.com/jayemerson/STV}{STV v1.0.2},
+after applying the \code{STV::cleanBallots} method to remove the ten empty
+rows.
 }
 \keyword{datasets}

@@ -4,14 +4,18 @@
 \alias{extractMargins}
 \title{extract margins from the results of a ballot count}
 \usage{
-extractMargins(marginNames, rankMethod, cr)
+extractMargins(marginNames, crRanks, cr)
 }
 \arguments{
 \item{marginNames}{list of colnames of the margins in our SafeRank result}
 
-\item{rankMethod}{if "safeRank", margins are adjusted appropriately}
+\item{crRanks}{ranks of candidates, not necessarily total}
 
-\item{cr}{structure returned by a ballot-counting method}
+\item{cr}{structure returned by a ballot-counting method
+
+Margins are adjusted for tied candidates, such that candidates within a tie
+group have margins indicative of their relative strengths. Extremely small
+margins are indicative of floating-point roundoff errors.}
 }
 \value{
 named list of margins

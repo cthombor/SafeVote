@@ -346,7 +346,7 @@ stv <-
       ## not group members).  Note that in a corner case, ic will include
       ## candidates with zero votes.
       ic <-
-        (1:5)[(inPlay & (vcast == vmax)) | ((1:5) %in% group.members)]
+        (1:nc)[(inPlay & (vcast == vmax)) | ((1:nc) %in% group.members)]
       
       D <-
         colSums(abs(result.elect)) == 0  # set of hopeful candidates
@@ -1020,8 +1020,8 @@ image.SafeVote.stv <- function(x,
                                ...) {
   stopifnot(requireNamespace("ggplot2", quietly = TRUE))
   
-  
-  ## Declaring temps for data.table calls.  Warning: overloads rank() 
+  # Declaring temps for data.table calls.  Warning: overloads rank()
+  # https://www.r-bloggers.com/2019/08/no-visible-binding-for-global-variable/
   voter <- rank <- NULL 
   
   xd <- x$data
@@ -1118,7 +1118,7 @@ plot.SafeVote.stv <-
            ...) {
     stopifnot(requireNamespace("ggplot2", quietly = TRUE))
     
-    ## Temp objects for data.table calls
+    ## Declare temp objects for use by data.table
     Count <- value <- selection <-
       i.value <- count.select <- Candidate <-
       i.Count <- NULL
@@ -1180,16 +1180,17 @@ plot.SafeVote.stv <-
     g
   }
 
-#' internal method to analyse the partial results of an stv() ballot count,
-#' to discover a complete ranking of all candidates.  The ranking may depend
-#' on the value of nseats, because this affects how votes are transferred.
+#' internal method to analyse the partial results of an stv() ballot count, to
+#' discover a complete ranking of all candidates.  The ranking may depend on the
+#' value of nseats, because this affects how votes are transferred.
 #'
 #' @param object partial results
 #' @param quiet TRUE to suppress console output
 #' @param verbose TRUE to produce diagnostic output
 #'
-#' @return data.frame with columns Rank, Margin, Candidate, Elected, SafeRank
-#'
+#' @return data.frame with columns TotalRank, Margin, Candidate, Elected,
+#'   SafeRank
+#' 
 completeRankingTable <- function(object, quiet, verbose) {
   cand.in.play <- colSums(abs(object$elect.elim)) == 0
   ## list the eliminated candidates in reverse order of elimination
@@ -1273,9 +1274,7 @@ completeRankingTable <- function(object, quiet, verbose) {
   ## Corner case: a candidate may have been elected on NA votes in the final
   ## round, after one or more eliminations of candidates on 0 votes.
   if (any(is.na(winMargins))) {
-    stopifnot(sum(is.na(winMargins) == 1))
-    stopifnot((length(eliminated) > 0) &&
-                (winMargins[eliminated[length(eliminated)]] == 0))
+    stopifnot(sum(is.na(winMargins)) == 1)
     winMargins[which(is.na(winMargins))] <- 0
   }
   
@@ -1300,7 +1299,7 @@ completeRankingTable <- function(object, quiet, verbose) {
   
   result <-
     data.frame(
-      Rank = ranking,
+      TotalRank = ranking,
       SafeRank = safeRank,
       Margin = winMargins
     )

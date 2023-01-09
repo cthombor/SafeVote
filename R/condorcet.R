@@ -196,6 +196,8 @@ condorcet <-
           x - max(tScore[tScore < x])
       }
     )
+  ## the lowest-preference candidate(s) have a margin of 0, not NA
+  tMargin[which(is.na(tMargin))] <- 0
       
   nv <- nrow(x2)
   fuzz <- safety * (nc-1) * sqrt(nv) / 2
@@ -241,6 +243,15 @@ condorcet <-
     }
   }
   
+  ## We require a total ranking of the candidates, when computing margin
+  ## adjustments within tie-groups. This table is also a nice presentation of
+  ## safeRank and margins
+  rankingTable <- data.frame(
+    TotalRank =  rank(-tScore, ties.method = "random"),
+    SafeRank = safeRank,
+    Margin = tMargin
+  )
+  
   result <-
     structure(
       list(
@@ -253,6 +264,7 @@ condorcet <-
         ranking = tRank,
         margins = tMargin,
         safeRank = safeRank,
+        rankingTable = rankingTable,
         fuzz = fuzz,
         data = x,
         invalid.votes = votes[setdiff(rownames(votes), rownames(x)),

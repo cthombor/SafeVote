@@ -66,7 +66,7 @@ test_that("stv.STV on yale_ballots with seed = 1234", {
   )$elected,
   {
     set.seed(1234)
-    STV::stv(STV::cleanBallots(yale_ballots),
+    STV::stv(yale_ballots,
              seats = 4,
              surplusMethod = "Fractional")$elected
   })

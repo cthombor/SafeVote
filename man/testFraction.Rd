@@ -31,11 +31,11 @@ non-\code{NULL} if \code{ainc=0} && is.null(trep)`.}
 \item{trep}{Limit on the total number of simulated elections. Required to be
 non-\code{NULL} if \code{ainc=0 && is.null(arep)}.}
 
-\item{rankMethod}{Name of a ranking attribute in the output of countMethod,
-e.g. "elected", "ranking", "safeRank".}
+\item{rankMethod}{"safeRank" (default), "elected", or "rank".  "rank" is
+a total ranking of the candidates, with ties broken at random.  "elected"
+assigns rank=1 to elected candidates, rank=2 for eliminated candidates.}
 
-\item{countMethod}{The name of a function which will count the ballots,
-\emph{e.g.} "stv", "condorcet"}
+\item{countMethod}{countMethod "stv" (default) or "condorcet"}
 
 \item{countArgs}{List of args to be passed to \code{countMethod} (in addition to
 \code{votes})}

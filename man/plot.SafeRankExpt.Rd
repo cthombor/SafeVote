@@ -15,6 +15,8 @@
   title = NULL,
   subtitle = "(default)",
   line = TRUE,
+  boxPlot = FALSE,
+  boxPlotCutInterval = 10,
   pointSize = 1,
   ...
 )
@@ -37,6 +39,10 @@ the least-favoured candidates first)}
 any non-zero rank-adjustment parameters}
 
 \item{line}{TRUE will connect points with lines, and will disable jitter}
+
+\item{boxPlot}{TRUE for a boxplot, rather than the default xy-scatter}
+
+\item{boxPlotCutInterval}{parameter of boxplot, default 10}
 
 \item{pointSize}{diameter of points}
 
