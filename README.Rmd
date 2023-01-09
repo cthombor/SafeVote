@@ -65,8 +65,8 @@ is the number of ballots.
 #> 5    5        NA        Pears                5
 ```
 
-A few safety-testing routines are supplied, to support experimental study of the
-statistical behaviour of ballot counting methods. 
+Three safety-testing routines are supplied, to support experimental study of the
+stochastic behaviour of ballot counting methods. 
 
 [testFraction](reference/testFraction) draws a series of independent samples
 from a ballot box. Stochastic experimentation with this method will, we hope,
