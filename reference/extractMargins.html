@@ -42,7 +42,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extractMargins</span><span class="op">(</span><span class="va">marginNames</span>, <span class="va">rankMethod</span>, <span class="va">cr</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extractMargins</span><span class="op">(</span><span class="va">marginNames</span>, <span class="va">crRanks</span>, <span class="va">cr</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -51,12 +51,15 @@
 <dd><p>list of colnames of the margins in our SafeRank result</p></dd>
 
 
-<dt>rankMethod</dt>
-<dd><p>if "safeRank", margins are adjusted appropriately</p></dd>
+<dt>crRanks</dt>
+<dd><p>ranks of candidates, not necessarily total</p></dd>
 
 
 <dt>cr</dt>
-<dd><p>structure returned by a ballot-counting method</p></dd>
+<dd><p>structure returned by a ballot-counting method</p>
+<p>Margins are adjusted for tied candidates, such that candidates within a tie
+group have margins indicative of their relative strengths. Extremely small
+margins are indicative of floating-point roundoff errors.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -69,6 +69,8 @@ and \(c&gt;0\) is the margin-scaling parameter <code>cMargin</code>.</p>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  subtitle <span class="op">=</span> <span class="st">"(default)"</span>,</span>
 <span>  line <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  boxPlot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  boxPlotCutInterval <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  pointSize <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -108,6 +110,14 @@ any non-zero rank-adjustment parameters</p></dd>
 
 <dt>line</dt>
 <dd><p>TRUE will connect points with lines, and will disable jitter</p></dd>
+
+
+<dt>boxPlot</dt>
+<dd><p>TRUE for a boxplot, rather than the default xy-scatter</p></dd>
+
+
+<dt>boxPlotCutInterval</dt>
+<dd><p>parameter of boxplot, default 10</p></dd>
 
 
 <dt>pointSize</dt>
