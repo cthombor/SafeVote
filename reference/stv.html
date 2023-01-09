@@ -20,7 +20,7 @@ and the ballots'><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
     
     <a class="navbar-brand me-2" href="../index.html">SafeVote</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.00</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,7 +120,8 @@ backward</p></dd>
 
 <dt>win.by.elim</dt>
 <dd><p><code>TRUE</code> (default) if the quota is waived when there are no
-more candidates than vacant seats</p></dd>
+more candidates than vacant seats.  Note: there is no lower limit when the
+quota is waived, so a candidate may be elected on zero votes.</p></dd>
 
 
 <dt>group.nseats</dt>
@@ -132,10 +133,11 @@ more candidates than vacant seats</p></dd>
 
 
 <dt>complete.ranking</dt>
-<dd><p><code>TRUE</code> (default) if a complete ranking of all
-candidates will be produced.  This parameter affects the value assigned to
-<code>nseats</code> when <code>stv()</code> is called with <code>nseats=NULL</code>, but has no effect on
-elections in which <code>nseats</code> is explicitly specified.</p></dd>
+<dd><p>is <code>TRUE</code> by default.  This parameter is retained
+solely for backwards compatibility with
+<a href="https://cran.r-project.org/web/packages/vote/index.html" class="external-link">vote.2.3-2</a>. It
+has no effect on elections in which <code>nseats</code> is explicitly specified in
+the call to <a href="stv">stv()</a>.</p></dd>
 
 
 <dt>invalid.partial</dt>
