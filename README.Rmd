@@ -49,10 +49,20 @@ is the number of ballots.
 
 ``` r
     library(SafeVote)
-    data(food_election)
-    stv(food_election)
-    stv(food_election, safety=0.25)
-    stv(food_election, safety=0)
+    stv(food_election,quiet=TRUE)$rankingTable
+#>   Rank    Margin    Candidate Elected SafeRank
+#> 1    1 8.0000000    Chocolate       x        1
+#> 2    2 0.5548889 Strawberries       x        2
+#> 3    3 1.2225556      Oranges                2
+#> 4    4 0.7774444       Sweets                2
+#> 5    5        NA        Pears                2
+    stv(food_election,quiet=TRUE,safety=0)$rankingTable
+#>   Rank    Margin    Candidate Elected SafeRank
+#> 1    1 8.0000000    Chocolate       x        1
+#> 2    2 0.5548889 Strawberries       x        2
+#> 3    3 1.2225556      Oranges                3
+#> 4    4 0.7774444       Sweets                4
+#> 5    5        NA        Pears                5
 ```
 
 A few safety-testing routines are supplied, to support experimental study of the
@@ -84,6 +94,7 @@ plot(xrHare,boxPlot=TRUE,boxPlotCutInterval=10,
 ```
 
 ![](man/figures/yaleHare.png)
+
 [testFraction](reference/testFraction) may also be useful in determining the
 extent to which the safety of the preliminary results of an STV election is
 affected by its quota method.  In the case of the 2016 Yale Senate election, the

@@ -37,10 +37,20 @@ is the number of ballots.
 
 ``` r
     library(SafeVote)
-    data(food_election)
-    stv(food_election)
-    stv(food_election, safety=0.25)
-    stv(food_election, safety=0)
+    stv(food_election,quiet=TRUE)$rankingTable
+#>   Rank    Margin    Candidate Elected SafeRank
+#> 1    1 8.0000000    Chocolate       x        1
+#> 2    2 0.5548889 Strawberries       x        2
+#> 3    3 1.2225556      Oranges                2
+#> 4    4 0.7774444       Sweets                2
+#> 5    5        NA        Pears                2
+    stv(food_election,quiet=TRUE,safety=0)$rankingTable
+#>   Rank    Margin    Candidate Elected SafeRank
+#> 1    1 8.0000000    Chocolate       x        1
+#> 2    2 0.5548889 Strawberries       x        2
+#> 3    3 1.2225556      Oranges                3
+#> 4    4 0.7774444       Sweets                4
+#> 5    5        NA        Pears                5
 ```
 
 A few safety-testing routines are supplied, to support experimental
@@ -71,22 +81,23 @@ plot(xrHare,boxPlot=TRUE,boxPlotCutInterval=10,
      line=FALSE,facetWrap=TRUE,nResults=6)
 ```
 
-![](man/figures/yaleHare.png) [testFraction](reference/testFraction) may
-also be useful in determining the extent to which the safety of the
-preliminary results of an STV election is affected by its quota method.
-In the case of the 2016 Yale Senate election, the use of a Droop quota,
-rather than a Hare quota, has a significant influence over the partial
-results for the fourth seat. This influence is readily explained by the
-fact that multiple rounds of elimination were required before any
-candidate achieved the quota. Fewer rounds of elimination are required
-to reach a Droop quota, so fewer votes are transferred before each seat
-is filled – which will differentially affect the vote-counts of the
-candidates still in play for the remaining seats. Furthermore, the
-[Cambridge method of transferring
-votes](https://www.opavote.com/methods/cambridge-stv-rules) may have
-been employed. Under these rules, the initial numbering of the ballots
-determines the ballot papers which are consulted when a candidate’s
-surplus votes are transfered. As noted in the tests of [STV
+![](man/figures/yaleHare.png)
+
+[testFraction](reference/testFraction) may also be useful in determining
+the extent to which the safety of the preliminary results of an STV
+election is affected by its quota method. In the case of the 2016 Yale
+Senate election, the use of a Droop quota, rather than a Hare quota, has
+a significant influence over the partial results for the fourth seat.
+This influence is readily explained by the fact that multiple rounds of
+elimination were required before any candidate achieved the quota. Fewer
+rounds of elimination are required to reach a Droop quota, so fewer
+votes are transferred before each seat is filled – which will
+differentially affect the vote-counts of the candidates still in play
+for the remaining seats. Furthermore, the [Cambridge method of
+transferring votes](https://www.opavote.com/methods/cambridge-stv-rules)
+may have been employed. Under these rules, the initial numbering of the
+ballots determines the ballot papers which are consulted when a
+candidate’s surplus votes are transfered. As noted in the tests of [STV
 v1.0.2](https://cran.r-project.org/package=STV), if ballots are selected
 for a vote-transfer process by a pseudorandom number generator, the
 seeding of this generator affects the outcome of the election. The
