@@ -20,13 +20,15 @@
 #' @param constant.quota `TRUE` if quota is held constant.  Over-rides
 #'   `quota.hare`. Default is `FALSE`
 #' @param win.by.elim `TRUE` (default) if the quota is waived when there are no
-#'   more candidates than vacant seats
+#'   more candidates than vacant seats.  Note: there is no lower limit when the
+#'   quota is waived, so a candidate may be elected on zero votes.
 #' @param group.nseats number of seats reserved to members of a group
 #' @param group.members vector of members of the group with reserved seats
-#' @param complete.ranking `TRUE` (default) if a complete ranking of all
-#'   candidates will be produced.  This parameter affects the value assigned to
-#'   `nseats` when [stv()] is called with `nseats=NULL`, but has no effect on
-#'   elections in which `nseats` is explicitly specified.
+#' @param complete.ranking is `TRUE` by default.  This parameter is retained
+#'   solely for backwards compatibility with
+#'   [vote.2.3-2](https://cran.r-project.org/web/packages/vote/index.html). It
+#'   has no effect on elections in which `nseats` is explicitly specified in
+#'   the call to [stv()](stv).
 #' @param invalid.partial `TRUE` if ballots which do not specify a complete
 #'   ranking of candidates are informal (aka "invalid") *i.e.* ignored
 #'   (with a warning).  Default is `FALSE`.

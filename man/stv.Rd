@@ -48,16 +48,18 @@ backward}
 \code{quota.hare}. Default is \code{FALSE}}
 
 \item{win.by.elim}{\code{TRUE} (default) if the quota is waived when there are no
-more candidates than vacant seats}
+more candidates than vacant seats.  Note: there is no lower limit when the
+quota is waived, so a candidate may be elected on zero votes.}
 
 \item{group.nseats}{number of seats reserved to members of a group}
 
 \item{group.members}{vector of members of the group with reserved seats}
 
-\item{complete.ranking}{\code{TRUE} (default) if a complete ranking of all
-candidates will be produced.  This parameter affects the value assigned to
-\code{nseats} when \code{\link[=stv]{stv()}} is called with \code{nseats=NULL}, but has no effect on
-elections in which \code{nseats} is explicitly specified.}
+\item{complete.ranking}{is \code{TRUE} by default.  This parameter is retained
+solely for backwards compatibility with
+\href{https://cran.r-project.org/web/packages/vote/index.html}{vote.2.3-2}. It
+has no effect on elections in which \code{nseats} is explicitly specified in
+the call to \href{stv}{stv()}.}
 
 \item{invalid.partial}{\code{TRUE} if ballots which do not specify a complete
 ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored

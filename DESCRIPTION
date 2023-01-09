@@ -1,8 +1,8 @@
 Package: SafeVote
 Type: Package
 Title: Election Vote Counting with Safety Features
-Version: 0.99
-Date: 2023-01-05
+Version: 1.00
+Date: 2023-01-10
 Author: Clark Thomborson
 Maintainer: Clark Thomborson<cthombor@pm.me>
 Description: Experimental fork of vote_2.3-2, with SafeRank and safety tests. 
