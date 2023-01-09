@@ -87,22 +87,25 @@ plot(xrHare,boxPlot=TRUE,boxPlotCutInterval=10,
 [testFraction](reference/testFraction) may also be useful in determining the
 extent to which the safety of the preliminary results of an STV election is
 affected by its quota method.  In the case of the 2016 Yale Senate election, the
-use of a Droop quota seems likely to have significantly increased the variance
-in partial results for the fourth seat.  Multiple rounds of elimination were
-required before any candidate achieved the quota, increasing the importance of
-votes transferred from the eliminated candidates.  Furthermore, the [Cambridge
-method of transferring
-votes(https://www.opavote.com/methods/cambridge-stv-rules) may have been
+use of a Droop quota, rather than a Hare quota, has a significant influence over
+the partial results for the fourth seat.  This influence is readily explained by
+the fact that multiple rounds of elimination were required before any candidate
+achieved the quota.  Fewer rounds of elimination are required to reach a Droop
+quota, so fewer votes are transferred before each seat is filled -- which will
+differentially affect the vote-counts of the candidates still in play for the
+remaining seats.  Furthermore, the [Cambridge method of transferring
+votes](https://www.opavote.com/methods/cambridge-stv-rules) may have been
 employed. Under these rules, the initial numbering of the ballots determines the
 ballot papers which are consulted when a candidate's surplus votes are
 transfered.  As noted in the tests of [STV
 v1.0.2](https://cran.r-project.org/package=STV), if ballots are selected for a
-vote-transfer process are determined by a pseudorandom number generator, the
-seeding of this generator affects the outcome of the election.  The median bars
-in the per-candidate boxplots in the last decile of vote-counting in our
-experimental results below (using the Droop quota with fractional vote
-transfers), ATL_2 has a small margin of victory for the third seat, ATL_54 has a
-small margin of victory for the fourth seat, and ATL_27 is not elected.
+vote-transfer process by a pseudorandom number generator, the seeding of this
+generator affects the outcome of the election.  The per-candidate boxplots in
+the last decile of vote-counting in our experimental results below (using the
+Droop quota with fractional vote transfers) illustrate this phenomenon.  The
+median result of the last decile of ballot-counting show ATL_2 having a very
+small margin of victory for the third seat, and ATL_54 having a slight advantage
+over ATL_27 in a very close race for the fourth seat.
 
 ``` r
 load(SaveVote)
@@ -185,8 +188,8 @@ safety of an election result. We introduce the scaling factor $c/\sqrt{n}$ into
 the exponent as a rough-cut estimate of the standard deviation of the standard
 deviation of a victory margin in an election with $n$ ballots.  Our
 margin-scaling parameter $c$ has the default value of 1, and may be adjusted
-using the parameter `cMargin` of [plot.SafeVote](reference/plot.SafeVote). In
-the sample [testDeletions](reference/testDeletions) plot above, Morrissey’s
+using the parameter `cMargin` of [plot.SafeVote](reference/plot.SafeVote.stv).
+In the sample [testDeletions](reference/testDeletions) plot above, Morrissey’s
 adjusted rank is visually very close to McDonald’s adjusted rank when most of
 the ballots have been counted.  This suggests to us that their relative standing
 in this election is sensitive to small variations in voter behaviour.
