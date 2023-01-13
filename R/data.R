@@ -195,7 +195,7 @@
 #' 
 #' @description This data is one of 87 sets of ballots from the [Tideman data
 #'   collection](https://rangevoting.org/TidemanData.html), as curated by [The
-#'   Center for Range Voting](https://rangevoting.org/).
+#'   Center for Range Voting](https://rangevoting.org/). 
 #'
 #'   This set of ballots was collected in 1988 by Nicolaus Tideman, with support
 #'   from NSF grant SES86-18328. "The data are records of ballots from elections
