@@ -13,6 +13,15 @@
     <loc>/reference/SafeVote-package.html</loc>
   </url>
   <url>
+    <loc>/reference/a3_hil.html</loc>
+  </url>
+  <url>
+    <loc>/reference/a4_hil.html</loc>
+  </url>
+  <url>
+    <loc>/reference/a53_hil.html</loc>
+  </url>
+  <url>
     <loc>/reference/approval.html</loc>
   </url>
   <url>
@@ -115,6 +124,9 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/invalid.votes.html</loc>
+  </url>
+  <url>
     <loc>/reference/is.SafeRankExpt.html</loc>
   </url>
   <url>
@@ -164,6 +176,9 @@
   </url>
   <url>
     <loc>/reference/rbind.SafeRankExpt.html</loc>
+  </url>
+  <url>
+    <loc>/reference/readHil.html</loc>
   </url>
   <url>
     <loc>/reference/remove.candidate.html</loc>

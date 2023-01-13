@@ -3,13 +3,13 @@
 computed once per dinc ballot-deletions.  The experiment terminates after a
 specified number of ballots have been deleted, or a specified number of
 ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-testFraction() to experiment with independently-drawn samples from the
-ballot-box."><title>Assess the safety of a preliminary result for an election — testDeletions • SafeVote</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Assess the safety of a preliminary result for an election — testDeletions"><meta property="og:description" content="Ballots are deleted at random from the ballot-box, with election results
+testFraction()
+to experiment with independently-drawn samples from the ballot-box."><title>Assess the safety of a preliminary result for an election — testDeletions • SafeVote</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Assess the safety of a preliminary result for an election — testDeletions"><meta property="og:description" content="Ballots are deleted at random from the ballot-box, with election results
 computed once per dinc ballot-deletions.  The experiment terminates after a
 specified number of ballots have been deleted, or a specified number of
 ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-testFraction() to experiment with independently-drawn samples from the
-ballot-box."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+testFraction()
+to experiment with independently-drawn samples from the ballot-box."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
@@ -20,7 +20,7 @@ ballot-box."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
     
     <a class="navbar-brand me-2" href="../index.html">SafeVote</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.00</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,8 +51,8 @@ ballot-box."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs
 computed once per <code>dinc</code> ballot-deletions.  The experiment terminates after a
 specified number of ballots have been deleted, or a specified number of
 ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-<code><a href="testFraction.html">testFraction()</a></code> to experiment with independently-drawn samples from the
-ballot-box.</p>
+<a href="https://cthombor.github.io/SafeVote/reference/testFraction" class="external-link">testFraction()</a>
+to experiment with independently-drawn samples from the ballot-box.</p>
     </div>
 
     <div class="section level2">
@@ -76,7 +76,7 @@ ballot-box.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>votes</dt>
 <dd><p>A set of ballots, as in
-<a href="https://cran.r-project.org/web/packages/vote/index.html" class="external-link">vote_2.3.2</a></p></dd>
+<a href="https://CRAN.R-project.org/package=vote" class="external-link">vote_2.3.2</a></p></dd>
 
 
 <dt>countMethod</dt>
@@ -128,8 +128,10 @@ a 3-character string of capital letters is chosen at random.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p><a href="new_SafeRankExpt.html">SafeRankExpt</a> object, describing this experiment
-and its results</p>
+<p><a href="https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt" class="external-link">SafeRankExpt</a></p>
+
+
+<p>object, describing this experiment and its results</p>
     </div>
 
     <div class="section level2">
@@ -138,7 +140,7 @@ and its results</p>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv: 20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2023-01-09 21:15:32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2023-01-13 21:17:21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -152,21 +154,21 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN0   |       20|       2|     2|         1|            2|      2|  6.000000|       0|    8.000000|       4.554889| 2.7774444|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN1   |       18|       2|     2|         1|            2|      2|  5.000000|       0|    7.000000|       4.181182| 2.8178182|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN2   |       16|       2|     2|         1|            2|      2|  4.000000|       0|    7.000000|       3.799400| 2.8662667|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN3   |       14|       2|     2|         1|            2|      2|  3.000000|       0|    7.000000|       3.406852| 2.9254815|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN4   |       12|       2|     2|         1|            2|      2|  2.000000|       0|    6.000000|       4.999500| 4.9995000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN5   |       10|       2|     2|         1|            2|      2|  2.000000|       0|    4.000000|       4.332833| 4.3328333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN6   |        8|       1|     1|         1|            1|      1|  3.333083|       0|    5.333083|       1.333083| 3.3323333|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN7   |        6|       1|     1|         1|            1|      1|  2.000000|       0|    3.000000|       0.333000| 1.6660000|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN8   |        4|       1|     1|         1|            1|      1|  2.000000|       0|    2.000000|       0.000000| 0.6656667|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |ACN9   |        2|       1|     1|         1|            1|      1|  1.000000|       0|    1.000000|       0.000000| 0.3323333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY0   |       20|       2|     2|         1|            2|      2|  6.000000|       0|           8|      4.5548889| 2.7774444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY1   |       18|       2|     2|         1|            2|      2|  5.364364|       2|           7|      4.0000000| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY2   |       16|       2|     2|         1|            2|      2|  5.000000|       0|           6|      4.2659667| 1.3997000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY3   |       14|       2|     2|         1|            2|      2|  3.000000|       1|           6|      4.3695926| 0.9627407|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY4   |       12|       2|     2|         1|            2|      2|  3.429429|       1|           4|      3.0000000| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY5   |       10|       1|     1|         1|            1|      1|  4.000000|       1|           7|      2.2213889| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY6   |        8|       1|     1|         1|            1|      1|  3.000000|       0|           5|      1.8658667| 0.4664667|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY7   |        6|       1|     3|         1|            3|      3|  3.000000|       0|           3|      0.0000000| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY8   |        4|       1|     1|         1|            1|      1|  2.000000|       0|           2|      0.6656667| 0.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |VIY9   |        2|       2|     2|         1|            2|      2|  0.000000|       0|           2|      1.3323333| 0.0000000|</span>
 <span class="r-in"><span><span class="fu">testDeletions</span><span class="op">(</span><span class="va">food_election</span>, countMethod<span class="op">=</span><span class="st">"stv"</span>,</span></span>
 <span class="r-in"><span>  countArgs<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>complete.ranking<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of ballots counted by stv: 20, 18, 16, 14, 12, 10, 8, 6, 4, 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2023-01-09 21:15:32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testDeletions at 2023-01-13 21:17:21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = stv, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -183,18 +185,18 @@ and its results</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO0   |       20|       2|     2|         1|            2|      2|         4|       2|    8.000000|      6.7771111| 3.888556|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO1   |       18|       2|     2|         1|            2|      2|         4|       2|    6.000000|      5.8993000| 3.099700|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO2   |       16|       2|     2|         1|            2|      2|         3|       2|    6.000000|      5.2215556| 3.110778|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO3   |       14|       2|     2|         1|            2|      2|         2|       2|    6.000000|      4.5410417| 3.124625|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO4   |       12|       2|     2|         1|            2|      2|         2|       0|    6.000000|      4.7493750| 3.249625|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO5   |       10|       2|     2|         1|            2|      2|         2|       0|    5.000000|      3.0470476| 3.285286|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO6   |        8|       2|     2|         1|            2|      2|         1|       0|    5.000000|      2.3328333| 3.332833|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO7   |        6|       2|     2|         1|            2|      2|         1|       0|    3.000000|      1.4995000| 2.499500|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO8   |        4|       1|     1|         1|            1|      1|         1|       0|    2.666167|      0.6661667| 1.666167|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |GDO9   |        2|       1|     1|         1|            1|      1|         1|       0|    0.000000|      0.0000000| 1.000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries|  m.Sweets|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX0   |       20|       2|     2|         1|            2|      2|     4.000|       2|       8.000|       6.777111| 3.8885556|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX1   |       18|       2|     2|         1|            2|      2|     4.000|       2|       7.000|       6.090273| 2.9087273|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX2   |       16|       2|     2|         1|            2|      2|     4.000|       1|       6.000|       5.399400| 2.9329333|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX3   |       14|       2|     2|         1|            2|      2|     3.000|       1|       6.000|       4.703148| 2.9625185|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX4   |       12|       2|     2|         1|            2|      2|     3.000|       1|       4.000|       3.856571| 2.1424286|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX5   |       10|       2|     2|         1|            2|      2|     3.000|       0|       4.000|       3.047048| 2.2852857|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX6   |        8|       1|     1|         1|            1|      1|     3.000|       0|       5.000|       1.466267| 2.1994000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX7   |        6|       2|     2|         1|            2|      2|     1.000|       0|       4.000|       1.599600| 2.3994000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX8   |        4|       2|     2|         1|            2|      2|     1.000|       0|       2.000|       1.554889| 0.7774444|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |IVX9   |        2|       1|     1|         1|            1|      1|     1.799|       0|       1.799|       0.799000| 0.0000000|</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
