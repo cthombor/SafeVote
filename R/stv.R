@@ -1,18 +1,64 @@
 #' Count preferential ballots using an STV method
-#' 
+#'
 #' The `votes` parameter is as described in the [Details for
-#' condorcet()](condorcet.html#details) with the following additional semantics.
-#' If a ballot fails to rank all candidates, it is informal (*i.e.* "invalid")
-#' unless `invalid.partial=FALSE`. If a ballot has equally-ranked candidates, it
-#' is informal unless `equal.preferences=TRUE`. Informal ballots are removed
-#' from the ballot box before counting, a warning is issued,
-#' and the ballots 
+#' `condorcet`](https://cthombor.github.io/SafeVote/reference/condorcet#details)
+#' with the following additional semantics.
+#'
+#' By default the preferences are not allowed to contain duplicates per ballot.
+#' However, if the argument `equal.ranking` is set to `TRUE`, ballots are allowed
+#' to have the same ranking for multiple candidates. The desired format is such
+#' that for each preference $i$ that does not have any duplicate, there must be
+#' exactly $i – 1$ preferences $j$ with $0 < j < i$. For example, valid ordered
+#' preferences are `1; 1; 3; 4; …`, or `1; 2; 3; 3; 3; 6; …`, but NOT `1; 1; 2;
+#' 3; …`, or NOT `1; 2; 3; 3; 3; 5; 6; …`. If the data contain such invalid
+#' votes, they are automatically corrected and a warning is issued by calling
+#' the `correct.ranking` function.
+#'
+#' If equal ranking is not allowed (`equal.ranking = FALSE`), the argument
+#' `invalid.partial` can be used to make ballots containing duplicates or gaps
+#' partially valid. If it is `TRUE`, a ballot is considered valid up to a
+#' preference that is in normal case not allowed. For example, ballots `1; 2; 3;
+#' 4; 4; 6` or `1; 2; 3; 5; 6; 7` would be both converted into `1; 2; 3; 0; 0;
+#' 0`, because the ballots contain valid ranking only up to the third
+#' preference.
+#' 
+#' By default, ties in the STV algorithm are resolved using the forwards
+#' tie-breaking method, see Newland and Briton (Section 5.2.5). Argument `ties`
+#' can be set to ”b” in order to use the backwards tie-breaking method, see
+#' O’Neill (2004). In addition, both methods are complemented by the following
+#' “ordered” method: Prior to the STV election candidates are ordered by the
+#' number of first preferences. Equal ranks are resolved by moving to the number
+#' of second preferences, then third and so on. Remaining ties are broken by
+#' random draws. Such complete ordering is used to break any tie that cannot be
+#' resolved by the forwards or backwards method. If there is at least one tie
+#' during the processing, the output contains a row indicating in which count a
+#' tie-break happened (see the `ties` element in the Value section for an
+#' explanation of the symbols).
+#' 
+#' The ordered tiebreaking described above can be analysed from outside of the
+#' `stv` function by using the `ordered.tiebreak` function for viewing the
+#' a-priori ordering (the highest number is the best and lowest is the worst).
+#' Such ranking is produced by comparing candidates along the columns of the
+#' matrix returned by `ordered.preferences`.
 #'
 #' @param votes an array with one column per candidate and one row per ballot,
 #'   as described in the [Details for condorcet()](condorcet.html#details)
 #' @param nseats the number of seats to be filled in this election
-#' @param eps fuzz-factor when comparing fractional votes
-#' @param equal.ranking = FALSE,
+#' @param eps fuzz-factor when comparing fractional votes.  The default of 0.001
+#'   is preserved from the legacy code, injecting substantial validity hazards
+#'   into the codebase.  We have not attempted to mitigate any of these hazards
+#'   in `SafeVote v1.0.0`.  We prefer instead to retain backwards-compatibility
+#'   with the legacy code in `vote_2.3-2` in the knowledge that, even if these
+#'   hazards were adequately addressed, the resulting code is unlikely to be
+#'   reliable at replicating the results of any other implementation of any of
+#'   the many variants of "STV" counting methods.  Please see the description of
+#'   the `a53_hil` dataset in this package for some preliminary findings on the
+#'   magnitude of the vote-count-variances which may be injected by differing
+#'   implementations of broadly-similar "STV" counting methods.
+#' @param equal.ranking if `TRUE`, equal preferences are allowed.
+#' @param invalid.partial `TRUE` if ballots which do not specify a complete
+#'   ranking of candidates are informal (aka "invalid") *i.e.* ignored
+#'   (with a warning).  Default is `FALSE`.
 #' @param fsep column-separator for output
 #' @param ties vector of tie-breaking methods: `'f'` for forward, `'b'` for
 #'   backward
@@ -26,21 +72,18 @@
 #' @param group.members vector of members of the group with reserved seats
 #' @param complete.ranking is `TRUE` by default.  This parameter is retained
 #'   solely for backwards compatibility with
-#'   [vote.2.3-2](https://cran.r-project.org/web/packages/vote/index.html). It
-#'   has no effect on elections in which `nseats` is explicitly specified in
-#'   the call to [stv()](stv).
-#' @param invalid.partial `TRUE` if ballots which do not specify a complete
-#'   ranking of candidates are informal (aka "invalid") *i.e.* ignored
-#'   (with a warning).  Default is `FALSE`.
+#'   [vote.2.3-2](https://CRAN.R-project.org/package=vote). It has no effect on
+#'   elections in which `nseats` is explicitly specified in the call to
+#'   [stv()](https://cthombor.github.io/SafeVote/reference/stv).
 #' @param verbose `TRUE` for diagnostic output
 #' @param seed integer seed for tie-breaking.  Warning: if non-`NULL`, the PRNG
 #'   for R is reseeded prior to *every* random tie-break among the
 #'   possibly-elected candidates.  We have preserved this functionality in this
 #'   branch to allow regression against the legacy codebase of
-#'   [vote_2.3-2](https://cran.r-project.org/web/packages/vote/index.html). In
-#'   [SafeVote] the default value for seed is `NULL` rather than the legacy
-#'   value of 1234, to mitigate the validity hazard of PRNG reseedings during a
-#'   stochastic experiment.
+#'   [vote_2.3-2](https://CRAN.R-project.org/package=vote). In
+#'   [SafeVote](https://CRAN.R-project.org/package=SafeVote) the default value
+#'   for seed is `NULL` rather than the legacy value of 1234, to mitigate the
+#'   validity hazard of PRNG reseedings during a stochastic experiment.
 #' @param quiet `TRUE` to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param backwards.compatible `TRUE` to regress against vote2_3.2 by
@@ -180,9 +223,9 @@ stv <-
     ## be in row (j-1) of the spreadsheet.
     ##
     
-    if (verbose &&
-        !quiet)
+    if (verbose && !quiet) {
       cat("Number of votes cast is", nrow(votes), "\n")
+    }
     corvotes <- votes
     corrected.votes <- NULL
     
@@ -791,20 +834,27 @@ backwards.tiebreak <- function(prefs, icans, elim = TRUE) {
 #' @param object undocumented, legacy code
 #' @param ... undocumented
 #' @param digits undocumented
-#'
+#' @return data.frame summarising `object`, for use by `print` method
 #' @export
 #'
 summary.SafeVote.stv <- function(object, ..., digits = 3) {
   
-  ## The following function is of undocumented origin.  It is of dubious
-  ## validity, if only because floating-point intermediates will be rounded
-  ## reliably to IEEE double-precision storage format only when they are stored
-  ## in memory -- and that's under the control of the optimising compiler,
-  ## with variations for different CPUs and optimisation levels.
-  
-  ## TODO: consider using formattable::formattable(), which
-  ## is imported by view.stv().  See
-  ## https://stackoverflow.com/questions/3443687/formatting-decimal-places-in-r
+  ## The following function is of undocumented origin.  The intent of the code
+  ## is apparently to introduce a "fuzz" on float-to-integer automagic
+  ## conversions which is right-sized: large enough that programmer-intended
+  ## integral values appear to have been computed by integer arithmetic, but not
+  ## so large that any values which "really are" non-integral are ever
+  ## inappropriately rounded to the nearest integer in a printout. All "fuzzing"
+  ## regimes (including the ones found in various versions of Basic and Python)
+  ## have the potential to distort results -- especially if the programmer has
+  ## attempted to emulate integer arithmetic using "fuzzed" floating-point
+  ## values. One fundamental problem is that the limited-precision mantissa of a
+  ## double-precision float is mostly occupied by the significant digits of a
+  ## large integer value, leaving very little headroom for "fuzzing".  Also,
+  ## subtracting two floating-point numbers which are nearly equal to each other
+  ## may result in a result with surprisingly-low precision, in a phenomenon
+  ## sometimes called "catastrophic cancellation" [Goldberg
+  ## (1991)](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html).
   decimalplaces <- function(x) {
     ifelse(abs(x - round(x)) > .Machine$double.eps ^ 0.5,
            nchar(sub(
@@ -812,7 +862,10 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
            )),
            0)
   }
-  
+  ## TODO: consider using formattable::formattable() instead of this function.
+  ## Note that formattable::formattable() is imported by view.stv().  See
+  ## https://stackoverflow.com/questions/3443687/formatting-decimal-places-in-r
+
   backwards.compatible <- is.null(object$nseats)
   
   ncounts <- nrow(object$preferences)
@@ -931,6 +984,7 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
 #'
 #' @param x election results
 #' @param ... args to be passed to kable()
+#' @return no return value, called for side-effect of printing to console
 #'
 #' @export
 print.summary.SafeVote.stv <- function(x, ...) {
@@ -1003,9 +1057,15 @@ view.SafeVote.stv <- function(object, ...) {
   formattable::formattable(s, formatter, ...)
 }
 
-#' image() method for the result of an stv() ballot-count
+#' visualisation of joint and marginal distributions in STV preferences
 #'
-#' @param x,xpref,ypref,all.pref,proportion undocumented (legacy code)
+#' @param x STV results to be visualised
+#' @param xpref,ypref candidates shown in a joint distribution plot
+#' @param all.pref plot the joint distribution of two preferences (if
+#'   `all.pref=FALSE`) or the marginal distribution of all preferences (if
+#'   `all.pref=TRUE`).
+#' @param proportion The joint distribution can be shown either as proportions
+#'   (if `proportion=TRUE`) or raw vote counts (if `proportion=FALSE`).
 #' @param ... args passed to fields::image.plot()
 #'
 #' @return image object, with side-effect in RStudio Plots pane
@@ -1013,7 +1073,7 @@ view.SafeVote.stv <- function(object, ...) {
 #' @importFrom graphics axis mtext text par
 #' @importFrom fields image.plot
 #' @export
-#'
+#' 
 image.SafeVote.stv <- function(x,
                                xpref = 2,
                                ypref = 1,
@@ -1106,6 +1166,10 @@ image.SafeVote.stv <- function(x,
 }
 
 #' plot() method for the result of an stv() ballot-count
+#'
+#' The `plot` function shows the evolution of the total score for each candidate
+#' as well as the quota. 
+#'
 #' @param x stv results
 #' @param xlab,ylab axis labels
 #' @param point.size diameter of elected/eliminated points

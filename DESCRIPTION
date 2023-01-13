@@ -1,11 +1,13 @@
 Package: SafeVote
 Type: Package
 Title: Election Vote Counting with Safety Features
-Version: 1.00
-Date: 2023-01-10
-Author: Clark Thomborson
-Maintainer: Clark Thomborson<cthombor@pm.me>
-Description: Experimental fork of vote_2.3-2, with SafeRank and safety tests. 
+Version: 1.0.0
+Date: 2023-01-13
+Authors@R: c(person("Clark Thomborson",role=c("cre"),
+  email="c.thomborson@auckland.ac.nz",comment=c(ORCID="0000-0002-4147-7898")))
+Description: Fork of `vote_2.3-2` 
+  [Raftery et al. (2021) <DOI:10.32614/RJ-2021-086>], with additional support 
+  for stochastic experimentation.
 Depends: R (>= 3.5.0)
 Imports: formattable, knitr, fields, grDevices, graphics, utils, ggplot2,
   data.table, stringr, forcats, dplyr

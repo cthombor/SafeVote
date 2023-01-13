@@ -4,11 +4,11 @@
 #' computed once per `dinc` ballot-deletions.  The experiment terminates after a
 #' specified number of ballots have been deleted, or a specified number of
 #' ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-#' [testFraction()] to experiment with independently-drawn samples from the
-#' ballot-box.
+#' [testFraction()](https://cthombor.github.io/SafeVote/reference/testFraction)
+#' to experiment with independently-drawn samples from the ballot-box.
 #'
 #' @param votes A set of ballots, as in 
-#'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
+#'   [vote_2.3.2](https://CRAN.R-project.org/package=vote)
 #' @param countMethod "stv" (default) or "condorcet"
 #' @param countArgs List of args to be passed to `countMethod` (in addition to
 #'   `votes`)
@@ -24,8 +24,9 @@
 #'   a 3-character string of capital letters is chosen at random.
 #' @param equiet TRUE to suppress all experimental output
 #' @param everbose TRUE to produce diagnostic output from the experiment
-#' @return [SafeRankExpt](new_SafeRankExpt.html) object, describing this experiment
-#'   and its results
+#' @return
+#'   [SafeRankExpt](https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt)
+#'   object, describing this experiment and its results
 #' @export
 #' @import data.table
 #' @examples
@@ -201,7 +202,7 @@ testDeletions <- function(votes,
 #' favoured one.
 #'
 #' @param votes A set of ballots, as in
-#'   [vote_2.3.2](https://cran.r-project.org/web/packages/vote/index.html)
+#'   [vote_2.3.2](https://CRAN.R-project.org/package=vote)
 #' @param countMethod countMethod "stv" (default) or "condorcet"
 #' @param countArgs List of args to be passed to countMethod (in addition to
 #'   votes)
@@ -410,8 +411,9 @@ testAdditions <- function(votes,
 #'   a 3-character string of capital letters is chosen at random.
 #' @param equiet `TRUE` to suppress all experimental output
 #' @param everbose `TRUE` to produce diagnostic output from the experiment
-#' @return a [SafeRankExpt](new_SafeRankExpt.html) object of experimental
-#'   results.
+#' @return a
+#'   [SafeRankExpt](https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt)
+#'   object of experimental results.
 #' @export
 #' @examples
 #' data(food_election)

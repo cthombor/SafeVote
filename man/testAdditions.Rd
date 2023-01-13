@@ -20,7 +20,7 @@ testAdditions(
 }
 \arguments{
 \item{votes}{A set of ballots, as in
-\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}}
+\href{https://CRAN.R-project.org/package=vote}{vote_2.3.2}}
 
 \item{ainc}{Number of ballots to be added in each step}
 

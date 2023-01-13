@@ -11,6 +11,9 @@
 
 \item{...}{args to be passed to kable()}
 }
+\value{
+no return value, called for side-effect of printing to console
+}
 \description{
 print() method for a summary() of a SafeVote result
 }

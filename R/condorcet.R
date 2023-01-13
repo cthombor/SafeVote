@@ -38,9 +38,11 @@
 #' @param votes A [matrix] or [data.frame] containing the votes. Rows correspond
 #'   to the votes, columns correspond to the candidates. If `votes` is a
 #'   character string, it is interpreted as a file name from which the votes are
-#'   to be read. See [below](condorcet.html#details).
-#' @param runoff Logical. If [TRUE] and no Condorcet winner exists,
-#' the election goes into a run-off, see [below](condorcet.html#details).
+#'   to be read. See
+#'   [below](https://cthombor.github.io/SafeVote/reference/condorcet#details).
+#' @param runoff Logical. If [TRUE] and no Condorcet winner exists, the election
+#'   goes into a run-off, see
+#'   [below](https://cthombor.github.io/SafeVote/reference/condorcet#details).
 #' @param nseats the number of seats to be filled in this election
 #' @param safety Parameter for a clustering heuristic on a total ranking of
 #' the candidates.  Conjecture: the default of `1.0` ensures a separation
@@ -404,6 +406,7 @@ view.SafeVote.condorcet <- function(object, ...) {
 #' @param x object of type SafeVote.condorcet
 #' @param ... See arguments for [image.SafeVote.stv], especially `xpref`,
 #'   `ypref`, `all.pref` and `proportion`.
+#' @return image object, with side-effect in RStudio Plots pane
 #' @export
 image.SafeVote.condorcet <- function(x, ...) {
     image.SafeVote.stv(x, ...)

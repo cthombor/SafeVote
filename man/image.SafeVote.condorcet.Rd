@@ -16,6 +16,9 @@ can be shown as proportions (if \code{proportion=TRUE}) or raw vote counts
 \item{...}{See arguments for \link{image.SafeVote.stv}, especially \code{xpref},
 \code{ypref}, \code{all.pref} and \code{proportion}.}
 }
+\value{
+image object, with side-effect in RStudio Plots pane
+}
 \description{
 The image function visualizes the joint distribution of two preferences
 (if \code{all.pref=FALSE}) given \code{xpref} and \code{ypref}, as well as the marginal

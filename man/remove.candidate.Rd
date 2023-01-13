@@ -2,16 +2,20 @@
 % Please edit documentation in R/check_votes.R
 \name{remove.candidate}
 \alias{remove.candidate}
-\title{undocumented internal method}
+\title{Remove a candidate, amending ballot papers as required}
 \usage{
 remove.candidate(votes, can, quiet = TRUE)
 }
 \arguments{
-\item{votes, can, quiet}{undocumented}
+\item{votes}{ballot box}
+
+\item{can}{candidate to be removed}
+
+\item{quiet}{suppress diagnostics}
 }
 \value{
-undocumented
+amended ballot box
 }
 \description{
-undocumented internal method
+Remove a candidate, amending ballot papers as required
 }

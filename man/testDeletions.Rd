@@ -20,7 +20,7 @@ testDeletions(
 }
 \arguments{
 \item{votes}{A set of ballots, as in
-\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3.2}}
+\href{https://CRAN.R-project.org/package=vote}{vote_2.3.2}}
 
 \item{countMethod}{"stv" (default) or "condorcet"}
 
@@ -48,16 +48,16 @@ a 3-character string of capital letters is chosen at random.}
 \item{everbose}{TRUE to produce diagnostic output from the experiment}
 }
 \value{
-\href{new_SafeRankExpt.html}{SafeRankExpt} object, describing this experiment
-and its results
+\href{https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt}{SafeRankExpt}
+object, describing this experiment and its results
 }
 \description{
 Ballots are deleted at random from the ballot-box, with election results
 computed once per \code{dinc} ballot-deletions.  The experiment terminates after a
 specified number of ballots have been deleted, or a specified number of
 ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
-\code{\link[=testFraction]{testFraction()}} to experiment with independently-drawn samples from the
-ballot-box.
+\href{https://cthombor.github.io/SafeVote/reference/testFraction}{testFraction()}
+to experiment with independently-drawn samples from the ballot-box.
 }
 \examples{
 data(food_election)

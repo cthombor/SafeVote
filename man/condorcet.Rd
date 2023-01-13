@@ -18,10 +18,12 @@ condorcet(
 \item{votes}{A \link{matrix} or \link{data.frame} containing the votes. Rows correspond
 to the votes, columns correspond to the candidates. If \code{votes} is a
 character string, it is interpreted as a file name from which the votes are
-to be read. See \href{condorcet.html#details}{below}.}
+to be read. See
+\href{https://cthombor.github.io/SafeVote/reference/condorcet#details}{below}.}
 
-\item{runoff}{Logical. If \link{TRUE} and no Condorcet winner exists,
-the election goes into a run-off, see \href{condorcet.html#details}{below}.}
+\item{runoff}{Logical. If \link{TRUE} and no Condorcet winner exists, the election
+goes into a run-off, see
+\href{https://cthombor.github.io/SafeVote/reference/condorcet#details}{below}.}
 
 \item{nseats}{the number of seats to be filled in this election}
 

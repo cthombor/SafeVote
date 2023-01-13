@@ -33,9 +33,19 @@ as described in the \href{condorcet.html#details}{Details for condorcet()}}
 
 \item{nseats}{the number of seats to be filled in this election}
 
-\item{eps}{fuzz-factor when comparing fractional votes}
+\item{eps}{fuzz-factor when comparing fractional votes.  The default of 0.001
+is preserved from the legacy code, injecting substantial validity hazards
+into the codebase.  We have not attempted to mitigate any of these hazards
+in \verb{SafeVote v1.0.0}.  We prefer instead to retain backwards-compatibility
+with the legacy code in \code{vote_2.3-2} in the knowledge that, even if these
+hazards were adequately addressed, the resulting code is unlikely to be
+reliable at replicating the results of any other implementation of any of
+the many variants of "STV" counting methods.  Please see the description of
+the \code{a53_hil} dataset in this package for some preliminary findings on the
+magnitude of the vote-count-variances which may be injected by differing
+implementations of broadly-similar "STV" counting methods.}
 
-\item{equal.ranking}{= FALSE,}
+\item{equal.ranking}{if \code{TRUE}, equal preferences are allowed.}
 
 \item{fsep}{column-separator for output}
 
@@ -57,9 +67,9 @@ quota is waived, so a candidate may be elected on zero votes.}
 
 \item{complete.ranking}{is \code{TRUE} by default.  This parameter is retained
 solely for backwards compatibility with
-\href{https://cran.r-project.org/web/packages/vote/index.html}{vote.2.3-2}. It
-has no effect on elections in which \code{nseats} is explicitly specified in
-the call to \href{stv}{stv()}.}
+\href{https://CRAN.R-project.org/package=vote}{vote.2.3-2}. It has no effect on
+elections in which \code{nseats} is explicitly specified in the call to
+\href{https://cthombor.github.io/SafeVote/reference/stv}{stv()}.}
 
 \item{invalid.partial}{\code{TRUE} if ballots which do not specify a complete
 ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored
@@ -71,10 +81,10 @@ ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored
 for R is reseeded prior to \emph{every} random tie-break among the
 possibly-elected candidates.  We have preserved this functionality in this
 branch to allow regression against the legacy codebase of
-\href{https://cran.r-project.org/web/packages/vote/index.html}{vote_2.3-2}. In
-\link{SafeVote} the default value for seed is \code{NULL} rather than the legacy
-value of 1234, to mitigate the validity hazard of PRNG reseedings during a
-stochastic experiment.}
+\href{https://CRAN.R-project.org/package=vote}{vote_2.3-2}. In
+\href{https://CRAN.R-project.org/package=SafeVote}{SafeVote} the default value
+for seed is \code{NULL} rather than the legacy value of 1234, to mitigate the
+validity hazard of PRNG reseedings during a stochastic experiment.}
 
 \item{quiet}{\code{TRUE} to suppress console output}
 
@@ -95,12 +105,43 @@ adjusted within tiegroups to be valid for the candidates' (possibly
 partial) safeRank.
 }
 \description{
-The \code{votes} parameter is as described in the \href{condorcet.html#details}{Details for condorcet()} with the following additional semantics.
-If a ballot fails to rank all candidates, it is informal (\emph{i.e.} "invalid")
-unless \code{invalid.partial=FALSE}. If a ballot has equally-ranked candidates, it
-is informal unless \code{equal.preferences=TRUE}. Informal ballots are removed
-from the ballot box before counting, a warning is issued,
-and the ballots
+The \code{votes} parameter is as described in the \href{https://cthombor.github.io/SafeVote/reference/condorcet#details}{Details for \code{condorcet}}
+with the following additional semantics.
+}
+\details{
+By default the preferences are not allowed to contain duplicates per ballot.
+However, if the argument \code{equal.ranking} is set to \code{TRUE}, ballots are allowed
+to have the same ranking for multiple candidates. The desired format is such
+that for each preference $i$ that does not have any duplicate, there must be
+exactly $i – 1$ preferences $j$ with $0 < j < i$. For example, valid ordered
+preferences are \verb{1; 1; 3; 4; …}, or \verb{1; 2; 3; 3; 3; 6; …}, but NOT \verb{1; 1; 2; 3; …}, or NOT \verb{1; 2; 3; 3; 3; 5; 6; …}. If the data contain such invalid
+votes, they are automatically corrected and a warning is issued by calling
+the \code{correct.ranking} function.
+
+If equal ranking is not allowed (\code{equal.ranking = FALSE}), the argument
+\code{invalid.partial} can be used to make ballots containing duplicates or gaps
+partially valid. If it is \code{TRUE}, a ballot is considered valid up to a
+preference that is in normal case not allowed. For example, ballots \verb{1; 2; 3; 4; 4; 6} or \verb{1; 2; 3; 5; 6; 7} would be both converted into \verb{1; 2; 3; 0; 0; 0}, because the ballots contain valid ranking only up to the third
+preference.
+
+By default, ties in the STV algorithm are resolved using the forwards
+tie-breaking method, see Newland and Briton (Section 5.2.5). Argument \code{ties}
+can be set to ”b” in order to use the backwards tie-breaking method, see
+O’Neill (2004). In addition, both methods are complemented by the following
+“ordered” method: Prior to the STV election candidates are ordered by the
+number of first preferences. Equal ranks are resolved by moving to the number
+of second preferences, then third and so on. Remaining ties are broken by
+random draws. Such complete ordering is used to break any tie that cannot be
+resolved by the forwards or backwards method. If there is at least one tie
+during the processing, the output contains a row indicating in which count a
+tie-break happened (see the \code{ties} element in the Value section for an
+explanation of the symbols).
+
+The ordered tiebreaking described above can be analysed from outside of the
+\code{stv} function by using the \code{ordered.tiebreak} function for viewing the
+a-priori ordering (the highest number is the best and lowest is the worst).
+Such ranking is produced by comparing candidates along the columns of the
+matrix returned by \code{ordered.preferences}.
 }
 \examples{
 data(food_election)

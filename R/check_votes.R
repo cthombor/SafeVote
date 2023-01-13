@@ -1,3 +1,193 @@
+#' read a set of ballots in .HIL format
+#' 
+#' [rangevoting.org/TidemanData.html](https://rangevoting.org/TidemanData.html):
+#' The data are in a format developed by David Hill. The first line contains the
+#' number of candidates and the number to be elected. (Many but not all
+#' elections were multi-winner.) In subsequent lines that represent ballot
+#' papers, the first number is always 1. (The format was designed for a counting
+#' program that treats the first number as the number of instances of the
+#' ordering of the candidates on the line.) Next on these lines is a sequence of
+#' numbers representing a voter's reported ranking: The number of the candidate
+#' ranked first, the number of the candidate ranked second, and so on. The end
+#' of the reported ranking is signaled by a zero. A zero at the beginning of the
+#' ranking is a signal that the list of ballot papers has ended. Next come the
+#' names of the candidates, each in parentheses, as required by the counting
+#' program, and finally the name of the election.
+#'
+#' @param filnm name of a file in .HIL format
+#' @param quiet suppress diagnostic output 
+#'
+#' @return a matrix with one row per ballot, one column per candidate, with
+#'   named rows and columns, and with attributes "nseats" and "ename"
+#' @export
+#' 
+#' @importFrom stringr str_split_1
+#'
+readHil <- function(filnm, quiet=FALSE){
+  
+  rankToPref <- function(hilrank, nc) {
+    # input is a 0-terminated vector of candidate names
+    # output is a length-nc vector of voter preferences (integers)
+    stopifnot(length(hilrank) == nc+1)
+    if (length(which(hilrank == 0)) != 1) {
+      stop(paste(
+        "\nInvalid .HIL file:",
+        "ballot is recorded as (",
+        hilrank,
+        ") but must end with a 0"
+      ))
+    }
+    if (hilrank[1] == 0) {
+      warning("\nBlank ballot paper")
+      ranking <- integer(0)
+    } else {
+      ranking <- hilrank[1:(which(hilrank == 0) - 1)]
+      if ((length(ranking) != length(unique(ranking))) ||
+          (length(ranking) > nc) ||
+          (max(ranking) > nc) ||
+          (min(ranking) < 1)) {
+        stop(
+          paste(
+            "\nInvalid .HIL file:",
+            "ballot (",
+            hilrank,
+            ") is an ambiguous preference-ranking of the",
+            nc,
+            "candidates"
+          )
+        )
+      }
+    }
+    ## from Rankcluster:::convertSingleRank
+    prefs <- rep(0, nc)
+    ind <- ranking[ranking > 0]
+    for (i in ind) {
+      prefs[i] <- which(ranking == i)
+    }
+    return(prefs)
+  }
+  
+  if (is.character(filnm)) {
+    data <- utils::read.csv(file = filnm, sep=" ", header=FALSE)
+  }
+  
+  ## first row contains number of candidates and seats
+  firstRow <- data[1, ]
+  nc <- as.numeric(firstRow[1])
+  nseats <- as.numeric(firstRow[2])
+  if (!quiet) {
+    cat(
+      paste0(
+        "\n",
+        filnm,
+        " : ncandidates = ",
+        nc,
+        ", nseats = ",
+        nseats,
+        ", nballots = ",
+        nrow(data) - 3
+      )
+    )
+  }
+  if (is.na(nc) || (nc < 1) || is.na(nseats) || (nseats < 1)) {
+    stop(paste(
+      "\nInvalid .HIL file:",
+      "invalid number of candidates",
+      nc,
+      "or seats",
+      nseats
+    ))
+  }
+  
+  ## re-read file, with nc+2 columns.  Ballots are encoded with a leading
+  ## repetition-count, a preference-ordered vector of candidates, and a
+  ## trailing 0.
+  if (is.character(filnm)) {
+    data <- utils::read.csv(file = filnm, sep=" ", header=FALSE,
+                            col.names = c(0:(nc+1)),
+                            colClasses = rep("character", nc+1))
+  }
+  
+  ## last row contains candidate names and the name of the election
+  names <- as.list(data[nrow(data), ])
+  cnames <- names[1:nc]
+  electionName <- names[[nc+1]]
+
+  if (length(cnames) != nc) {
+    stop(
+      paste(
+        "\nInvalid .HIL file:",
+        "number of candidates is",
+        nc,
+        "but",
+        length(cnames),
+        "candidate names are specified"
+      )
+    )
+  }
+  
+  if (!quiet) {
+    cat("\nName of election, as recorded in file: ", electionName)
+  }
+  
+  # omit drive from election name
+  electionNameSplit <- stringr::str_split_1(electionName,"[:]") 
+  ename1 <- toupper(electionNameSplit[length(electionNameSplit)])
+
+  # omit drive, path, and extension from filnm
+  filnmSplit <- stringr::str_split_1(filnm, "[:/.]")
+  ename2 <- toupper(filnmSplit[length(filnmSplit)-1]) 
+  
+  if (ename1 != ename2) {
+    warning(paste(
+      "\nInvalid .HIL file:",
+      "filnm is",
+      filnm,
+      "but the election name is",
+      electionName
+    ))
+  }
+  if (length(ename2) > length(ename1)) {
+    ename <- ename2
+  } else {
+    ename <- ename1
+  }
+  
+  ## penultimate row should be 0
+  penultimateRow <- as.list(data[nrow(data) - 1, ])
+  if (penultimateRow[1] != 0) {
+    stop(paste(
+      "\nInvalid .HIL file:",
+      "penultimate row should be 0 but is",
+      penultimateRow
+    ))
+  }
+  
+  x <- data[2:(nrow(data) - 2), ] # stripping rows
+  
+  if (any(x[, 1] != 1)) {
+    stop(
+      paste(
+        "\nUnsupported option in .HIL file:",
+        "all ballot-repetition counts must be 1, but min =",
+        min(x[, 1]),
+        "and max =",
+        max(x[, 1])
+      )
+    )
+  }
+  
+  # retain the last column of x for the trailing 0 in each row
+  x <- x[paste0("X", c(1:(nc + 1)))] 
+  x <- sapply(x, as.numeric)
+  votes <- t(apply(x, 1, rankToPref, nc=nc))
+  colnames(votes) <- cnames
+  votes <- as.matrix(prepare.votes(votes))
+  attr(votes, "nseats") <- nseats
+  attr(votes, "ename") <- ename
+  return(votes)
+}
+
 #' parameter-checking method for nseats (internal)
 #'
 #' @param nseats initially-specified number of seats to be filled in an election
@@ -9,29 +199,6 @@
 #'   compatibility)
 #'
 #' @return a valid non-NULL value for the number of seats to be filled
-#'
-#' @examples
-#' ## TODO: port the following tests (from legacy code) into testthat 3e tests
-#' unitTestStatus <- TRUE
-#' ## appropriately default nseats, when testing stv() with five candidates
-#'    nc<-5
-#'    nseats<-NULL
-#'    nseats<-SafeVote:::check.nseats(nseats=nseats, ncandidates=nc,
-#'                                    default=floor(nc/2))
-#'    if (nseats != floor(nc/2)) {
-#'      warning("Unit test 1 on check.nseats() failed with nseats =", nseats)
-#'      unitTestStatus <- FALSE
-#'    }
-#' ## appropriately default nseats, when using stv() to rank candidates 
-#'    nc<-5
-#'    nseats<-NULL
-#'    nseats<-SafeVote:::check.nseats(nseats=nseats, ncandidates=nc, 
-#'                                    complete.ranking=TRUE, default=nc)
-#'    if (nseats != nc) {
-#'      warning("Unit test 2 on check.nseats() failed with nseats =", nseats)
-#'      unitTestStatus <- FALSE
-#'    }
-#' cat("Unit tests on check.seats():", ifelse(unitTestStatus, "Pass", "Fail"))
 #'
 check.nseats <- function(nseats = NULL, ncandidates, default=1, mcan = NULL,
                          complete.ranking = FALSE) {
@@ -123,7 +290,32 @@ check.votes <- function(x, ..., quiet = FALSE) {
       sum(ok),
       ".\nUse invalid.votes(...) function to view discarded records.\n"
     )
+  attr(x, "invalidVotes") <- x[!ok,] 
   return(x[ok,])
+}
+
+#' Extracts the invalid.votes member (if any) from the result of a count
+#'
+#' This method was added Jan 2022 -- it was named in a warning message but had
+#' apparently either never been implemented, or had been "lost" through
+#' versioning.
+#'
+#' @param x value returned by stv, condorcet, approval, plurality, or score
+#'
+#' @return matrix with one column per candidate and one row per invalid
+#'   ballot
+#' @export
+#'
+invalid.votes <- function(x) {
+  if ("invalid.votes" %in% names(x)) {
+    return(x$invalid.votes)
+  } else {
+    warning(paste("\nThere is no invalid.votes member in these results.",
+                  "\nUse invalid.votes(stv(dataSetName,quiet=TRUE))",
+                  "to list the ballots",
+                  "in dataSetName which are invalid for stv()"))
+    return(NULL)
+  }
 }
 
 #' undocumented internal method
@@ -153,8 +345,6 @@ prepare.votes <- function(data, fsep="\n") {
                               sep=fsep, row.names = NULL)
   }
   x <- as.matrix(data)
-  ##TODO: see if data.table offers any performance improvement over matrix, e.g.
-  ## through multithreading
   x[is.na(x)] <- 0
   if (is.null(colnames(x))) {
     warning("Candidate names not supplied, dummy names used instead.")
@@ -166,9 +356,22 @@ prepare.votes <- function(data, fsep="\n") {
   return(x)
 }
 
-#' undocumented internal method
-#' @param votes,partial,quiet undocumented
-#' @return undocumented
+#' Amend ballots with equal or incomplete preferences 
+#' 
+#' The `correct.ranking` function returns a modified set of ballots.  Its
+#' argument `partial` determines if ballots are partially set to `0` (`TRUE`),
+#' or if it is a complete re-ranking, as allowed when `equal.ranking = TRUE`. It
+#' can be used by calling it explicitly. It is called by `stv` if `equal.ranking
+#' = TRUE` or `invalid.partial = TRUE`. It is also called from within the
+#' `condorcet` function with the default value (`FALSE`) for `partial`, i.e.
+#' interpreting any `0` as a last= preference.
+#' 
+#' @param votes original contents of ballot box
+#' @param partial if `FALSE` (default), each ballot is interpreted, if possible,
+#'   as a complete (but not necessarily total) ranking of the candidates.  If
+#'   `TRUE`, a ballot will contain a `0` on unranked candidates.
+#' @param quiet suppress diagnostics
+#' @return corrected ballots
 correct.ranking <- function(votes,
                             partial = FALSE,
                             quiet = FALSE) {
@@ -201,18 +404,29 @@ correct.ranking <- function(votes,
     do.rank
   v <- t(apply(votes, 1, fct))
   dif <- rowSums(v != votes)
-  if (any(dif > 0) &&
-      !quiet)
-    warning("Votes ", 
-            paste(which(dif > 0), collapse = ", "), " were ", wrn, ".\n")
+  if (any(dif > 0) && !quiet) {
+    if (sum(dif > 0) <= 10) {
+      warning("\nBallots ",
+              paste(which(dif > 0), collapse = ", "),
+              " were ",
+              wrn,
+              ".\n")
+    } else {
+      warning(paste("\n", sum(dif > 0), "ballots were ", wrn, ".\n"))
+    }
+  }
   colnames(v) <- colnames(votes)
   rownames(v) <- rownames(votes)
   return(v)
 }
 
-#' undocumented internal method
-#' @param votes,can,quiet undocumented
-#' @return undocumented
+#' Remove a candidate, amending ballot papers as required
+#' 
+#' @param votes ballot box
+#' @param can candidate to be removed
+#' @param quiet suppress diagnostics
+#' @return amended ballot box
+#' 
 remove.candidate <- function(votes, can, quiet = TRUE) {
   if (!all(can %in% colnames(votes)) ||
       (is.numeric(can) && !all(can %in% 1:nrow(votes))))

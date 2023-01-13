@@ -139,3 +139,109 @@
 #' 
 #' @keywords datasets
 "uk_labour_2010"
+
+#' @title Tideman a3_hil
+#' 
+#' @usage data(a3_hil)
+#' 
+#' @description This data is one of 87 sets of ballots from the [Tideman data
+#'   collection](https://rangevoting.org/TidemanData.html), as curated by [The
+#'   Center for Range Voting](https://rangevoting.org/).
+#'
+#'   This set of ballots was collected in 1987 by Nicolaus Tideman, with support
+#'   from NSF grant SES86-18328. "The data are records of ballots from elections
+#'   of British organizations (mostly trade unions using PR-STV or IRV voting)
+#'   in which the voters ranked the candidates. The data were gathered under a
+#'   stipulation that the organizations involved would remain anonymous."
+#'
+#'   The ballots were encoded in David Hill's format, and have been converted to
+#'   the preference-vector format of this package.  The file
+#'   [A4.HIL](https://rangevoting.org/TiData/A3.HIL) contains eight blank ballot
+#'   papers (1, 616, 619, 620, 685, 686, 687, 688) which we have retained. This
+#'   set may be counted by `stv(a3_hil,nseats=attr(a3_hil,"nseats"))`.
+#'   
+#' @format A data frame with attribute "nseats" = 7, consisting of 989
+#'   observations and 15 candidates.
+#' 
+#' @keywords datasets
+"a3_hil"
+
+#' @title Tideman a4_hil
+#' 
+#' @usage data(a4_hil)
+#' 
+#' @description This data is one of 87 sets of ballots from the [Tideman data
+#'   collection](https://rangevoting.org/TidemanData.html), as curated by [The
+#'   Center for Range Voting](https://rangevoting.org/).
+#'
+#'   This set of ballots was collected in 1987 by Nicolaus Tideman, with support
+#'   from NSF grant SES86-18328. "The data are records of ballots from elections
+#'   of British organizations (mostly trade unions using PR-STV or IRV voting)
+#'   in which the voters ranked the candidates. The data were gathered under a
+#'   stipulation that the organizations involved would remain anonymous."
+#'
+#'   The ballots were encoded in David Hill's format, and have been converted to
+#'   the preference-vector format of this package.
+#'   
+#' @format A data frame with attribute "nseats" = 2, consisting of 43
+#'   observations and 14 candidates.
+#' 
+#' @keywords datasets
+"a4_hil"
+
+#' @title Tideman a53_hil
+#' 
+#' @usage data(a53_hil)
+#' 
+#' @description This data is one of 87 sets of ballots from the [Tideman data
+#'   collection](https://rangevoting.org/TidemanData.html), as curated by [The
+#'   Center for Range Voting](https://rangevoting.org/).
+#'
+#'   This set of ballots was collected in 1988 by Nicolaus Tideman, with support
+#'   from NSF grant SES86-18328. "The data are records of ballots from elections
+#'   of British organizations (mostly trade unions using PR-STV or IRV voting)
+#'   in which the voters ranked the candidates. The data were gathered under a
+#'   stipulation that the organizations involved would remain anonymous."
+#'
+#'   The ballots were encoded in David Hill's format, and have been converted to
+#'   the preference-vector format of this package.  Candidates have been renamed
+#'   to letters of the alphabet, for ease of comparison with Table 3 of Tideman,
+#'   "Better voting methods through technology: The refinement-manageability
+#'   trade-off in the single transferable vote", Public Choice 103: 13-34, 2000,
+#'   DOI: [10.1023/A:1005082925477](http://dx.doi.org/10.1023/A:1005082925477).
+#'   As noted in this table, it is a very close race between candidates D, F,
+#'   and B in the final rounds of a Meek count of `a53_hil`.  
+#'   
+#'   Tideman's implementation of Meek's method excludes B (on 59.02 votes), then
+#'   elects D in the final round (on 88.33 votes) with a margin of 0.95 votes
+#'   ahead of F (on 87.38 votes).  
+#'   
+#'   In v1.0, `stv(a53.hil,quota.hare=TRUE)` excludes F (on 56.418 votes), then
+#'   elects D in the final round (on 79.705 votes) with a winning margin of
+#'   0.747 votes ahead of B (on 78.958 votes). The result of the election is the
+#'   same but the vote counts and winning margins differ significantly; so we
+#'   conclude that `stv(quota.hare=TRUE)` in SafeVote v1.0 is *not* a reliable
+#'   proxy for Tideman's implementation of Meek's algorithm.
+#'   
+#'   Future researchers may wish to adjust the quota calculation of `vote.stv()`
+#'   so that it is no longer biased upward by a "fuzz" of 0.001, to see if this
+#'   change significantly reduces the discrepancies with Tideman's
+#'   implementation of Meek.
+#'   
+#'   As noted in [(Wichmann,
+#'   2000)](https://www.votingmatters.org.uk/RES/MKVAL.pdf), "... an exact
+#'   coomparison [between two implementations of Meek] cannot be expected due
+#'   both to differences in the specification and due to the breaking of ties."
+#'   
+#'   In June 2020, a postgraduate student at Edinburgh presented a
+#'   [slideshow](https://web.inf.ed.ac.uk/sites/default/files/atoms/files/aiai_seminar_22_june_slides.pdf)
+#'   describing progress toward a formal specification of Meek's algorithm. This
+#'   specification, when complete, would support proofs of important properties
+#'   -- such as convergence -- and would allow an implementation to be formally
+#'   verified for correctness.
+#'   
+#' @format A data frame with attribute "nseats" = 4, consisting of 460
+#'   observations and 10 candidates.
+#' 
+#' @keywords datasets
+"a53_hil"

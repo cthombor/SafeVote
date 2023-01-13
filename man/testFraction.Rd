@@ -48,8 +48,9 @@ a 3-character string of capital letters is chosen at random.}
 \item{everbose}{\code{TRUE} to produce diagnostic output from the experiment}
 }
 \value{
-a \href{new_SafeRankExpt.html}{SafeRankExpt} object of experimental
-results.
+a
+\href{https://cthombor.github.io/SafeVote/reference/new_SafeRankExpt}{SafeRankExpt}
+object of experimental results.
 }
 \description{
 Starting from some number (\code{astart}) of randomly-selected ballots, an

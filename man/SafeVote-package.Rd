@@ -6,13 +6,17 @@
 \alias{SafeVote-package}
 \title{SafeVote: Election Vote Counting with Safety Features}
 \description{
-Experimental fork of vote_2.3-2, with SafeRank and safety tests.
+Fork of `vote_2.3-2` [Raftery et al. (2021) \doi{10.32614/RJ-2021-086}], with additional support for stochastic experimentation.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://cthombor.github.io/SafeVote/}
 }
+
+}
+\author{
+\strong{Maintainer}: Clark Thomborson \email{c.thomborson@auckland.ac.nz} (\href{https://orcid.org/0000-0002-4147-7898}{ORCID})
 
 }
 \keyword{internal}
