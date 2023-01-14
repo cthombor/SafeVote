@@ -140,7 +140,7 @@ a 3-character string of capital letters is chosen at random.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting condorcet ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2023-01-14 21:12:29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2023-01-14 21:14:53</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = food_election, countMethod = condorcet, rankMethod = safeRank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -157,22 +157,22 @@ a 3-character string of capital letters is chosen at random.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Oranges| Pears| Chocolate| Strawberries| Sweets| m.Oranges| m.Pears| m.Chocolate| m.Strawberries| m.Sweets|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|-------:|-----:|---------:|------------:|------:|---------:|-------:|-----------:|--------------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV1   |        2|       3|     3|         1|            2|      3|         0|       0|           2|              6|        0|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV2   |        4|       4|     4|         1|            2|      2|         0|       0|          10|             12|        6|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV3   |        6|       2|     5|         1|            2|      2|         8|       0|           4|              7|        6|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV4   |        8|       2|     5|         1|            2|      2|         8|       0|          15|             10|        9|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV5   |       10|       1|     2|         2|            2|      2|         7|       0|           8|              3|        6|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV6   |       12|       3|     4|         1|            2|      4|         9|       0|           9|              4|        2|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV7   |       14|       4|     4|         1|            2|      2|         2|       0|          17|              9|        6|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV8   |       16|       2|     5|         1|            2|      2|        15|       0|          21|             14|       12|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV9   |       18|       3|     5|         1|            2|      4|         5|       0|          16|             10|        5|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |HCV10  |       20|       3|     5|         1|            2|      4|         6|       0|          20|              6|        8|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV1   |        2|       1|     4|         1|            1|      4|         4|       0|           5|              3|        0|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV2   |        4|       3|     3|         2|            5|      1|         3|       4|           4|              0|        2|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV3   |        6|       2|     4|         1|            2|      4|         3|       1|           7|              5|        0|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV4   |        8|       1|     3|         1|            3|      3|         6|       2|           8|              0|        0|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV5   |       10|       3|     3|         1|            2|      3|         0|       1|           6|             15|        4|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV6   |       12|       2|     5|         1|            2|      4|         5|       0|           8|              6|        6|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV7   |       14|       2|     4|         1|            2|      4|         9|       0|          18|             18|        1|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV8   |       16|       3|     5|         1|            2|      4|         9|       0|          11|              6|        6|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV9   |       18|       3|     5|         1|            2|      3|        10|       0|          24|              6|        8|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |DDV10  |       20|       3|     5|         1|            2|      4|         6|       0|          20|              6|        8|</span>
 <span class="r-in"><span><span class="fu">testFraction</span><span class="op">(</span><span class="va">dublin_west</span>, astart<span class="op">=</span><span class="fl">20</span>, ainc<span class="op">=</span><span class="fl">10</span>, arep<span class="op">=</span><span class="fl">2</span>, trep<span class="op">=</span><span class="fl">3</span>, </span></span>
 <span class="r-in"><span>             countMethod<span class="op">=</span><span class="st">"stv"</span>, rankMethod<span class="op">=</span><span class="st">"elected"</span>, equiet<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Progress in counting stv ballots:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  33.3%, 66.7%, 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2023-01-14 21:12:29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results of testFraction at 2023-01-14 21:14:53</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dataset = dublin_west, countMethod = stv, rankMethod = elected</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -182,11 +182,11 @@ a 3-character string of capital letters is chosen at random.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Experiment ID, number of ballots in simulated election, ranks, winning margins:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry| m.Bonnie|  m.Burton|   m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|  m.Terry|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|--------:|---------:|--------:|---------:|---------:|----------:|-----------:|-------:|--------:|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |NGF1   |       20|      2|      1|    2|       1|       1|        2|         2|     2|     1| 0.026022| 2.8348019| 2.625529|  2.234402|  2.834802|   0.000000|   0.3561122|       0| 2.234402|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |NGF2   |       30|      2|      1|    2|       1|       1|        2|         2|     2|     1| 0.000000| 2.8390793| 5.124800|  2.428100|  4.696365|   0.000000|   4.4281429|       1| 4.696365|</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> |NGF3   |       20|      2|      2|    1|       1|       1|        2|         2|     2|     1| 0.000000| 0.8568571| 2.217246|  1.435532|  6.360389|   3.856857|   2.8568571|       0| 2.360389|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |exptID | nBallots| Bonnie| Burton| Ryan| Higgins| Lenihan| McDonald| Morrissey| Smyth| Terry|  m.Bonnie|  m.Burton|   m.Ryan| m.Higgins| m.Lenihan| m.McDonald| m.Morrissey| m.Smyth|   m.Terry|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------|--------:|------:|------:|----:|-------:|-------:|--------:|---------:|-----:|-----:|---------:|---------:|--------:|---------:|---------:|----------:|-----------:|-------:|---------:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |UXJ1   |       20|      2|      1|    1|       1|       1|        2|         2|     2|     2| 1.0000000| 0.5122133| 1.737884|  1.516106|  7.737884|   2.555444|    0.000000|       1| 4.0000000|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |UXJ2   |       30|      2|      1|    2|       1|       1|        2|         2|     2|     1| 0.0137144| 0.6287217| 5.089405|  5.055006|  5.055006|   6.252013|    1.884539|       0| 2.5552562|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |UXJ3   |       20|      2|      1|    2|       1|       1|        2|         2|     2|     1| 0.2725744| 1.3153795| 3.481790|  3.315380|  6.315379|   1.329320|    0.020024|       0| 0.2701057|</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
