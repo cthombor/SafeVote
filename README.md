@@ -35,15 +35,15 @@ $z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
 is the number of ballots.
 
 ``` r
-    library(SafeVote)
-    stv(food_election,quiet=TRUE)$rankingTable
+library(SafeVote)
+stv(food_election,quiet=TRUE)$rankingTable
 #>   Rank    Margin    Candidate Elected SafeRank
 #> 1    1 8.0000000    Chocolate       x        1
 #> 2    2 0.5548889 Strawberries       x        2
 #> 3    3 1.2225556      Oranges                2
 #> 4    4 0.7774444       Sweets                2
 #> 5    5        NA        Pears                2
-    stv(food_election,quiet=TRUE,safety=0)$rankingTable
+stv(food_election,quiet=TRUE,safety=0)$rankingTable
 #>   Rank    Margin    Candidate Elected SafeRank
 #> 1    1 8.0000000    Chocolate       x        1
 #> 2    2 0.5548889 Strawberries       x        2
@@ -96,18 +96,18 @@ is filled – which will differentially affect the vote-counts of the
 candidates still in play for the remaining seats. Furthermore, the
 [Cambridge method of transferring
 votes](https://www.opavote.com/methods/cambridge-stv-rules) may have
-been employed. Under these rules, the initial numbering of the ballots
-determines the ballot papers which are consulted when a candidate’s
-surplus votes are transfered. As noted in the tests of [STV
-v1.0.2](https://cran.r-project.org/package=STV), if ballots are selected
-for a vote-transfer process by a pseudorandom number generator, the
-seeding of this generator affects the outcome of the election. The
-per-candidate boxplots in the last decile of vote-counting in our
-experimental results below (using the Droop quota with fractional vote
-transfers) illustrate this phenomenon. The median result of the last
-decile of ballot-counting show ATL_2 having a very small margin of
-victory for the third seat, and ATL_54 having a slight advantage over
-ATL_27 in a very close race for the fourth seat.
+been employed in the real-world Yale Senate election. Under these rules,
+the initial numbering of the ballots determines the ballot papers which
+are consulted when a candidate’s surplus votes are transfered. As noted
+in the tests of [STV v1.0.2](https://cran.r-project.org/package=STV), if
+ballots are selected for a vote-transfer process by a pseudorandom
+number generator, the seeding of this generator affects the outcome of
+the election. The per-candidate boxplots in the last decile of
+vote-counting in our experimental results below (using the Droop quota
+with fractional vote transfers) illustrate this phenomenon. The median
+result of the last decile of ballot-counting show ATL_2 having a very
+small margin of victory for the third seat, and ATL_54 having a slight
+advantage over ATL_27 in a very close race for the fourth seat.
 
 ``` r
 load(SaveVote)

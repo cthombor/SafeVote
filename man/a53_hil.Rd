@@ -46,8 +46,9 @@ change significantly reduces the discrepancies with Tideman's
 implementation of Meek.
 
 As noted in \href{https://www.votingmatters.org.uk/RES/MKVAL.pdf}{(Wichmann, 2000)}, "... an exact
-coomparison \link{between two implementations of Meek} cannot be expected due
-both to differences in the specification and due to the breaking of ties."
+comparison \[ between two implementations of Meek \] cannot be expected
+due both to differences in the specification and due to the breaking of
+ties."
 
 In June 2020, a postgraduate student at Edinburgh presented a
 \href{https://web.inf.ed.ac.uk/sites/default/files/atoms/files/aiai_seminar_22_june_slides.pdf}{slideshow}

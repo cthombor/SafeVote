@@ -230,8 +230,9 @@
 #'   
 #'   As noted in [(Wichmann,
 #'   2000)](https://www.votingmatters.org.uk/RES/MKVAL.pdf), "... an exact
-#'   coomparison [between two implementations of Meek] cannot be expected due
-#'   both to differences in the specification and due to the breaking of ties."
+#'   comparison \\[ between two implementations of Meek \\] cannot be expected
+#'   due both to differences in the specification and due to the breaking of
+#'   ties."
 #'   
 #'   In June 2020, a postgraduate student at Edinburgh presented a
 #'   [slideshow](https://web.inf.ed.ac.uk/sites/default/files/atoms/files/aiai_seminar_22_june_slides.pdf)

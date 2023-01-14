@@ -12,6 +12,12 @@
   ROxygen2.
 * Revised Description.  Repaired three faulty cross-links.
 * Revised Description as requested.  Added @return fields to the ROxygen2
-  comments of a few functions which lacked /value comments.  Amended the tests of
-  the internal method check.nseats which had been ported from legacy code, using
-  :: rather than ::: decorations.
+  comments of a few functions which lacked /value comments.  Amended the tests 
+  of the internal method check.nseats which had been ported from legacy code, 
+  using :: rather than ::: decorations.
+* Using my professional email address rather than my personal one on
+  this submission.
+* Deleted the legacy tests of check.nseats.  They add little value to the
+  codebase, and I can't be bothered to figure out how to persuade test_check()
+  to test an internal method without using `:::`.
+
