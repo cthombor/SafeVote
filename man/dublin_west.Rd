@@ -13,8 +13,10 @@ zeros allowed.
 data(dublin_west)
 }
 \description{
-Dataset containing ranked votes for the Dublin West
-constituency in 2002, Ireland. Results of that STV election can be viewed
-at https://en.wikipedia.org/wiki/Dublin_West#2002_general_election.
+Dataset containing ranked votes for the Dublin West constituency
+in 2002, Ireland.
+}
+\seealso{
+\href{https://en.wikipedia.org/wiki/Dublin_West#2002_general_election}{Wikipedia}
 }
 \keyword{datasets}

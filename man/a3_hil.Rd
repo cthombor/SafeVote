@@ -12,7 +12,8 @@ observations and 15 candidates.
 data(a3_hil)
 }
 \description{
-This data is one of 87 sets of ballots from the \href{https://rangevoting.org/TidemanData.html}{Tideman data collection}, as curated by \href{https://rangevoting.org/}{The Center for Range Voting}.
+This data is one of 87 sets of ballots from the Tideman data
+collection, as curated by The Center for Range Voting.
 
 This set of ballots was collected in 1987 by Nicolaus Tideman, with support
 from NSF grant SES86-18328. "The data are records of ballots from elections
@@ -21,8 +22,8 @@ in which the voters ranked the candidates. The data were gathered under a
 stipulation that the organizations involved would remain anonymous."
 
 The ballots were encoded in David Hill's format, and have been converted to
-the preference-vector format of this package.  The file
-\href{https://rangevoting.org/TiData/A3.HIL}{A4.HIL} contains eight blank ballot
+the preference-vector format of this package.  The archival file
+A4.HIL at rangevoting.org contains eight blank ballot
 papers (1, 616, 619, 620, 685, 686, 687, 688) which we have retained. This
 set may be counted by \code{stv(a3_hil,nseats=attr(a3_hil,"nseats"))}.
 }

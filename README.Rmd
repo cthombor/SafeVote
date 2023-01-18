@@ -35,8 +35,7 @@ devtools::install_github("cthombor/SafeVote")
 
 ## Example
 
-This mod of [vote.2.3-2](https://CRAN.R-project.org/package=vote) reports the
-margins of victory in an election.
+This mod of [vote.2.3-2](https://CRAN.R-project.org/package=vote) reports the margins of victory in an election.
 
 The value of the `safety` parameter will affect the completeness of the
 safeRank ordering of the candidates. Setting `safety = 0` will cause
@@ -67,13 +66,13 @@ stv(food_election,quiet=TRUE,safety=0)$rankingTable
 Three safety-testing routines are supplied, to support experimental study of the
 stochastic behaviour of ballot counting methods. 
 
-[testFraction](reference/testFraction) draws a series of independent samples
+[testFraction] draws a series of independent samples
 from a ballot box. Stochastic experimentation with this method will, we hope,
 help future researchers develop advice, to election officials, on whether a
 preliminary count is sufficiently stable for them to make a preliminary
 announcement of the result -- without undue risk of having to retract their
-announcement (as in [Hastings NZ in October
-2022](https://web.archive.org/web/20221012043548/https://www.1news.co.nz/2022/10/12/public-humiliation-council-apologises-for-election-result-error/)).
+announcement as had occurred in [Hastings NZ in October
+2022](http://web.archive.org/web/20230000000000*/www.1news.co.nz/2022/10/12/public-humiliation-council-apologises-for-election-result-error/).
 As seen below, in the case of the [yale_ballots](https://cthombor.github.io/SafeVote/reference/yale_ballots)
 dataset, 400 of the 479 votes were sufficient to establish candidates ATL_19,
 ATL_10, and ATL_2 as being very likely to be three of the four winners.  The
@@ -231,12 +230,10 @@ modification of Meek's STV algorithm, enshrined in [Schedule 1A of Local
 Electoral Regulations
 2001](https://www.legislation.govt.nz/regulation/public/2001/0145/latest/DLM57125.html),
 to form its party list.  Under its current rules, the NZ Greens rely on a
-delegated assembly to form an [initial
-list](https://www.stuff.co.nz/national/politics/120950431/green-party-initial-election-list-puts-newcomer-teanau-tuiono-ahead-of-several-sitting-mps).
-In a possible future in which the NZ Greens have dozens of elected MPs, the size
-of this assembly may have to be increased if the sitting MPs seeking re-election
-are to be safely ranked against each other, and against other candidates in the
-pool.  
+delegated assembly to form an initial list. In a possible future in which the NZ
+Greens have dozens of elected MPs, the size of this assembly may have to be
+increased if the sitting MPs seeking re-election are to be safely ranked against
+each other, and against other candidates in the pool.
 
 We wonder: are $n$ preferential ballots generally sufficient, in real-world
 elections, to safely rank-order $\sqrt{n}$ candidates?  This package is, we

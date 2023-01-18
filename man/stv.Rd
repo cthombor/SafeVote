@@ -29,7 +29,7 @@ stv(
 }
 \arguments{
 \item{votes}{an array with one column per candidate and one row per ballot,
-as described in the \href{condorcet.html#details}{Details for condorcet()}}
+as described in \code{\link[=condorcet]{condorcet()}}}
 
 \item{nseats}{the number of seats to be filled in this election}
 
@@ -66,10 +66,9 @@ quota is waived, so a candidate may be elected on zero votes.}
 \item{group.members}{vector of members of the group with reserved seats}
 
 \item{complete.ranking}{is \code{TRUE} by default.  This parameter is retained
-solely for backwards compatibility with
-\href{https://CRAN.R-project.org/package=vote}{vote.2.3-2}. It has no effect on
+solely for backwards compatibility with \code{\link[vote:stv]{vote::stv()}}. It has no effect on
 elections in which \code{nseats} is explicitly specified in the call to
-\href{https://cthombor.github.io/SafeVote/reference/stv}{stv()}.}
+\code{\link[=stv]{stv()}}.}
 
 \item{invalid.partial}{\code{TRUE} if ballots which do not specify a complete
 ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored
@@ -80,11 +79,10 @@ ranking of candidates are informal (aka "invalid") \emph{i.e.} ignored
 \item{seed}{integer seed for tie-breaking.  Warning: if non-\code{NULL}, the PRNG
 for R is reseeded prior to \emph{every} random tie-break among the
 possibly-elected candidates.  We have preserved this functionality in this
-branch to allow regression against the legacy codebase of
-\href{https://CRAN.R-project.org/package=vote}{vote_2.3-2}. In
-\href{https://CRAN.R-project.org/package=SafeVote}{SafeVote} the default value
-for seed is \code{NULL} rather than the legacy value of 1234, to mitigate the
-validity hazard of PRNG reseedings during a stochastic experiment.}
+branch to allow regression against the legacy codebase of \code{\link[vote:stv]{vote::stv()}}. In
+\code{\link[=stv]{stv()}} the default value for seed is \code{NULL} rather than the
+legacy value of 1234, to mitigate the validity hazard of PRNG reseedings
+during a stochastic experiment.}
 
 \item{quiet}{\code{TRUE} to suppress console output}
 
@@ -105,7 +103,7 @@ adjusted within tiegroups to be valid for the candidates' (possibly
 partial) safeRank.
 }
 \description{
-The \code{votes} parameter is as described in the \href{https://cthombor.github.io/SafeVote/reference/condorcet#details}{Details for \code{condorcet}}
+The \code{votes} parameter is as described in \code{\link[=condorcet]{condorcet()}}
 with the following additional semantics.
 }
 \details{

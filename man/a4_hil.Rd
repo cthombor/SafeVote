@@ -12,15 +12,15 @@ observations and 14 candidates.
 data(a4_hil)
 }
 \description{
-This data is one of 87 sets of ballots from the \href{https://rangevoting.org/TidemanData.html}{Tideman data collection}, as curated by \href{https://rangevoting.org/}{The Center for Range Voting}.
+This data is one of 87 sets of ballots from the Tideman data
+collection, as curated by The Center for Range Voting. The ballots were
+archived in David Hill's format, and have been converted to the
+preference-vector format of this package.
 
 This set of ballots was collected in 1987 by Nicolaus Tideman, with support
 from NSF grant SES86-18328. "The data are records of ballots from elections
 of British organizations (mostly trade unions using PR-STV or IRV voting)
 in which the voters ranked the candidates. The data were gathered under a
 stipulation that the organizations involved would remain anonymous."
-
-The ballots were encoded in David Hill's format, and have been converted to
-the preference-vector format of this package.
 }
 \keyword{datasets}

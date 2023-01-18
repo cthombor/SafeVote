@@ -1,7 +1,6 @@
 #' Count preferential ballots using an STV method
 #'
-#' The `votes` parameter is as described in the [Details for
-#' `condorcet`](https://cthombor.github.io/SafeVote/reference/condorcet#details)
+#' The `votes` parameter is as described in [condorcet()]
 #' with the following additional semantics.
 #'
 #' By default the preferences are not allowed to contain duplicates per ballot.
@@ -42,7 +41,7 @@
 #' matrix returned by `ordered.preferences`.
 #'
 #' @param votes an array with one column per candidate and one row per ballot,
-#'   as described in the [Details for condorcet()](condorcet.html#details)
+#'   as described in [condorcet()]
 #' @param nseats the number of seats to be filled in this election
 #' @param eps fuzz-factor when comparing fractional votes.  The default of 0.001
 #'   is preserved from the legacy code, injecting substantial validity hazards
@@ -71,19 +70,17 @@
 #' @param group.nseats number of seats reserved to members of a group
 #' @param group.members vector of members of the group with reserved seats
 #' @param complete.ranking is `TRUE` by default.  This parameter is retained
-#'   solely for backwards compatibility with
-#'   [vote.2.3-2](https://CRAN.R-project.org/package=vote). It has no effect on
+#'   solely for backwards compatibility with [vote::stv()]. It has no effect on
 #'   elections in which `nseats` is explicitly specified in the call to
-#'   [stv()](https://cthombor.github.io/SafeVote/reference/stv).
+#'   [SafeVote::stv()].
 #' @param verbose `TRUE` for diagnostic output
 #' @param seed integer seed for tie-breaking.  Warning: if non-`NULL`, the PRNG
 #'   for R is reseeded prior to *every* random tie-break among the
 #'   possibly-elected candidates.  We have preserved this functionality in this
-#'   branch to allow regression against the legacy codebase of
-#'   [vote_2.3-2](https://CRAN.R-project.org/package=vote). In
-#'   [SafeVote](https://CRAN.R-project.org/package=SafeVote) the default value
-#'   for seed is `NULL` rather than the legacy value of 1234, to mitigate the
-#'   validity hazard of PRNG reseedings during a stochastic experiment.
+#'   branch to allow regression against the legacy codebase of [vote::stv()]. In
+#'   [SafeVote::stv()] the default value for seed is `NULL` rather than the
+#'   legacy value of 1234, to mitigate the validity hazard of PRNG reseedings
+#'   during a stochastic experiment.
 #' @param quiet `TRUE` to suppress console output
 #' @param digits number of significant digits in the output table
 #' @param backwards.compatible `TRUE` to regress against vote2_3.2 by
@@ -418,15 +415,15 @@ stv <-
       ##
       ## TODO: regress against the results of actual elections, to assess
       ## validity with respect to the actual STV ballot-counting method employed
-      ## in those elections.  For example, the Dublin West 2002 results of
-      ## https://en.wikipedia.org/wiki/Dublin_West_(D%C3%A1il_constituency) show
-      ## markedly different vote-transfers to those of stv() in the second
+      ## in those elections.  For example, the [Dublin West 2002
+      ## results](https://en.wikipedia.org/wiki/Dublin_West_(D%C3%A1il_constituency)
+      ## show markedly different vote-transfers to those of [stv()] in the second
       ## round. The list of elected candidates is identical, and the vote totals
-      ## in round 1 are identical; but stv() is inexact in its calculations of
+      ## in round 1 are identical; but [stv()] is inexact in its calculations of
       ## the margins of victory, and its vote-totals are at significant variance
       ## to the official vote-totals.
       ##
-      ## Note that the vmax terms in each of the three disjunctive clauses of
+      ## Note that the `vmax` terms in each of the three disjunctive clauses of
       ## the following guard ensure that a non-group candidate must receive at
       ## least one vote (even if it's only a last-preference!) in order to be
       ## elected. This implies that seats may remain unfilled, even if there are

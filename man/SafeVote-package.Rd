@@ -6,7 +6,7 @@
 \alias{SafeVote-package}
 \title{SafeVote: Election Vote Counting with Safety Features}
 \description{
-Fork of `vote_2.3-2` [Raftery et al. (2021) \doi{10.32614/RJ-2021-086}], with additional support for stochastic experimentation.
+Fork of `vote_2.3-2`, Raftery et al. (2021) \doi{10.32614/RJ-2021-086}, with additional support for stochastic experimentation.
 }
 \seealso{
 Useful links:

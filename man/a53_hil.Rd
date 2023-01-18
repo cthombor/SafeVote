@@ -12,7 +12,8 @@ observations and 10 candidates.
 data(a53_hil)
 }
 \description{
-This data is one of 87 sets of ballots from the \href{https://rangevoting.org/TidemanData.html}{Tideman data collection}, as curated by \href{https://rangevoting.org/}{The Center for Range Voting}.
+This data is one of 87 sets of ballots from the Tideman data
+collection, as curated by The Center for Range Voting.
 
 This set of ballots was collected in 1988 by Nicolaus Tideman, with support
 from NSF grant SES86-18328. "The data are records of ballots from elections
@@ -22,10 +23,10 @@ stipulation that the organizations involved would remain anonymous."
 
 The ballots were encoded in David Hill's format, and have been converted to
 the preference-vector format of this package.  Candidates have been renamed
-to letters of the alphabet, for ease of comparison with Table 3 of Tideman,
-"Better voting methods through technology: The refinement-manageability
-trade-off in the single transferable vote", Public Choice 103: 13-34, 2000,
-DOI: \href{http://dx.doi.org/10.1023/A:1005082925477}{10.1023/A:1005082925477}.
+to letters of the alphabet, for ease of comparison with Table 3 of Tideman
+(2000). Note: the DOI for this article is 10.1023/A:1005082925477, with an
+embedded colon which isn't handled by the usual DOI-to-URL conversions.
+
 As noted in this table, it is a very close race between candidates D, F,
 and B in the final rounds of a Meek count of \code{a53_hil}.
 
@@ -45,16 +46,20 @@ so that it is no longer biased upward by a "fuzz" of 0.001, to see if this
 change significantly reduces the discrepancies with Tideman's
 implementation of Meek.
 
-As noted in \href{https://www.votingmatters.org.uk/RES/MKVAL.pdf}{(Wichmann, 2000)}, "... an exact
-comparison \[ between two implementations of Meek \] cannot be expected
-due both to differences in the specification and due to the breaking of
-ties."
+It would be unreasonable to expect an exact replication of results from two
+different implementations of an STV method.  We leave it to future
+researchers to develop a formal specification, so that it would be possible
+to verify the correctness of an implementation.  We also leave it to future
+researchers to develop a set of test cases with appropriate levels of
+tolerance for the vagaries of floating-point roundoff in optimised (or even
+unoptimised!) compilations of the same code on different computing systems.
+We suggest that \code{a53_hil} be included in any such test set.
 
-In June 2020, a postgraduate student at Edinburgh presented a
-\href{https://web.inf.ed.ac.uk/sites/default/files/atoms/files/aiai_seminar_22_june_slides.pdf}{slideshow}
-describing progress toward a formal specification of Meek's algorithm. This
-specification, when complete, would support proofs of important properties
--- such as convergence -- and would allow an implementation to be formally
-verified for correctness.
+We note in passing that B.A. Wichmann, in "Checking two STV programs",
+Voting Matters 11, 2000, discussed the cross-validation exercise he
+conducted between the ERBS implementation of its voting rules and the
+Church of England's implementation of its voting rules.  In both cases, he
+discovered ambiguities in the specification as well as defects in the
+implementation.
 }
 \keyword{datasets}

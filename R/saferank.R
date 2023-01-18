@@ -922,7 +922,8 @@ plot.SafeRankExpt <- function(x,
   # coerce x to a SafeRankExpt if possible, otherwise throw an error
   x <- as.SafeRankExpt(x)
   
-  ## https://joshuacook.netlify.app/post/integer-values-ggplot-axis/
+  ## Coding idea from Joshua Cook's blog (joshuacook.netlify.app), "Setting axes
+  ## to integer values in 'ggplot2'", Last updated on Jan 27, 2021.
   integer_breaks <- function(n = 5, ...) {
     fxn <- function(x) {
       ## amended 10 Dec 2022 to use round() rather than floor()
