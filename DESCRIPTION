@@ -1,9 +1,9 @@
 Package: SafeVote
 Type: Package
 Title: Election Vote Counting with Safety Features
-Version: 1.0.0
-Date: 2023-01-18
-Authors@R: c(person("Clark Thomborson",role=c("cre","aut"),
+Version: 1.0.1
+Date: 2024-10-01
+Authors@R: c(person("Clark","Thomborson",role=c("cre","aut"),
   email="c.thomborson@auckland.ac.nz",comment=c(ORCID="0000-0002-4147-7898")))
 Description: Fork of 'vote_2.3-2', Raftery et al. (2021)
   <DOI:10.32614/RJ-2021-086>, with additional support 
@@ -15,10 +15,11 @@ Encoding: UTF-8
 License: GPL (>= 2)
 Language: EN-GB
 NeedsCompilation: no
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 LazyData: true
-URL: https://cthombor.github.io/SafeVote/
+URL: https://cran.r-project.org/package=SafeVote, 
+  https://cthombor.github.io/SafeVote/
 Suggests: 
     testthat (>= 3.0.0), vote, STV
 Config/testthat/edition: 3

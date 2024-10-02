@@ -24,7 +24,7 @@
 #'   a 3-character string of capital letters is chosen at random.
 #' @param equiet TRUE to suppress all experimental output
 #' @param everbose TRUE to produce diagnostic output from the experiment
-#' @return [SafeRankExpt] object, describing this experiment and its results
+#' @return 'SafeRankExpt' object, describing this experiment and its results
 #' @export
 #' @import data.table
 #' @examples
@@ -409,7 +409,7 @@ testAdditions <- function(votes,
 #'   a 3-character string of capital letters is chosen at random.
 #' @param equiet 'TRUE' to suppress all experimental output
 #' @param everbose 'TRUE' to produce diagnostic output from the experiment
-#' @return [SafeRankExpt] object of experimental results.
+#' @return SafeRankExpt object of experimental results.
 #' @export
 #' @examples
 #' data(food_election)
