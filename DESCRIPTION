@@ -2,7 +2,7 @@ Package: SafeVote
 Type: Package
 Title: Election Vote Counting with Safety Features
 Version: 1.0.1
-Date: 2024-10-01
+Date: 2024-10-04
 Authors@R: c(person("Clark","Thomborson",role=c("cre","aut"),
   email="c.thomborson@auckland.ac.nz",comment=c(ORCID="0000-0002-4147-7898")))
 Description: Fork of 'vote_2.3-2', Raftery et al. (2021)
