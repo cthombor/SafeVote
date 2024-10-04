@@ -43,7 +43,7 @@ safeRank to be a total ranking of the candidates, except in the rare
 case that there is an exact tie. The “fuzz” $z$ on the
 vote-differentials in a safeRank clustering of the candidates is
 $z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
-is the number of ballots. (Testing inline math: $y = e^{-\sqrt{n}}$.)
+is the number of ballots.
 
 ``` r
 library(SafeVote)
