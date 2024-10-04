@@ -1,255 +1,88 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SafeVote-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/a3_hil.html</loc>
-  </url>
-  <url>
-    <loc>/reference/a4_hil.html</loc>
-  </url>
-  <url>
-    <loc>/reference/a53_hil.html</loc>
-  </url>
-  <url>
-    <loc>/reference/approval.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/assemble.args.for.check.score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/assemble.args.for.check.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/backwards.tiebreak.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.nseats.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.ranking.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.approval.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.condorcet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.plurality.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check.votes.tworound.runoff.html</loc>
-  </url>
-  <url>
-    <loc>/reference/combineRankings.html</loc>
-  </url>
-  <url>
-    <loc>/reference/completeRankingTable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/condorcet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/correct.ranking.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-print.summary.SafeVote.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-summary.SafeVote.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dublin_west.html</loc>
-  </url>
-  <url>
-    <loc>/reference/election.info.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extractMargins.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extractRank.html</loc>
-  </url>
-  <url>
-    <loc>/reference/food_election.html</loc>
-  </url>
-  <url>
-    <loc>/reference/forwards.tiebreak.html</loc>
-  </url>
-  <url>
-    <loc>/reference/image.SafeVote.condorcet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/image.SafeVote.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ims_approval.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ims_election.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ims_plurality.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ims_score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ims_stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/invalid.votes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.valid.vote.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loserMargin.html</loc>
-  </url>
-  <url>
-    <loc>/reference/new_SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ordered.preferences.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ordered.tiebreak.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.SafeVote.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plurality.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prepare.votes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.SafeVote.approval.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.SafeVote.condorcet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.SafeVote.plurality.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.SafeVote.score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.SafeVote.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rbind.SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/readHil.html</loc>
-  </url>
-  <url>
-    <loc>/reference/remove.candidate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/solveTiebreak.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sumOfVotes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.SafeRankExpt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.SafeVote.approval.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.SafeVote.condorcet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.SafeVote.plurality.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.SafeVote.score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.SafeVote.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/testAdditions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/testDeletions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/testFraction.html</loc>
-  </url>
-  <url>
-    <loc>/reference/translate.ties.html</loc>
-  </url>
-  <url>
-    <loc>/reference/uk_labour_2010.html</loc>
-  </url>
-  <url>
-    <loc>/reference/view.SafeVote.approval.html</loc>
-  </url>
-  <url>
-    <loc>/reference/view.SafeVote.condorcet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/view.SafeVote.plurality.html</loc>
-  </url>
-  <url>
-    <loc>/reference/view.SafeVote.score.html</loc>
-  </url>
-  <url>
-    <loc>/reference/view.SafeVote.stv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/view.html</loc>
-  </url>
-  <url>
-    <loc>/reference/winnerMargin.html</loc>
-  </url>
-  <url>
-    <loc>/reference/yale_ballots.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/SafeVote-package.html</loc></url>
+<url><loc>/reference/a3_hil.html</loc></url>
+<url><loc>/reference/a4_hil.html</loc></url>
+<url><loc>/reference/a53_hil.html</loc></url>
+<url><loc>/reference/approval.html</loc></url>
+<url><loc>/reference/as.SafeRankExpt.html</loc></url>
+<url><loc>/reference/assemble.args.for.check.score.html</loc></url>
+<url><loc>/reference/assemble.args.for.check.stv.html</loc></url>
+<url><loc>/reference/backwards.tiebreak.html</loc></url>
+<url><loc>/reference/check.nseats.html</loc></url>
+<url><loc>/reference/check.ranking.html</loc></url>
+<url><loc>/reference/check.votes.approval.html</loc></url>
+<url><loc>/reference/check.votes.condorcet.html</loc></url>
+<url><loc>/reference/check.votes.html</loc></url>
+<url><loc>/reference/check.votes.plurality.html</loc></url>
+<url><loc>/reference/check.votes.score.html</loc></url>
+<url><loc>/reference/check.votes.stv.html</loc></url>
+<url><loc>/reference/check.votes.tworound.runoff.html</loc></url>
+<url><loc>/reference/combineRankings.html</loc></url>
+<url><loc>/reference/completeRankingTable.html</loc></url>
+<url><loc>/reference/condorcet.html</loc></url>
+<url><loc>/reference/correct.ranking.html</loc></url>
+<url><loc>/reference/dot-print.summary.SafeVote.html</loc></url>
+<url><loc>/reference/dot-summary.SafeVote.html</loc></url>
+<url><loc>/reference/dublin_west.html</loc></url>
+<url><loc>/reference/election.info.html</loc></url>
+<url><loc>/reference/extractMargins.html</loc></url>
+<url><loc>/reference/extractRank.html</loc></url>
+<url><loc>/reference/food_election.html</loc></url>
+<url><loc>/reference/forwards.tiebreak.html</loc></url>
+<url><loc>/reference/image.SafeVote.condorcet.html</loc></url>
+<url><loc>/reference/image.SafeVote.stv.html</loc></url>
+<url><loc>/reference/ims_approval.html</loc></url>
+<url><loc>/reference/ims_election.html</loc></url>
+<url><loc>/reference/ims_plurality.html</loc></url>
+<url><loc>/reference/ims_score.html</loc></url>
+<url><loc>/reference/ims_stv.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/invalid.votes.html</loc></url>
+<url><loc>/reference/is.SafeRankExpt.html</loc></url>
+<url><loc>/reference/is.valid.vote.html</loc></url>
+<url><loc>/reference/loserMargin.html</loc></url>
+<url><loc>/reference/new_SafeRankExpt.html</loc></url>
+<url><loc>/reference/ordered.preferences.html</loc></url>
+<url><loc>/reference/ordered.tiebreak.html</loc></url>
+<url><loc>/reference/plot.SafeRankExpt.html</loc></url>
+<url><loc>/reference/plot.SafeVote.stv.html</loc></url>
+<url><loc>/reference/plurality.html</loc></url>
+<url><loc>/reference/prepare.votes.html</loc></url>
+<url><loc>/reference/print.summary.SafeRankExpt.html</loc></url>
+<url><loc>/reference/print.summary.SafeVote.approval.html</loc></url>
+<url><loc>/reference/print.summary.SafeVote.condorcet.html</loc></url>
+<url><loc>/reference/print.summary.SafeVote.plurality.html</loc></url>
+<url><loc>/reference/print.summary.SafeVote.score.html</loc></url>
+<url><loc>/reference/print.summary.SafeVote.stv.html</loc></url>
+<url><loc>/reference/rbind.SafeRankExpt.html</loc></url>
+<url><loc>/reference/readHil.html</loc></url>
+<url><loc>/reference/remove.candidate.html</loc></url>
+<url><loc>/reference/score.html</loc></url>
+<url><loc>/reference/solveTiebreak.html</loc></url>
+<url><loc>/reference/stv.html</loc></url>
+<url><loc>/reference/sumOfVotes.html</loc></url>
+<url><loc>/reference/summary.SafeRankExpt.html</loc></url>
+<url><loc>/reference/summary.SafeVote.approval.html</loc></url>
+<url><loc>/reference/summary.SafeVote.condorcet.html</loc></url>
+<url><loc>/reference/summary.SafeVote.plurality.html</loc></url>
+<url><loc>/reference/summary.SafeVote.score.html</loc></url>
+<url><loc>/reference/summary.SafeVote.stv.html</loc></url>
+<url><loc>/reference/testAdditions.html</loc></url>
+<url><loc>/reference/testDeletions.html</loc></url>
+<url><loc>/reference/testFraction.html</loc></url>
+<url><loc>/reference/translate.ties.html</loc></url>
+<url><loc>/reference/uk_labour_2010.html</loc></url>
+<url><loc>/reference/view.SafeVote.approval.html</loc></url>
+<url><loc>/reference/view.SafeVote.condorcet.html</loc></url>
+<url><loc>/reference/view.SafeVote.plurality.html</loc></url>
+<url><loc>/reference/view.SafeVote.score.html</loc></url>
+<url><loc>/reference/view.SafeVote.stv.html</loc></url>
+<url><loc>/reference/view.html</loc></url>
+<url><loc>/reference/winnerMargin.html</loc></url>
+<url><loc>/reference/yale_ballots.html</loc></url>
 </urlset>
+
