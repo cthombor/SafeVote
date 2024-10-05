@@ -139,7 +139,7 @@ testDeletions <- function(votes,
                            nBallots = nb),
                       append(crRanks,
                              crMargins))
-  result <- rbind.SafeRankExpt(result, newResult)
+  result <- rbind_SafeRankExpt(result, newResult)
   
   if (!equiet) {
     cat(paste0("Number of ballots counted by ", countMethod, ": ", nb))
@@ -173,7 +173,7 @@ testDeletions <- function(votes,
                              nBallots = nb),
                         append(crRanks,
                                crMargins))
-    result <- rbind.SafeRankExpt(result, newResult)
+    result <- rbind_SafeRankExpt(result, newResult)
     stopifnot(is.SafeRankExpt(result))
   }
   
@@ -322,7 +322,7 @@ testAdditions <- function(votes,
                            nBallots = nrow(votes)),
                       append(crRanks,
                              crMargins))
-  result <- rbind.SafeRankExpt(result, newResult)
+  result <- rbind_SafeRankExpt(result, newResult)
   nseats <- cr$nseats
   attr(result, "nseats") <- nseats
 
@@ -372,7 +372,7 @@ testAdditions <- function(votes,
                              nBallots = nrow(svotes)),
                         append(crRanks,
                                crMargins))
-    result <- rbind.SafeRankExpt(result, newResult)
+    result <- rbind_SafeRankExpt(result, newResult)
     
   }
   
@@ -549,7 +549,7 @@ testFraction <- function(votes = NULL,
                              nBallots = nb),
                         append(crRanks,
                                crMargins))
-    result <- rbind.SafeRankExpt(result, newResult)
+    result <- rbind_SafeRankExpt(result, newResult)
   }
   
   if (!equiet) {
@@ -742,7 +742,7 @@ is.SafeRankExpt <- function(x) {
 #'
 #' @return SafeRankExpt object with an additional row
 #' 
-rbind.SafeRankExpt <- function(object, row) {
+rbind_SafeRankExpt <- function(object, row) {
   stopifnot(is.SafeRankExpt(object))
   ##TODO: optimise, if level 2 of the R Inferno is ever painfully hot
   result <- dplyr::bind_rows(object, row)
