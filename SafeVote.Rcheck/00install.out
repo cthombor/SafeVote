@@ -1,0 +1,16 @@
+* installing *source* package 'SafeVote' ...
+** this is package 'SafeVote' version '1.0.2'
+** using staged installation
+** R
+** data
+*** moving datasets to lazyload DB
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** testing if installed package can be loaded from temporary location
+Warning in file.rename(instdir, final_instdir) :
+  cannot rename file 'C:/Users/cthom/ONEDRI~1.NZ/DOCUME~1/RWORKS~1/SafeVote/SAFEVO~1.RCH/00LOCK-SafeVote/00new/SafeVote' to 'C:/Users/cthom/ONEDRI~1.NZ/DOCUME~1/RWORKS~1/SafeVote/SAFEVO~1.RCH/SafeVote', reason 'Access is denied'
+ERROR:    moving to final location failed
+* removing 'C:/Users/cthom/ONEDRI~1.NZ/DOCUME~1/RWORKS~1/SafeVote/SAFEVO~1.RCH/SafeVote'

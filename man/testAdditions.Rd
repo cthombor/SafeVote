@@ -69,7 +69,6 @@ Alternatively, a 'tacticalBallot' may be specified.  If both 'favoured' and
 favoured one.
 }
 \examples{
-data(food_election) 
 testAdditions(food_election, arep = 2, favoured = "Strawberries", 
   countArgs = list(safety = 0))
 

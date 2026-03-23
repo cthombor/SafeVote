@@ -1,12 +1,15 @@
-# Analysis of votes reported in excess of valid ballots counted
+# An analysis of the published results from the Hamilton 2022 local body 
+# election. This script may be helpful as an example of a "tidy" analysis.
 
-# Note that the transferable votes reported for an eliminated candidate are
-# also reported against some other candidate.  Dividing the excess votes
-# by the initial quota is thus a measure of the "closeness" of an
-# election.
+# Note that the transferable votes reported for an eliminated candidate are also
+# reported against some other candidate.  Dividing the excess votes by the
+# initial quota is (at least arguably) a valid measure of the "closeness" of an
+# election -- and thus could be a sanity-check on the "safety" metric we
+# calculate in SafeVote::stv().
 #
-# A small number of votes will be "lost" or "added", due to roundoff errors and
-# fuzzed arithmetic.
+# Note that a small number of votes may be "lost" or "added" during the
+# counting process, due to roundoff errors and the fuzzed arithmetic of
+# STV counting method we inherited from vote::stv().
 
 library(tidyverse)
 data(hamilton2022)

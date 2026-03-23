@@ -1,4 +1,6 @@
-# Analysis of votes reported in excess of valid ballots counted
+# An analysis of the published results for the Wellington 2022 election,
+# focussing on comparing the total votes reported to the number valid ballots 
+# counted.
 
 # Note that the transferable votes reported for an eliminated candidate are
 # also reported against some other candidate.  Dividing the excess votes

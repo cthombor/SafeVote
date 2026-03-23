@@ -1,9 +1,14 @@
-# Analysis of votes reported in excess of valid ballots counted
+# An analysis of votes reported in the Gisborne 2022 election, in excess of
+# the valid ballots counted.  This is definitely not an unbiased measure of
+# the informal ballots which were not counted, because the votes reported
+# for an eliminated candidate will be counted at least one more time (and
+# possibly many times, if the voter's next-preferred candidate is eliminated
+# many times).
 #
-# Also: analysis of ranks as computed from votes[cand], vs ranks computed from
-# the election & elimination order.  We break ties in the elimination order
-# by comparing votes, because votes are comparable within the same round of
-# an STV ballot count.
+# Also: an analysis of ranks as computed from votes[cand], vs ranks computed
+# from the election & elimination order.  We break ties in the elimination order
+# by comparing votes, because votes are comparable within the same round of an
+# STV ballot count.
 #
 # Note that the transferable votes reported for an eliminated candidate are also
 # reported against some other candidate.  Dividing the excess votes by the

@@ -59,7 +59,6 @@ unit; if you want to count decreasingly-sized portions of a single sample of
 ballots, use \code{\link[=testDeletions]{testDeletions()}}.
 }
 \examples{
-fdata(food_election)
 testFraction(food_election, countMethod="condorcet",
              countArgs=list(safety=0.5,complete.ranking=TRUE))
 testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3, 

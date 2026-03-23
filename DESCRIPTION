@@ -20,5 +20,5 @@ Roxygen: list(markdown = TRUE)
 LazyData: true
 URL: https://cthombor.github.io/SafeVote/
 Suggests: 
-    testthat (>= 3.0.0), tictoc, vote, STV
+    testthat (>= 3.0.0), vote, STV
 Config/testthat/edition: 3

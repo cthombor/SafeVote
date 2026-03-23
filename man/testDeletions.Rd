@@ -60,8 +60,6 @@ ballot-counts have occurred.  Note: these ballot-counts are correlated.  Use
 ballot-box.
 }
 \examples{
-data(food_election)
-testDeletions(food_election)
 testDeletions(food_election, countMethod="stv",
   countArgs=list(complete.ranking=TRUE))
 

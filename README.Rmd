@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 The goals of SafeVote are to investigate the safety of announcing
 preliminary results from an election, and to allow experimental study of
 the safety of a complete ranking of all candidates (as in a party list)
-that is derived from a small-scale election with preferential ballots.
+that is derived from a small-scale election with preferential ballots. 
 
 ## Installation
 

@@ -29,8 +29,6 @@
 #' @export
 #' @import data.table
 #' @examples
-#' data(food_election)
-#' testDeletions(food_election)
 #' testDeletions(food_election, countMethod="stv",
 #'   countArgs=list(complete.ranking=TRUE))
 #' 
@@ -140,7 +138,7 @@ testDeletions <- function(votes,
                            nBallots = nb),
                       append(crRanks,
                              crMargins))
-  result <- rbind.SafeRankExpt(result, newResult)
+  result <- rbind_SafeRankExpt(result, newResult)
   
   if (!equiet) {
     cat(paste0("Number of ballots counted by ", countMethod, ": ", nb))
@@ -174,7 +172,7 @@ testDeletions <- function(votes,
                              nBallots = nb),
                         append(crRanks,
                                crMargins))
-    result <- rbind.SafeRankExpt(result, newResult)
+    result <- rbind_SafeRankExpt(result, newResult)
     stopifnot(is.SafeRankExpt(result))
   }
   
@@ -230,7 +228,6 @@ testDeletions <- function(votes,
 #'   [new_SafeRankExpt()]
 #' @export
 #' @examples
-#' data(food_election) 
 #' testAdditions(food_election, arep = 2, favoured = "Strawberries", 
 #'   countArgs = list(safety = 0))
 #'
@@ -324,7 +321,7 @@ testAdditions <- function(votes,
                            nBallots = nrow(votes)),
                       append(crRanks,
                              crMargins))
-  result <- rbind.SafeRankExpt(result, newResult)
+  result <- rbind_SafeRankExpt(result, newResult)
   nseats <- cr$nseats
   attr(result, "nseats") <- nseats
 
@@ -374,7 +371,7 @@ testAdditions <- function(votes,
                              nBallots = nrow(svotes)),
                         append(crRanks,
                                crMargins))
-    result <- rbind.SafeRankExpt(result, newResult)
+    result <- rbind_SafeRankExpt(result, newResult)
     
   }
   
@@ -415,7 +412,6 @@ testAdditions <- function(votes,
 #'   [new_SafeRankExpt()]
 #' @export
 #' @examples
-#' fdata(food_election)
 #' testFraction(food_election, countMethod="condorcet",
 #'              countArgs=list(safety=0.5,complete.ranking=TRUE))
 #' testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3, 
@@ -552,7 +548,7 @@ testFraction <- function(votes = NULL,
                              nBallots = nb),
                         append(crRanks,
                                crMargins))
-    result <- rbind.SafeRankExpt(result, newResult)
+    result <- rbind_SafeRankExpt(result, newResult)
   }
   
   if (!equiet) {
@@ -739,20 +735,18 @@ is.SafeRankExpt <- function(x) {
   )
 }
 
-#' add a row to a SafeRankExpt object
+#' add a row to a SafeRankExpt object, using dplyr::bind_rows()
 #'
 #' @param object prior results of experimentation
 #' @param row    new observations
 #'
 #' @return SafeRankExpt object with an additional row
 #' 
-rbind.SafeRankExpt <- function(object, row) {
+rbind_SafeRankExpt <- function(object, row) {
   stopifnot(is.SafeRankExpt(object))
   ##TODO: optimise, if level 2 of the R Inferno is ever painfully hot
   result <- dplyr::bind_rows(object, row)
   stopifnot(identical(colnames(object), colnames(result)))
-  ## rbind returns a base-class data.frame
-  ## attr(result, "class") <- c("SafeRankExpt", "data.frame")
   stopifnot(is.SafeRankExpt(result)) 
   return(result)
 }
