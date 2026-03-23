@@ -1,3 +1,4 @@
+
 #' Count preferential ballots using an STV method
 #'
 #' The 'votes' parameter is as described in [condorcet()] with the following
@@ -35,7 +36,7 @@
 #' explanation of the symbols).
 #' 
 #' The ordered tiebreaking described above can be analysed from outside of the
-#' 'stv' function by using the 'ordered.tiebreak' function for viewing the
+#' 'stv' function by using the 'ordered.tiebreak' function for Viewing the
 #' a-priori ordering (the highest number is the best and lowest is the worst).
 #' Such ranking is produced by comparing candidates along the columns of the
 #' matrix returned by 'ordered.preferences'.
@@ -232,25 +233,20 @@ stv <-
       if (invalid.partial) {
         corvotes <- correct.ranking(votes, partial = TRUE, quiet = quiet)
       }
+    }
       
-      x <-
-        check.votes(corvotes,
-                    "stv",
-                    equal.ranking = equal.ranking,
-                    quiet = quiet)
-      corrected <-
-        which(rowSums(corvotes != votes) > 0 &
-                rownames(votes) %in% rownames(x))
-      
-      if (length(corrected) > 0) {
-        corrected.votes <-
-          list(
-            original = votes[corrected, ],
-            new = corvotes[corrected,],
-            index = as.numeric(corrected)
-          )
-      }
-      
+    x <-
+      check.votes(corvotes, "stv", equal.ranking = equal.ranking, quiet = quiet)
+    
+    corrected <-
+      which(rowSums(corvotes != votes) > 0 &
+              rownames(votes) %in% rownames(x))
+    
+    if (length(corrected) > 0) {
+      corrected.votes <-
+        list(original = votes[corrected, ],
+             new = corvotes[corrected, ],
+             index = as.numeric(corrected))
     }
     
     nvotes <- nrow(x)
@@ -292,6 +288,7 @@ stv <-
       result.margins <- rep(NA, nc)
       names(result.margins) <- cnames
     }
+    
     orig.x <- x
     
     ##
@@ -588,6 +585,17 @@ stv <-
           NULL
       )
     )
+    #hack to regress against vote 2.5-2. N.b. attributes are not reliably
+    #preserved in base R.  Common operations, such as subsetting a vector,
+    #quietly delete them! The intent in vote 2.5-2 is to associate a weight with
+    #each ballot -- and it is implemented by associating a vector of weights
+    #with a vector of ballots, and by subclassing the vector-subset operation of
+    #base R.
+    if (backwards.compatible) {
+      dif <- setdiff(rownames(votes), rownames(x))
+      attr(partialResult$invalid.votes, "weights") <- 
+        attr(votes, "weights")[dif]
+    }
     if (!backwards.compatible) {
       partialResult$nseats = nseats.initial
       partialResult$ranking = result.ranks
@@ -610,7 +618,7 @@ stv <-
     }
     
     if (!quiet) {
-      print(summary(result, digits = digits))
+      View(summary(result, digits = digits))
     }
     invisible(result)
   }
@@ -860,7 +868,7 @@ summary.SafeVote.stv <- function(object, ..., digits = 3) {
            0)
   }
   ## TODO: consider using formattable::formattable() instead of this function.
-  ## Note that formattable::formattable() is imported by view.stv().  See
+  ## Note that formattable::formattable() is imported by View.stv().  See
   ## https://stackoverflow.com/questions/3443687/formatting-decimal-places-in-r
 
   backwards.compatible <- is.null(object$nseats)
@@ -1021,18 +1029,19 @@ print.summary.SafeVote.stv <- function(x, ...) {
       "\n\n")
 }
 
-#' generic view() for classes defined in this package
-#'
-#' @param object election object to be viewed
-#' @param ... additional parameters, passed to formattable::formattable()
-#'
-#' @return html-formatted object, with side-effect in RStudio's Viewer pane
-#' @export
-view <- function(object, ...) {
-  UseMethod("view")
-}
+# Refactored to "View", for compatibility with current-gen R packages
+# #' generic view() for classes defined in this package
+# #'
+# #' @param object election object to be viewed
+# #' @param ... additional parameters, passed to formattable::formattable()
+# #'
+# #' @return html-formatted object, with side-effect in RStudio's Viewer pane
+# #' @export
+# view <- function(object, ...) {
+#  UseMethod("view")
+# }
 
-#' view method for the result of an stv() ballot-count
+#' View method for the result of an stv() ballot-count
 #' @param object object to be viewed
 #' @param ... additional parameters, passed to formattable::formattable()
 #'
@@ -1040,7 +1049,7 @@ view <- function(object, ...) {
 #' @import formattable 
 #' @export
 #'
-view.SafeVote.stv <- function(object, ...) {
+View.SafeVote.stv <- function(object, ...) {
   s <- summary(object)
   formatter <-
     list(

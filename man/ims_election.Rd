@@ -3,14 +3,30 @@
 \docType{data}
 \name{ims_election}
 \alias{ims_election}
-\title{IMS Election}
+\title{Dublin West vote count}
 \format{
+A copy of the output of the stv() method of vote 2.5-2,
+when it produces a complete ranking of candidates standing
+in the Dublin West election of 2002.  The runtime of that count
+is approximately 2 minutes on my laptop, making it painful to
+regress against vote::stv(dublin_west, complete.ranking = TRUE).
+
+A copy of the output of the stv() method of vote 2.5-2,
+when it tallies the ballots of candidates standing in the Dublin
+West election of 2002.  The runtime of that count is approximately 2
+minutes on my laptop, making it painful to regress against
+vote::stv(dublin_west, nseats = 3, complete.ranking = TRUE).
+
 A data frame with 620 observations and 10 candidates (names were
 made up). Each record corresponds to one ballot. The IMS Council voting
 is done using the STV method, and thus the ims_election dataset contains
 ballots with candidates being ranked between 1 and 10 with zeros allowed.
 }
 \usage{
+data(dublin_west_vote_count)
+
+data(dublin_west_vote_count_3seats)
+
 data(ims_election)
 }
 \description{
@@ -19,4 +35,7 @@ election of the Institute of Mathematical Statistics (IMS). The dataset
 ims_election is the original dataset used with single transferable vote,
 where candidate names have been changed.
 }
+\keyword{"dublin_west_vote_count_3seats"}
+\keyword{dataset}
 \keyword{datasets}
+\keyword{testing}

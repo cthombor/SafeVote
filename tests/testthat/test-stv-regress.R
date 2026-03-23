@@ -18,7 +18,7 @@ test_that("vote.stv defaults on dublin_west", {
   skip_if_not_installed("vote")
   expect_equal(
     SafeVote::stv(dublin_west, backwards.compatible = TRUE),
-    vote::stv(dublin_west, complete.ranking = TRUE)
+    dublin_west_vote_count
   )
 })
 
@@ -30,11 +30,7 @@ test_that("vote.stv on dublin_west with three seats", {
       nseats = 3,
       backwards.compatible = TRUE
     ),
-    vote::stv(
-      dublin_west,
-      nseats = 3,
-      complete.ranking = TRUE
-    )
+    dublin_west_vote_count_3seats
   )
 })
 

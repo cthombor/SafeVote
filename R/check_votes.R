@@ -291,7 +291,14 @@ check.votes <- function(x, ..., quiet = FALSE) {
       ".\nUse invalid.votes(...) function to view discarded records.\n"
     )
   attr(x, "invalidVotes") <- x[!ok,] 
-  return(x[ok,])
+  retx <- x[ok,]
+  #hack to subset the weights attribute, as in vote 2.5-2
+  #N.b. the subset operator in base R deletes any attribute of a vector
+  #In vote 2.5-2, a weight isn't a field of an individual ballot, but
+  #is instead stored in a separate vector which is (insecurely) 
+  #associated with the ballots (aka "votes") as an attribute
+  attr(retx, "weights") <- attr(x, "weights")[ok]
+  return(retx)
 }
 
 #' Extracts the invalid.votes member (if any) from the result of a count
@@ -353,6 +360,11 @@ prepare.votes <- function(data, fsep="\n") {
   if (is.null(rownames(x))) {
     rownames(x) <- 1:nrow(x)
   }
+  #hack to allow regression against votes 2.5-2
+  w <- rep(1, nrow(x))
+  names(w) <- seq(1, nrow(x))
+  attr(x, "weights") <- w
+  
   return(x)
 }
 
@@ -417,6 +429,10 @@ correct.ranking <- function(votes,
   }
   colnames(v) <- colnames(votes)
   rownames(v) <- rownames(votes)
+  # hack, as in vote 2.5-2, to treat a weight as an attribute of an 
+  # individual ballot rather than as a (fragile!) vector-valued attribute of 
+  # a matrix whose rows are ballots. R is hazardous for OOP!
+  attr(v, "weights") <- attr(votes, "weights")[dif]
   return(v)
 }
 

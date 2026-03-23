@@ -235,13 +235,13 @@ print.summary.SafeVote.approval <- function(x, ...) {
   .print.summary.SafeVote(x, ...)
 }
 
-#' view method for approval object
+#' View method for approval object
 #'
 #' @param object,... undocumented 
 #'
 #' @return undocumented
 #' @export
-view.SafeVote.approval <- function(object, ...) {
+View.SafeVote.approval <- function(object, ...) {
   s <- summary(object)
   col_formatter <-
     formatter("span",
@@ -281,14 +281,14 @@ print.summary.SafeVote.plurality <- function(x, ...) {
   .print.summary.SafeVote(x, ...)
 }
 
-#' view method for plurality object
+#' View method for plurality object
 #'
 #' @param object,... undocumented
 #'
-#' @return undocumented
+#' @return View object
 #' @export
-view.SafeVote.plurality <- function(object, ...) {
-  view.SafeVote.approval(object, ...)
+View.SafeVote.plurality <- function(object, ...) {
+  View.SafeVote.approval(object, ...)
 }
 
 #' summary method for score object

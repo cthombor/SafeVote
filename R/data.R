@@ -1,5 +1,5 @@
 #' Sample data for testing SafeVote
-#' 
+#'   
 #' @title Food Election
 #'
 #' @docType data
@@ -31,6 +31,38 @@
 #' @keywords datasets
 "dublin_west"
 
+#' @title Dublin West vote count
+#' 
+#' @docType data
+#' 
+#' @usage data(dublin_west_vote_count)
+#' 
+#' @format A copy of the output of the stv() method of vote 2.5-2,
+#'   when it produces a complete ranking of candidates standing
+#'   in the Dublin West election of 2002.  The runtime of that count
+#'   is approximately 2 minutes on my laptop, making it painful to
+#'   regress against vote::stv(dublin_west, complete.ranking = TRUE).
+#'  
+#' @keywords dataset
+#' 
+#' 
+#' "dublin_west_vote_count_3seats"
+#' @title Dublin West vote count, identifying the top 3 candidates
+#' 
+#' @docType data
+#' 
+#' @usage data(dublin_west_vote_count_3seats)
+#' 
+#' @format A copy of the output of the stv() method of vote 2.5-2,
+#'   when it tallies the ballots of candidates standing in the Dublin 
+#'   West election of 2002.  The runtime of that count is approximately 2 
+#'   minutes on my laptop, making it painful to regress against 
+#'   vote::stv(dublin_west, nseats = 3, complete.ranking = TRUE).
+#'  
+#' @keywords testing
+#' "dublin_west_vote_count_3seats"
+#' 
+#' 
 #' @title IMS Election
 #' 
 #' @docType data
@@ -246,3 +278,60 @@
 #' 
 #' @keywords datasets
 "a53_hil"
+
+#' @title Results of Gisborne Local Elections 2022
+#'
+#' @docType data
+#'
+#' @usage data(gisborne2022)
+#'
+#' @format Results of [three STV elections in Gisborne, New Zealand, in
+#'   2022](https://www.gdc.govt.nz/council/mayor-and-councillors/2022-local-elections/election-results).
+#'   The results for each count of the ballots (progress, preliminary, and
+#'   final) include quotas, keep values, non-transferable votes(NTV), and the
+#'   number of the round in which each candidate was elected or eliminated.
+#'
+#' @keywords datasets
+"gisborne2022"
+
+#' @title Results of Auckland Local Elections 2022
+#'
+#' @docType data
+#'
+#' @usage data(auckland2022)
+#'
+#' @format A data frame with 1076 observations and 13 variables.  These are the
+#'   vote totals and rank-ordering of candidates in the progress and final
+#'   results of [STV elections in Auckland, New Zealand, in
+#'   2022](https://www.aucklandcouncil.govt.nz/elections/elections-2022-results/Pages/default.aspx).
+#'   "Progress results include votes returned up until Friday 7 October. Special
+#'   votes and votes hand delivered by 12 noon on Saturday 8 October are not
+#'   included... Final count includes all votes, including special votes that
+#'   are returned by 12 noon on Saturday 8 October."  We have calculated
+#'   nBallots from the votes as reported by the Electoral Officer, see
+#'   data-raw/auckland2022.R for details.  Curiously, the reported votes are all
+#'   integral, suggesting that some method other than Meek's was used to count
+#'   the ballots, or that some postprocessing of the usual reporting of Meek's
+#'   results was performed to avoid the (apparent) double-counting of votes
+#'   which occurs whenever an excluded candidate's votes are both reported
+#'   against this candidate *and* also distributed among the candidates still in
+#'   play.
+#'
+#' @keywords datasets
+"gisborne2022"
+
+#' @title Results of Hamilton Local Elections 2022
+#'
+#' @docType data
+#'
+#' @usage data(hamilton2022)
+#'
+#' @format
+#'   [Progress](https://www.yourcityelections.co.nz/assets/Uploads/Results-page/Hamilton-City-Council-Progress-results-for-the-2022-Election.pdf)
+#'   and [final](https://www.yourcityelections.co.nz/results/) results for the
+#'   2022 local body elections in Hamilton New Zealand.  These results include
+#'   quotas, keep values, non-transferable votes(NTV), and the number of the
+#'   round in which each candidate was either elected or eliminated.
+#'
+#' @keywords datasets
+"hamilton2022"

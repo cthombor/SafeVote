@@ -43,7 +43,7 @@ safeRank to be a total ranking of the candidates, except in the rare
 case that there is an exact tie. The “fuzz” $z$ on the
 vote-differentials in a safeRank clustering of the candidates is
 $z = s\sqrt{n}$, where $s$ is the value of the safety parameter and $n$
-is the number of ballots. (Testing inline math: $y = e^{-\sqrt{n}}$.)
+is the number of ballots.
 
 ``` r
 library(SafeVote)
@@ -66,6 +66,8 @@ stv(food_election,quiet=TRUE,safety=0)$rankingTable
 Three safety-testing routines are supplied, to support experimental study of the
 stochastic behaviour of ballot counting methods. 
 
+## testFraction
+
 [testFraction] draws a series of independent samples
 from a ballot box. Stochastic experimentation with this method will, we hope,
 help future researchers develop advice, to election officials, on whether a
@@ -81,41 +83,23 @@ winner; but ATL_54 and ATL_27 are ranked approximately 5= as the last 50 ballots
 are counted.  The STV variant used in this experiment has fractional
 vote-transfers and a Hare quota.
 
-
-``` r
-load(SaveVote)
-xrHare <- 
-  testFraction(yale_ballots,arep=9,ainc=5,astart=400,
+``` {r yaleHare, out.width="70%", out.height="30%"}
+library(SafeVote)
+xrHare <- testFraction(yale_ballots,arep=9,ainc=5,astart=400,
                countArgs=list(nseats=4,safety=0.0,quota.hare=TRUE))
 plot(xrHare,boxPlot=TRUE,boxPlotCutInterval=10,
-     line=FALSE,facetWrap=TRUE,nResults=6)
+    line=FALSE,facetWrap=TRUE,nResults=6)
 ```
 
-![](man/figures/yaleHare.png)
 
-[testFraction](https://cthombor.github.io/SafeVote/reference/testFraction) may
-also be useful in determining the extent to which the safety of the preliminary
-results of an STV election is affected by its quota method.  In the case of the
-2016 Yale Senate election, the use of a Droop quota, rather than a Hare quota,
-has a significant influence over the partial results for the fourth seat.  This
-influence is readily explained by the fact that multiple rounds of elimination
-were required before any candidate achieved the quota.  Fewer rounds of
-elimination are required to reach a Droop quota, so fewer votes are transferred
-before each seat is filled -- which will differentially affect the vote-counts
-of the candidates still in play for the remaining seats.  Furthermore, the
-[Cambridge method of transferring
-votes](https://www.opavote.com/methods/cambridge-stv-rules) may have been
-employed in the real-world Yale Senate election. Under these rules, the initial
-numbering of the ballots determines the ballot papers which are consulted when a
-candidate's surplus votes are transfered.  As noted in the tests of [STV
-v1.0.2](https://cran.r-project.org/package=STV), if ballots are selected for a
-vote-transfer process by a pseudorandom number generator, the seeding of this
-generator affects the outcome of the election.  The per-candidate boxplots in
-the last decile of vote-counting in our experimental results below (using the
-Droop quota with fractional vote transfers) illustrate this phenomenon.  The
-median result of the last decile of ballot-counting show ATL_2 having a very
-small margin of victory for the third seat, and ATL_54 having a slight advantage
-over ATL_27 in a very close race for the fourth seat.
+We think `testFraction` would help researchers discover whether the safety of
+the preliminary results of an STV election is significantly affected by its
+quota method.  Anecdotally this seems to be the case.  For example,
+in the case of the 2016 Yale Senate election plotted above, the use of a 
+Droop quota rather than a Hare quota would decrease the uncertainty of
+the decision for the fourth seat as the count nears completion.  After
+nearly all ballots are counted, ATL_54 is clearly leading ATL_27 if the
+Droop quota is employed.  See below.
 
 ``` r
 load(SaveVote)
@@ -127,6 +111,29 @@ plot(xrDroop,boxPlot=TRUE,boxPlotCutInterval=10,
 ```
 
 ![](man/figures/yaleDroop.png)
+
+On theoretical grounds, it seems plausible that the use of a Droop quota rather
+than a Hare quota will reduce the fluctuations in ranking as more ballots are
+counted.  The Droop quota is smaller than the Hare quota, so the candidates in a
+close race will be elected in an earlier round.  It seems likely that the
+count will then be completed with fewer vote-transfers and perhaps also
+with less "quasi-chaos" [@geller2005single].  
+
+We conjecture that the [Cambridge method of transferring
+votes](https://www.opavote.com/methods/cambridge-stv-rules) will decrease
+the safety of a count, because its transfer of entire ballots (rather than
+fractions of ballots) seems very likely to increase the variance in the
+results as additional ballots are counted.
+
+We suggest that an election count might be considered unsafe -- for
+purposes of declaring a preliminary result after a fraction of ballots is
+counted -- if its results show significant variance when a random sample of
+size $n-\sqrt{n}$ of the $n$ ballots is counted.  However we leave this
+determination to future researchers, because we believe safety is only
+one of many considerations to be considered when designing and administering
+an STV election process.
+
+## testAdditions
 
 [testAdditions](https://cthombor.github.io/SafeVote/reference/testAdditions) can
 be used to assess the sensitivity of an STV election to a tactical-voting
@@ -169,6 +176,8 @@ testAdditions(food_election, arep = 2, favoured = "Strawberries",
 #> |SBK1   |       21|       2|     5|         1|            3|      4| 0.6673333|       2|           8|      2.6663333| 0.6663333|
 #> |SBK2   |       22|       3|     5|         1|            2|      4| 3.4447778|       2|           8|      0.1104444| 0.5552222|
 ```
+
+## testDeletions
 
 [testDeletions](https://cthombor.github.io/SafeVote/reference/testDeletions)
 deletes ballots sequentially from the ballot box, counting after each deletion.

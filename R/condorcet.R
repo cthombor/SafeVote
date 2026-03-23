@@ -386,15 +386,15 @@ print.summary.SafeVote.condorcet <- function(x, ...) {
   
 }
 
-#' view method for SafeVote.condorcet
+#' View method for SafeVote.condorcet
 #' 
 #' @param object of type SafeVote.condorcet
-#' @param ... see [view.SafeVote.approval] 
+#' @param ... see [View.SafeVote.approval] 
 #'
-#' @return view object
+#' @return View object
 #' @export
-view.SafeVote.condorcet <- function(object, ...) {
-    view.SafeVote.approval(object, ...)
+View.SafeVote.condorcet <- function(object, ...) {
+    View.SafeVote.approval(object, ...)
 }
 
 #' The image function visualizes the joint distribution of two preferences
