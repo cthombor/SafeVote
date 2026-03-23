@@ -28,7 +28,7 @@ condorcet(
   A [matrix](https://rdrr.io/r/base/matrix.html) or
   [data.frame](https://rdrr.io/r/base/data.frame.html) containing the
   votes. Rows correspond to the votes, columns correspond to the
-  candidates. If `votes` is a character string, it is interpreted as a
+  candidates. If 'votes' is a character string, it is interpreted as a
   file name from which the votes are to be read. See
   [below](https://cthombor.github.io/SafeVote/reference/condorcet#details).
 
@@ -45,13 +45,13 @@ condorcet(
 - safety:
 
   Parameter for a clustering heuristic on a total ranking of the
-  candidates. Conjecture: the default of `1.0` ensures a separation of
-  one s.d. between clusters, when `votes` are i.u.d. permutations on the
+  candidates. Conjecture: the default of '1.0' ensures a separation of
+  one s.d. between clusters, when 'votes' are i.u.d. permutations on the
   candidates.
 
 - fsep:
 
-  If `votes` is a file name, this argument gives the column separator in
+  If 'votes' is a file name, this argument gives the column separator in
   the file.
 
 - quiet:
@@ -64,36 +64,36 @@ condorcet(
 
 ## Value
 
-Object of class `SafeVote.condorcet`
+Object of class 'SafeVote.condorcet'
 
 ## Details
 
-If the runoff argument is set to `TRUE` and no Condorcet winner exists,
+If the runoff argument is set to 'TRUE' and no Condorcet winner exists,
 two or more candidates with the most pairwise wins are selected and the
 method is applied to such subset. If more than two candidates are in
 such run-off, the selection is performed repeatedly, until either a
 winner is selected or no more selection is possible.
 
 The input data votes is structured the same way as for the [stv](stv.md)
-method: Row `i` contains the preferences of voter `i` numbered
-`1; 2; : : : ; r; 0; 0; 0; 0`, in some order, while equal preferences
-are allowed. The columns correspond to the candidates. The
+method: Row 'i' contains the preferences of voter 'i' numbered '1; 2; :
+: : ; r; 0; 0; 0; 0', in some order, while equal preferences are
+allowed. The columns correspond to the candidates. The
 [dimnames](https://rdrr.io/r/base/dimnames.html) of the columns are the
 names of the candidates; if these are not supplied then the candidates
-are lettered `A, B, C, ...`. If the dataset contains missing values
+are lettered 'A, B, C, ...'. If the dataset contains missing values
 ([NA](https://rdrr.io/r/base/NA.html)), they are replaced by zeros.
 
 If a ballot has equally-ranked candidates, its rankings are tested for
 validity: for each preference \\i\\ which does not have any duplicate,
 there are exactly \\i - 1\\ preferences \\j\\ with \\0 \< j \< i\\. If
-any ballot `x` fails this validity test, it is automatically corrected
-(aka "converted") into a valid ballot using
-`x <- rank(x, ties.method = "min")`, and a warning is issued.
+any ballot 'x' fails this validity test, it is automatically corrected
+(aka "converted") into a valid ballot using 'x \<- rank(x, ties.method =
+"min")', and a warning is issued.
 
 This method also computes a Borda ranking of all candidates, using
-tournament-style scoring. This ranking is "fuzzed" into a `safeRank`,
-with approximately 1 s.d. of fuzz when `safety=1.0` and voter
-preferences are i.u.d. A warning is thrown if a `safeRank` violates the
+tournament-style scoring. This ranking is "fuzzed" into a 'safeRank',
+with approximately 1 s.d. of fuzz when 'safety=1.0' and voter
+preferences are i.u.d. A warning is thrown if a 'safeRank' violates the
 (extended) Condorcet principle: that Candidate \\i\\ is more highly
 ranked than Candidate \\j\\ only if a majority of voters agree with
 this.

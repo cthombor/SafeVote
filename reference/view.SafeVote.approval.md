@@ -5,8 +5,8 @@ view method for approval object
 ## Usage
 
 ``` r
-# S3 method for class 'SafeVote.approval'
-view(object, ...)
+# S3 method for class 'approval'
+view.SafeVote(object, ...)
 ```
 
 ## Arguments

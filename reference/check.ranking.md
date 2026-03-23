@@ -16,4 +16,4 @@ check.ranking(r)
 
 ## Value
 
-a partial ranking of the elements of `r`, using `ties.method="min"`
+a partial ranking of the elements of 'r', using 'ties.method="min"'

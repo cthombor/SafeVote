@@ -18,22 +18,22 @@ of Tideman (2000). Note: the DOI for this article is
 the usual DOI-to-URL conversions.
 
 As noted in this table, it is a very close race between candidates D, F,
-and B in the final rounds of a Meek count of `a53_hil`.
+and B in the final rounds of a Meek count of 'a53_hil'.
 
 Tideman's implementation of Meek's method excludes B (on 59.02 votes),
 then elects D in the final round (on 88.33 votes) with a margin of 0.95
 votes ahead of F (on 87.38 votes).
 
-In v1.0, `stv(a53.hil,quota.hare=TRUE)` excludes F (on 56.418 votes),
+In v1.0, 'stv(a53.hil,quota.hare=TRUE)' excludes F (on 56.418 votes),
 then elects D in the final round (on 79.705 votes) with a winning margin
 of 0.747 votes ahead of B (on 78.958 votes). The result of the election
 is the same but the vote counts and winning margins differ
-significantly; so we conclude that `stv(quota.hare=TRUE)` in SafeVote
+significantly; so we conclude that 'stv(quota.hare=TRUE)' in SafeVote
 v1.0 is *not* a reliable proxy for Tideman's implementation of Meek's
 algorithm.
 
 Future researchers may wish to adjust the quota calculation of
-`vote.stv()` so that it is no longer biased upward by a "fuzz" of 0.001,
+'vote.stv()' so that it is no longer biased upward by a "fuzz" of 0.001,
 to see if this change significantly reduces the discrepancies with
 Tideman's implementation of Meek.
 
@@ -44,7 +44,7 @@ possible to verify the correctness of an implementation. We also leave
 it to future researchers to develop a set of test cases with appropriate
 levels of tolerance for the vagaries of floating-point roundoff in
 optimised (or even unoptimised!) compilations of the same code on
-different computing systems. We suggest that `a53_hil` be included in
+different computing systems. We suggest that 'a53_hil' be included in
 any such test set.
 
 We note in passing that B.A. Wichmann, in "Checking two STV programs",
@@ -57,7 +57,7 @@ implementation.
 ## Usage
 
 ``` r
-data(a53_hil)
+a53_hil
 ```
 
 ## Format

@@ -5,7 +5,7 @@ Copy of ims_election, included for backwards compatibility.
 ## Usage
 
 ``` r
-data(ims_election)
+ims_stv
 ```
 
 ## Format

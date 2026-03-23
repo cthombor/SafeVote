@@ -5,7 +5,7 @@ Sample data for testing SafeVote
 ## Usage
 
 ``` r
-data(food_election)
+food_election
 ```
 
 ## Format

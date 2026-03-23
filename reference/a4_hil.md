@@ -15,7 +15,7 @@ would remain anonymous."
 ## Usage
 
 ``` r
-data(a4_hil)
+a4_hil
 ```
 
 ## Format

@@ -5,8 +5,8 @@ view method for score object
 ## Usage
 
 ``` r
-# S3 method for class 'SafeVote.score'
-view(object, ...)
+# S3 method for class 'score'
+view.SafeVote(object, ...)
 ```
 
 ## Arguments

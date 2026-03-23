@@ -5,7 +5,7 @@ Modified version of ims_election, for use in approval voting.
 ## Usage
 
 ``` r
-data(ims_approval)
+ims_approval
 ```
 
 ## Format

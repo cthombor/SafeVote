@@ -17,7 +17,7 @@ combineRankings(r1, r2)
 ## Value
 
 the most complete (but possibly partial) ranking which is consistent
-with both r1 and r2. Uses `ties.method="min"`
+with both r1 and r2. Uses 'ties.method="min"'
 
 ## Examples
 

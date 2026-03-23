@@ -5,8 +5,8 @@ view method for plurality object
 ## Usage
 
 ``` r
-# S3 method for class 'SafeVote.plurality'
-view(object, ...)
+# S3 method for class 'plurality'
+view.SafeVote(object, ...)
 ```
 
 ## Arguments
@@ -17,4 +17,4 @@ view(object, ...)
 
 ## Value
 
-undocumented
+View object

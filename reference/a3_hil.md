@@ -14,12 +14,12 @@ The ballots were encoded in David Hill's format, and have been converted
 to the preference-vector format of this package. The archival file
 A4.HIL at rangevoting.org contains eight blank ballot papers (1, 616,
 619, 620, 685, 686, 687, 688) which we have retained. This set may be
-counted by `stv(a3_hil,nseats=attr(a3_hil,"nseats"))`.
+counted by 'stv(a3_hil,nseats=attr(a3_hil,"nseats"))'.
 
 ## Usage
 
 ``` r
-data(a3_hil)
+a3_hil
 ```
 
 ## Format

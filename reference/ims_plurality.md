@@ -5,7 +5,7 @@ Modified version of ims_election, for use in plurality voting.
 ## Usage
 
 ``` r
-data(ims_plurality)
+ims_plurality
 ```
 
 ## Format

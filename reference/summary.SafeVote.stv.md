@@ -25,4 +25,4 @@ summary(object, ..., digits = 3)
 
 ## Value
 
-data.frame summarising `object`, for use by `print` method
+data.frame summarising 'object', for use by 'print' method

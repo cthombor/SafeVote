@@ -22,4 +22,4 @@ print(x, ...)
 
 ## Value
 
-textual description of `x`
+textual description of 'x'

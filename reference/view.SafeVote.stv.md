@@ -5,8 +5,8 @@ view method for the result of an stv() ballot-count
 ## Usage
 
 ``` r
-# S3 method for class 'SafeVote.stv'
-view(object, ...)
+# S3 method for class 'stv'
+view.SafeVote(object, ...)
 ```
 
 ## Arguments

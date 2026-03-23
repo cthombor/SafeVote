@@ -1,7 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>/404.html</loc></url>
 <url><loc>/authors.html</loc></url>
-<url><loc>/cran-comments.V1.0.0.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/SafeVote-package.html</loc></url>
 <url><loc>/reference/a3_hil.html</loc></url>
@@ -11,6 +10,7 @@
 <url><loc>/reference/as.SafeRankExpt.html</loc></url>
 <url><loc>/reference/assemble.args.for.check.score.html</loc></url>
 <url><loc>/reference/assemble.args.for.check.stv.html</loc></url>
+<url><loc>/reference/auckland2022.html</loc></url>
 <url><loc>/reference/backwards.tiebreak.html</loc></url>
 <url><loc>/reference/check.nseats.html</loc></url>
 <url><loc>/reference/check.ranking.html</loc></url>
@@ -28,11 +28,17 @@
 <url><loc>/reference/dot-print.summary.SafeVote.html</loc></url>
 <url><loc>/reference/dot-summary.SafeVote.html</loc></url>
 <url><loc>/reference/dublin_west.html</loc></url>
+<url><loc>/reference/dublin_west_vote_count.html</loc></url>
+<url><loc>/reference/dublin_west_vote_count_3seats.html</loc></url>
 <url><loc>/reference/election.info.html</loc></url>
 <url><loc>/reference/extractMargins.html</loc></url>
 <url><loc>/reference/extractRank.html</loc></url>
 <url><loc>/reference/food_election.html</loc></url>
 <url><loc>/reference/forwards.tiebreak.html</loc></url>
+<url><loc>/reference/gisborne2022.html</loc></url>
+<url><loc>/reference/gisborne2022analysis.html</loc></url>
+<url><loc>/reference/hamilton2022.html</loc></url>
+<url><loc>/reference/hamilton2022analysis.html</loc></url>
 <url><loc>/reference/image.SafeVote.condorcet.html</loc></url>
 <url><loc>/reference/image.SafeVote.stv.html</loc></url>
 <url><loc>/reference/ims_approval.html</loc></url>
@@ -58,7 +64,7 @@
 <url><loc>/reference/print.summary.SafeVote.plurality.html</loc></url>
 <url><loc>/reference/print.summary.SafeVote.score.html</loc></url>
 <url><loc>/reference/print.summary.SafeVote.stv.html</loc></url>
-<url><loc>/reference/rbind.SafeRankExpt.html</loc></url>
+<url><loc>/reference/rbind_SafeRankExpt.html</loc></url>
 <url><loc>/reference/readHil.html</loc></url>
 <url><loc>/reference/remove.candidate.html</loc></url>
 <url><loc>/reference/score.html</loc></url>
@@ -78,10 +84,11 @@
 <url><loc>/reference/uk_labour_2010.html</loc></url>
 <url><loc>/reference/view.SafeVote.approval.html</loc></url>
 <url><loc>/reference/view.SafeVote.condorcet.html</loc></url>
+<url><loc>/reference/view.SafeVote.html</loc></url>
 <url><loc>/reference/view.SafeVote.plurality.html</loc></url>
 <url><loc>/reference/view.SafeVote.score.html</loc></url>
 <url><loc>/reference/view.SafeVote.stv.html</loc></url>
-<url><loc>/reference/view.html</loc></url>
+<url><loc>/reference/wellington2022analysis.html</loc></url>
 <url><loc>/reference/winnerMargin.html</loc></url>
 <url><loc>/reference/yale_ballots.html</loc></url>
 </urlset>

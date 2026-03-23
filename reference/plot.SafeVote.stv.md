@@ -1,6 +1,6 @@
 # plot() method for the result of an stv() ballot-count
 
-The `plot` function shows the evolution of the total score for each
+The 'plot' function shows the evolution of the total score for each
 candidate as well as the quota.
 
 ## Usage

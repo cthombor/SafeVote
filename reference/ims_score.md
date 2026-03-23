@@ -5,7 +5,7 @@ Modified version of ims_election, for use in score voting.
 ## Usage
 
 ``` r
-data(ims_score)
+ims_score
 ```
 
 ## Format

@@ -6,7 +6,7 @@ Dataset containing ranked votes for the Dublin West constituency in
 ## Usage
 
 ``` r
-data(dublin_west)
+dublin_west
 ```
 
 ## Format

@@ -21,13 +21,13 @@ image(x, xpref = 2, ypref = 1, all.pref = FALSE, proportion = TRUE, ...)
 
 - all.pref:
 
-  plot the joint distribution of two preferences (if `all.pref=FALSE`)
-  or the marginal distribution of all preferences (if `all.pref=TRUE`).
+  plot the joint distribution of two preferences (if 'all.pref=FALSE')
+  or the marginal distribution of all preferences (if 'all.pref=TRUE').
 
 - proportion:
 
   The joint distribution can be shown either as proportions (if
-  `proportion=TRUE`) or raw vote counts (if `proportion=FALSE`).
+  'proportion=TRUE') or raw vote counts (if 'proportion=FALSE').
 
 - ...:
 

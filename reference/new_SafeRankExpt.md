@@ -61,8 +61,9 @@ new_SafeRankExpt(
 - unitFactors:
 
   per-unit factors derived from PRNG of the experimental harness, e.g
-  describing the ballots randomly deleted during testDeletions
+  describing the ballots randomly deleted during
+  [`testDeletions()`](testDeletions.md)
 
 ## Value
 
-object of class SafeRankExpt
+object of class 'SafeRankExpt'

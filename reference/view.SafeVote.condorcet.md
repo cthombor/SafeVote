@@ -5,8 +5,8 @@ view method for SafeVote.condorcet
 ## Usage
 
 ``` r
-# S3 method for class 'SafeVote.condorcet'
-view(object, ...)
+# S3 method for class 'condorcet'
+view.SafeVote(object, ...)
 ```
 
 ## Arguments
@@ -21,4 +21,4 @@ view(object, ...)
 
 ## Value
 
-view object
+View object

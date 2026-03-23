@@ -9,7 +9,7 @@ election.
 ## Usage
 
 ``` r
-data(uk_labour_2010)
+uk_labour_2010
 ```
 
 ## Format

@@ -8,7 +8,7 @@ names have been changed.
 ## Usage
 
 ``` r
-data(ims_election)
+ims_election
 ```
 
 ## Format
