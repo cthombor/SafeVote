@@ -88,7 +88,7 @@ testDeletions(food_election, countMethod="stv",
   countArgs=list(complete.ranking=TRUE))
 #> Number of ballots counted by stv: 20, 18, 16, 14, 12, 10, 8, 6, 4, 2
 #> 
-#> Results of testDeletions at 2026-03-23 17:51:42
+#> Results of testDeletions at 2026-03-23 18:19:36
 #> 
 #> Dataset = food_election, countMethod = stv, rankMethod = safeRank
 #> 

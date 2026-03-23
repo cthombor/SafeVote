@@ -88,7 +88,7 @@ testFraction(food_election, countMethod="condorcet",
 #> Progress in counting condorcet ballots:
 #>  10%, 20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%, 100%
 #> 
-#> Results of testFraction at 2026-03-23 17:51:42
+#> Results of testFraction at 2026-03-23 18:19:37
 #> 
 #> Dataset = food_election, countMethod = condorcet, rankMethod = safeRank
 #> 
@@ -120,7 +120,7 @@ testFraction(dublin_west, astart=20, ainc=10, arep=2, trep=3,
 #> Progress in counting stv ballots:
 #>  33.3%, 66.7%, 100%
 #> 
-#> Results of testFraction at 2026-03-23 17:51:42
+#> Results of testFraction at 2026-03-23 18:19:37
 #> 
 #> Dataset = dublin_west, countMethod = stv, rankMethod = elected
 #> 

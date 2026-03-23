@@ -99,7 +99,7 @@ testAdditions(food_election, arep = 2, favoured = "Strawberries",
 #> Adding up to 2 stv ballots = ( 5 2 4 1 3 )
 #> Testing progress:  1, 2
 #> 
-#> Results of testAdditions at 2026-03-23 17:51:42
+#> Results of testAdditions at 2026-03-23 18:19:36
 #> 
 #> Dataset = food_election, countMethod = stv, rankMethod = safeRank
 #> 
