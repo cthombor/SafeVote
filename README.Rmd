@@ -120,7 +120,7 @@ count will then be completed with fewer vote-transfers and perhaps also
 with less "quasi-chaos" [@geller2005single].  
 
 We conjecture that the [Cambridge method of transferring
-votes](https://www.opavote.com/methods/cambridge-stv-rules) will decrease
+votes](https://opavote.com/methods/cambridge-stv-rules) will decrease
 the safety of a count, because its transfer of entire ballots (rather than
 fractions of ballots) seems very likely to increase the variance in the
 results as additional ballots are counted.
