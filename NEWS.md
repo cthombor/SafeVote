@@ -1,5 +1,5 @@
 
-SafeVote 1.0.1 (2024-10-04)
+SafeVote 1.0.1 (2024-10-01)
 =========================`
 
 ### DOCUMENTATION FIXES
