@@ -1,0 +1,28 @@
+# Tideman a3_hil
+
+This data is one of 87 sets of ballots from the Tideman data collection,
+as curated by The Center for Range Voting.
+
+This set of ballots was collected in 1987 by Nicolaus Tideman, with
+support from NSF grant SES86-18328. "The data are records of ballots
+from elections of British organizations (mostly trade unions using
+PR-STV or IRV voting) in which the voters ranked the candidates. The
+data were gathered under a stipulation that the organizations involved
+would remain anonymous."
+
+The ballots were encoded in David Hill's format, and have been converted
+to the preference-vector format of this package. The archival file
+A4.HIL at rangevoting.org contains eight blank ballot papers (1, 616,
+619, 620, 685, 686, 687, 688) which we have retained. This set may be
+counted by `stv(a3_hil,nseats=attr(a3_hil,"nseats"))`.
+
+## Usage
+
+``` r
+data(a3_hil)
+```
+
+## Format
+
+A data frame with attribute "nseats" = 7, consisting of 989 observations
+and 15 candidates.
